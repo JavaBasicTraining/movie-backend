@@ -27,7 +27,6 @@ public class CustomSecurityConfiguration {
         http.cors().and().csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         //
         corsConfig(http);
         //

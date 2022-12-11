@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-
 public class EpisodeController extends BaseController<Episode, UUID> implements IEpisodeController {
     public EpisodeController(IBaseService<Episode, UUID> service) {
         super(service);
     }
-
 
 }

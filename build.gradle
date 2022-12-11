@@ -14,11 +14,9 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
-}
 
 dependencies {
+    implementation "com.training.common:boot:0.0.1-SNAPSHOT"
     /**
      * Spring
      */
@@ -45,6 +43,17 @@ dependencies {
      */
     implementation 'org.keycloak:keycloak-spring-boot-starter:19.0.1'
     implementation 'org.keycloak:keycloak-admin-client:19.0.1'
+}
+
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/JavaBasicTraining/common")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+    mavenCentral()
 }
 
 tasks.named('test') {

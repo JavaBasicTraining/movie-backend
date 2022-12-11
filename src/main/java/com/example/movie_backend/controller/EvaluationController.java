@@ -9,10 +9,7 @@ import java.util.UUID;
 
 @RestController
 public class EvaluationController extends BaseController<Evaluation, UUID> implements IEvaluationController {
-
     public EvaluationController(IBaseService<Evaluation, UUID> service) {
         super(service);
     }
-
-
 }

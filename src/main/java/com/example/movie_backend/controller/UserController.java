@@ -7,7 +7,6 @@ import com.example.movie_backend.model.user.LoginResponse;
 import com.example.movie_backend.model.user.RegisterRequest;
 import com.example.movie_backend.model.user.RegisterResponse;
 import com.example.movie_backend.services.interfaces.IUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 public class UserController implements IUserController {
-
     private final IUserService iUserService;
+
+    public UserController(IUserService iUserService) {
+        this.iUserService = iUserService;
+    }
 
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(iUserService.login(request));
