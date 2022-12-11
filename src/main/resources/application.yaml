@@ -8,7 +8,7 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:1234}
+    password: ${DATABASE_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -40,6 +40,13 @@ spring:
           jwk-set-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}/protocol/openid-connect/certs
           issuer-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}
 
+keycloak:
+  auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
+  realm: ${PROFILE_REALM:movie_website_realm}
+  resource: ${MOVIE_CLIENT_ID:movie_website_client}
+  credentials:
+    secret: ${MOVIE_CLIENT_SECRET:zi0hI2cgqVDqGFa1N4jt0iuGI9078GNX}
+
 common:
   permit-all-path-patterns:
     - /swagger-ui.html/**
@@ -52,22 +59,3 @@ common:
     origins:
       - http://localhost:8081
       - http://localhost:3000
-
-#thai:
-#  name: thai
-#  age: 18
-#  clazz:
-#    name: lop 1
-#    ten-giao-vien: giao vien 1
-#  levels:
-#    - mot
-#    - hai
-#    - ba
-
-
-keycloak:
-  auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
-  realm: ${PROFILE_REALM:movie_website_realm}
-  resource: ${MOVIE_CLIENT_ID:movie_website_client}
-  credentials:
-    secret: ${MOVIE_CLIENT_SECRET:zi0hI2cgqVDqGFa1N4jt0iuGI9078GNX}
