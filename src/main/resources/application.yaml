@@ -37,25 +37,32 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          jwk-set-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}/protocol/openid-connect/certs
-          issuer-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}
+          jwk-set-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie-realm}/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie-realm}
 
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
-  realm: ${PROFILE_REALM:movie_website_realm}
-  resource: ${MOVIE_CLIENT_ID:movie_website_client}
+  realm: ${PROFILE_REALM:movie-realm}
+  resource: ${MOVIE_CLIENT_ID:movie-client-id}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:zi0hI2cgqVDqGFa1N4jt0iuGI9078GNX}
+    secret: ${MOVIE_CLIENT_SECRET:gkNEmbt9ArSpdKkI5dbhcZD15IztCzvv}
 
 common:
-  permit-all-path-patterns:
-    - /swagger-ui.html/**
+  permit-all-ant-matchers:
+    - /webjars/swagger-ui/**
     - /v3/api-docs/**
+    - /swagger-resources/**
+    - /webjars/**
     - /swagger-ui/**
+    - /swagger-ui.html
+    - /null/swagger-resources/**
     - /api/v1/user/login
     - /api/v1/user/register
-    - /test/**
   cors:
     origins:
       - http://localhost:8081
       - http://localhost:3000
+    headers:
+      - '*'
+    methods:
+      - '*'
