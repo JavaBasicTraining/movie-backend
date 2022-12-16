@@ -18,7 +18,7 @@ public class Movie {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, columnDefinition = "binary(16)")
     private UUID id;
 
     @Column(name = "name")

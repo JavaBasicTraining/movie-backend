@@ -1,12 +1,14 @@
 package com.example.movie_backend.services;
 
 import com.example.movie_backend.services.interfaces.IBaseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BaseService<T, ID> implements IBaseService<T, ID> {
+public abstract class BaseService<T, ID> implements IBaseService<T, ID> {
     private final JpaRepository<T, ID> repository;
 
     public BaseService(JpaRepository<T, ID> repository) {
@@ -44,5 +46,10 @@ public class BaseService<T, ID> implements IBaseService<T, ID> {
     public boolean deleteById(ID id) {
         repository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public Page<T> getPage(Integer number, Integer size) {
+        return repository.findAll(PageRequest.of(number, size));
     }
 }

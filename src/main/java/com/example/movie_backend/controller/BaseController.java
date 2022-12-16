@@ -2,6 +2,7 @@ package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.IBaseController;
 import com.example.movie_backend.services.interfaces.IBaseService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -36,5 +37,10 @@ public abstract class BaseController<T, ID> implements IBaseController<T, ID> {
     @Override
     public ResponseEntity<Boolean> deleteById(ID id) {
         return ResponseEntity.ok(iBaseService.deleteById(id));
+    }
+
+    @Override
+    public ResponseEntity<Page<T>> getPage(Integer number, Integer size) {
+        return ResponseEntity.ok(iBaseService.getPage(number, size));
     }
 }
