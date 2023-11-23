@@ -1,22 +1,26 @@
 package com.example.movie_backend.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "episode")
+@Entity
 @Getter
 @Setter
-@Entity
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
 public class Episode {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(updatable = false, nullable = false)
     private UUID id;
@@ -30,6 +34,7 @@ public class Episode {
     @Column(name = "video_url")
     private String videoUrl;
 
-    @Column(name = "movie_id")
-    private String movieId;
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 }

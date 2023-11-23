@@ -20,9 +20,6 @@ public class MovieService extends BaseService<Movie, UUID> implements IMovieServ
     @Override
     public Movie getByTitle(String title) {
         Optional<Movie> optional = movieRepository.getByViTitle(title);
-        if (optional.isEmpty()) {
-            return null;
-        }
-        return optional.get();
+        return optional.orElse(null);
     }
 }

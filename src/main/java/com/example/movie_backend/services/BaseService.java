@@ -2,7 +2,7 @@ package com.example.movie_backend.services;
 
 import com.example.movie_backend.services.interfaces.IBaseService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public abstract class BaseService<T, I> implements IBaseService<T, I> {
     }
 
     @Override
-    public Page<T> getPage(Integer number, Integer size) {
-        return repository.findAll(PageRequest.of(number, size));
+    public Page<T> getPage(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }

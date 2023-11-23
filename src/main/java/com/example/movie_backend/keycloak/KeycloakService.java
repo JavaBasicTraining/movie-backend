@@ -26,22 +26,22 @@ public class KeycloakService implements IKeycloakService {
 
     public KeycloakService(KeycloakSpringBootProperties properties) {
         this.authzClient = AuthzClient.create(
-                new Configuration(
-                        properties.getAuthServerUrl(),
-                        properties.getRealm(),
-                        properties.getResource(),
-                        properties.getCredentials(),
-                        null
-                )
+            new Configuration(
+                properties.getAuthServerUrl(),
+                properties.getRealm(),
+                properties.getResource(),
+                properties.getCredentials(),
+                null
+            )
         );
         this.keycloak = KeycloakBuilder.builder()
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-                .realm(properties.getRealm())
-                .serverUrl(properties.getAuthServerUrl())
-                .clientId(properties.getResource())
-                .clientSecret(properties.getCredentials().get("secret").toString())
-                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build())
-                .build();
+            .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+            .realm(properties.getRealm())
+            .serverUrl(properties.getAuthServerUrl())
+            .clientId(properties.getResource())
+            .clientSecret(properties.getCredentials().get("secret").toString())
+            .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build())
+            .build();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class KeycloakService implements IKeycloakService {
 
         UserResource userResource = usersResource.get(userId);
         userResource.resetPassword(
-                buildPassword(request.getPassword())
+            buildPassword(request.getPassword())
         );
 
         return UUID.fromString(userId);
@@ -72,7 +72,7 @@ public class KeycloakService implements IKeycloakService {
 
     private UsersResource getUsersResource() {
         return keycloak.realm(
-                authzClient.getConfiguration().getRealm()
+            authzClient.getConfiguration().getRealm()
         ).users();
     }
 

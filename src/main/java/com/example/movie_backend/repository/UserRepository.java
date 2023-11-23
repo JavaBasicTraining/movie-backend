@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = """
-                select u from User u where u.username = :#{#username}
-            """)
+            select u from User u where u.username = :#{#username}
+        """)
     Optional<User> findByFilter(String username);
 }

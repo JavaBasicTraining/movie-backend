@@ -3,6 +3,7 @@ package com.example.movie_backend.controller;
 import com.example.movie_backend.controller.interfaces.IBaseController;
 import com.example.movie_backend.services.interfaces.IBaseService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public abstract class BaseController<T, I> implements IBaseController<T, I> {
     }
 
     @Override
-    public ResponseEntity<Page<T>> getPage(Integer number, Integer size) {
-        return ResponseEntity.ok(iBaseService.getPage(number, size));
+    public ResponseEntity<Page<T>> getPage(Pageable pageable) {
+        return ResponseEntity.ok(iBaseService.getPage(pageable));
     }
 }

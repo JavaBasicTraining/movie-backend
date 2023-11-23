@@ -15,8 +15,8 @@ public class Movie {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(updatable = false, nullable = false, columnDefinition = "binary(16)")
     private UUID id;
@@ -36,7 +36,7 @@ public class Movie {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "movie_package_id")
-    private String moviePackageId;
-
+    @ManyToOne
+    @JoinColumn(name = "movie_package_id")
+    private MoviePackage moviePackage;
 }

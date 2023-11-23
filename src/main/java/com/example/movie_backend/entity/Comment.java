@@ -1,22 +1,26 @@
 package com.example.movie_backend.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "comment")
+@Entity
 @Getter
 @Setter
-@Entity
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(updatable = false, nullable = false)
     private UUID id;
@@ -24,9 +28,11 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "episode_id")
-    private String episodeId;
+    @ManyToOne
+    @JoinColumn(name = "episode_id")
+    private Episode episode;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

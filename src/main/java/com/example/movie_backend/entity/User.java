@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class User {
     @Id
@@ -35,8 +35,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
-
-    private Integer moviePackageId;
+    @ManyToOne
+    @JoinColumn(name = "movie_package_id")
+    private MoviePackage moviePackage;
 
     private String namePro;
 }
