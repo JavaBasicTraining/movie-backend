@@ -16,14 +16,12 @@ configurations {
 
 
 dependencies {
-    implementation "com.training.common:boot:0.0.1-SNAPSHOT"
     /**
      * Spring
      */
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
     implementation 'org.springframework.boot:spring-boot-starter-security:2.7.5'
@@ -36,8 +34,8 @@ dependencies {
     /**
      * Lombok
      */
-
-
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     /**
      * Keycloak
      */
@@ -46,13 +44,13 @@ dependencies {
 }
 
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/JavaBasicTraining/common")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
+//    maven {
+//        url = uri("https://maven.pkg.github.com/JavaBasicTraining/common")
+//        credentials {
+//            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+//            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+//        }
+//    }
     mavenCentral()
 }
 

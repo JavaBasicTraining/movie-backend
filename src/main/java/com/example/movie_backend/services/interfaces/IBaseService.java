@@ -4,16 +4,16 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface IBaseService<T, ID> {
+public interface IBaseService<T, I> {
     T create(T entity);
 
-    T update(ID id, T entity);
+    T update(I id, T entity);
 
-    T getById(ID id);
+    T getById(I id);
 
     List<T> getList();
 
     Page<T> getPage(Integer number, Integer size);
 
-    boolean deleteById(ID id);
+    boolean deleteById(I id);
 }

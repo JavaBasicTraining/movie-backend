@@ -8,7 +8,7 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:123456}
+    password: ${DATABASE_PASSWORD:FormosVN@123}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -43,26 +43,6 @@ spring:
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
   realm: ${PROFILE_REALM:movie-realm}
-  resource: ${MOVIE_CLIENT_ID:movie-client-id}
+  resource: ${MOVIE_CLIENT_ID:movie-client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:gkNEmbt9ArSpdKkI5dbhcZD15IztCzvv}
-
-common:
-  permit-all-ant-matchers:
-    - /webjars/swagger-ui/**
-    - /v3/api-docs/**
-    - /swagger-resources/**
-    - /webjars/**
-    - /swagger-ui/**
-    - /swagger-ui.html
-    - /null/swagger-resources/**
-    - /api/v1/user/login
-    - /api/v1/user/register
-  cors:
-    origins:
-      - http://localhost:8081
-      - http://localhost:3000
-    headers:
-      - '*'
-    methods:
-      - '*'
+    secret: ${MOVIE_CLIENT_SECRET:rZEgmEMN0beYTqojBMThndrSqxg4Jnxn}

@@ -27,7 +27,6 @@ public class UserService extends BaseService<User, UUID> implements IUserService
         this.userRepository = userRepository;
     }
 
-
     @Override
     public LoginResponse login(LoginRequest request) {
         AccessTokenResponse accessTokenResponse = iKeycloakService.token(request.getUsername(), request.getPassword());

@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseService<T, ID> implements IBaseService<T, ID> {
-    private final JpaRepository<T, ID> repository;
+public abstract class BaseService<T, I> implements IBaseService<T, I> {
+    private final JpaRepository<T, I> repository;
 
-    public BaseService(JpaRepository<T, ID> repository) {
+    protected BaseService(JpaRepository<T, I> repository) {
         this.repository = repository;
     }
 
@@ -21,7 +21,7 @@ public abstract class BaseService<T, ID> implements IBaseService<T, ID> {
     }
 
     @Override
-    public T update(ID id, T entity) {
+    public T update(I id, T entity) {
         if (getById(id) == null) {
             return null;
         }
@@ -29,12 +29,9 @@ public abstract class BaseService<T, ID> implements IBaseService<T, ID> {
     }
 
     @Override
-    public T getById(ID id) {
+    public T getById(I id) {
         Optional<T> optionalT = repository.findById(id);
-        if (optionalT.isEmpty()) {
-            return null;
-        }
-        return optionalT.get();
+        return optionalT.orElse(null);
     }
 
     @Override
@@ -43,7 +40,7 @@ public abstract class BaseService<T, ID> implements IBaseService<T, ID> {
     }
 
     @Override
-    public boolean deleteById(ID id) {
+    public boolean deleteById(I id) {
         repository.deleteById(id);
         return true;
     }

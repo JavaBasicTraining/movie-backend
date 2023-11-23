@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public abstract class BaseController<T, ID> implements IBaseController<T, ID> {
-    private final IBaseService<T, ID> iBaseService;
+public abstract class BaseController<T, I> implements IBaseController<T, I> {
+    private final IBaseService<T, I> iBaseService;
 
-    protected BaseController(IBaseService<T, ID> iBaseService) {
+    protected BaseController(IBaseService<T, I> iBaseService) {
         this.iBaseService = iBaseService;
     }
 
@@ -20,12 +20,12 @@ public abstract class BaseController<T, ID> implements IBaseController<T, ID> {
     }
 
     @Override
-    public ResponseEntity<T> update(ID id, T entity) {
+    public ResponseEntity<T> update(I id, T entity) {
         return ResponseEntity.ok(iBaseService.update(id, entity));
     }
 
     @Override
-    public ResponseEntity<T> getById(ID id) {
+    public ResponseEntity<T> getById(I id) {
         return ResponseEntity.ok(iBaseService.getById(id));
     }
 
@@ -35,7 +35,7 @@ public abstract class BaseController<T, ID> implements IBaseController<T, ID> {
     }
 
     @Override
-    public ResponseEntity<Boolean> deleteById(ID id) {
+    public ResponseEntity<Boolean> deleteById(I id) {
         return ResponseEntity.ok(iBaseService.deleteById(id));
     }
 
