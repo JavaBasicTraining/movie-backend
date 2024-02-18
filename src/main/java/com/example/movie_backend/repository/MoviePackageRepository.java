@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface MoviePackageRepository extends JpaRepository<MoviePackage, UUID> {
+public interface MoviePackageRepository extends JpaRepository<MoviePackage, Long> {
 
 }

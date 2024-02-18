@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MovieRepository extends JpaRepository<Movie, UUID> {
+public interface MovieRepository extends JpaRepository<Movie, Long> {
     Optional<Movie> getByViTitle(String title);
 }

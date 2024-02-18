@@ -1,16 +1,42 @@
 package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.IMovieController;
-import com.example.movie_backend.entity.Movie;
-import com.example.movie_backend.services.interfaces.IBaseService;
+import com.example.movie_backend.dto.movie.MovieDTO;
+import com.example.movie_backend.services.MovieService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @RestController
 
-public class MovieController extends BaseController<Movie, UUID> implements IMovieController {
-    public MovieController(IBaseService<Movie, UUID> service) {
-        super(service);
+public class MovieController implements IMovieController {
+
+    public final MovieService service;
+
+    public MovieController(MovieService service) {
+        this.service = service;
+    }
+
+    @Override
+    public ResponseEntity<MovieDTO> create(MovieDTO movieDTO) {
+        return ResponseEntity.ok(service.create(movieDTO));
+
+    }
+
+    @Override
+    public ResponseEntity<MovieDTO> update(MovieDTO movieDTO, Long id) {
+        return ResponseEntity.ok(service.create(movieDTO));
+    }
+
+    @Override
+    public ResponseEntity<MovieDTO> getById(Long id) {
+        return ResponseEntity.ok(service.getById(id));
+
+    }
+
+    @Override
+    public boolean delete(Long id) {
+         ResponseEntity.ok(service.delete(id));
+
+        return true;
     }
 }

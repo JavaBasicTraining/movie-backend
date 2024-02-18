@@ -68,6 +68,6 @@ common:
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
   realm: ${PROFILE_REALM:movie_website_realm}
-  resource: ${MOVIE_CLIENT_ID:movie_website_client}
+  resource: ${MOVIE_CLIENT_ID:movie_client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:zi0hI2cgqVDqGFa1N4jt0iuGI9078GNX}
+    secret: ${MOVIE_CLIENT_SECRET:BIet3scbFNt3a9Ye9o0gJ7TQoydC1G8h}

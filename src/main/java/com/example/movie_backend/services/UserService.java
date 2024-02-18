@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UserService extends BaseService<User, UUID> implements IUserService {
+public class UserService  implements IUserService {
     private final IKeycloakService iKeycloakService;
     private final UserRepository userRepository;
 
-    public UserService(JpaRepository<User, UUID> repository, IKeycloakService iKeycloakService, UserRepository userRepository) {
-        super(repository);
+    public UserService( IKeycloakService iKeycloakService, UserRepository userRepository) {
+        super();
         this.iKeycloakService = iKeycloakService;
         this.userRepository = userRepository;
     }
@@ -59,8 +59,4 @@ public class UserService extends BaseService<User, UUID> implements IUserService
                 .build();
     }
 
-    @Override
-    public List<User> getList() {
-        return userRepository.findAll();
-    }
 }

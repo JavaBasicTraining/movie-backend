@@ -1,6 +1,7 @@
 package com.example.movie_backend.repository;
 
 import com.example.movie_backend.entity.User;
+import com.sun.mail.util.UUDecoderStream;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

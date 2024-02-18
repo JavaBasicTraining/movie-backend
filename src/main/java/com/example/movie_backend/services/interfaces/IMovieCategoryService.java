@@ -1,8 +1,16 @@
 package com.example.movie_backend.services.interfaces;
 
-import com.example.movie_backend.entity.MovieCategory;
+import com.example.movie_backend.dto.moviecategory.MovieCategoryDTO;
+import com.example.movie_backend.dto.moviecategory.MovieCategoryDTO;
 
-import java.util.UUID;
+public interface IMovieCategoryService{
 
-public interface IMovieCategoryService extends IBaseService<MovieCategory, UUID> {
+    MovieCategoryDTO create(MovieCategoryDTO dto);
+
+    MovieCategoryDTO update(MovieCategoryDTO dto, Long id);
+
+    MovieCategoryDTO getById(Long id);
+
+
+    Boolean delete(Long id);
 }

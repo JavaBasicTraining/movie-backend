@@ -29,9 +29,9 @@ public class UserController implements IUserController {
         return ResponseEntity.ok(iUserService.register(request));
     }
 
-    @Override
-    public ResponseEntity<List<User>> getList() {
-        return ResponseEntity.ok(iUserService.getList());
-    }
+//    @Override
+//    public ResponseEntity<List<User>> getList() {
+//        return ResponseEntity.ok(iUserService.getList());
+//    }
 
 }

@@ -8,7 +8,7 @@ import com.example.movie_backend.model.user.RegisterResponse;
 
 import java.util.UUID;
 
-public interface IUserService extends IBaseService<User, UUID> {
+public interface IUserService  {
     LoginResponse login(LoginRequest request);
 
     RegisterResponse register(RegisterRequest request);
