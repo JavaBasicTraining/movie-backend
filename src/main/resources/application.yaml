@@ -45,4 +45,4 @@ keycloak:
   realm: ${PROFILE_REALM:movie-realm}
   resource: ${MOVIE_CLIENT_ID:movie-client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:rZEgmEMN0beYTqojBMThndrSqxg4Jnxn}
+    secret: ${MOVIE_CLIENT_SECRET:zo8DwOkVVwVnpoK5xjn3xj5fjoaTiIur}
