@@ -1,7 +1,9 @@
 package com.example.movie_backend.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@SuperBuilder
+@NoArgsConstructor
 public class Movie {
     @Id
     @GeneratedValue(generator = "UUID")

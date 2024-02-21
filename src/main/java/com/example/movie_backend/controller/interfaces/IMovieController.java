@@ -1,8 +1,29 @@
 package com.example.movie_backend.controller.interfaces;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.movie_backend.model.movie.CreateMovieRequest;
+import com.example.movie_backend.model.movie.MovieDTO;
+import com.example.movie_backend.model.movie.UpdateMovieRequest;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/movie/")
+import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
+
+@RequestMapping("/api/v1/movies")
 public interface IMovieController {
-
+    
+    @GetMapping
+    ResponseEntity<List<MovieDTO>> query(@ParameterObject Pageable pageable);
+    
+    @GetMapping("{id}")
+    ResponseEntity<MovieDTO> find(@PathVariable("id") UUID id);
+    
+    @PostMapping
+    ResponseEntity<MovieDTO> create(@RequestBody @Valid CreateMovieRequest request);
+    
+    @PutMapping("{id}")
+    ResponseEntity<MovieDTO> update(@PathVariable("id") UUID id, @RequestBody @Valid UpdateMovieRequest request);
 }
