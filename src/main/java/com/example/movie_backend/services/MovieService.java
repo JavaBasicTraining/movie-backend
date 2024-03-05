@@ -4,6 +4,7 @@ import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.mapper.MovieMapper;
 import com.example.movie_backend.model.movie.CreateMovieRequest;
 import com.example.movie_backend.model.movie.MovieDTO;
+import com.example.movie_backend.model.movie.QueryRequest;
 import com.example.movie_backend.model.movie.UpdateMovieRequest;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IMovieService;
@@ -29,8 +30,8 @@ public class MovieService implements IMovieService {
     }
     
     @Override
-    public List<MovieDTO> query(Pageable pageable) {
-        return this.movieRepository.findAll(pageable)
+    public List<MovieDTO> query(QueryRequest request, Pageable pageable) {
+        return this.movieRepository.query(request.getCategoryName(), pageable)
             .map(movieMapper::toDTO)
             .getContent();
     }

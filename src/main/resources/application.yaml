@@ -22,7 +22,7 @@ spring:
       maximum-pool-size: 20
     type: com.zaxxer.hikari.HikariDataSource
   jpa:
-    show-sql: false
+    show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate.format_sql: true
@@ -45,4 +45,4 @@ keycloak:
   realm: ${PROFILE_REALM:movie-realm}
   resource: ${MOVIE_CLIENT_ID:movie-client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:zo8DwOkVVwVnpoK5xjn3xj5fjoaTiIur}
+    secret: ${MOVIE_CLIENT_SECRET:CmMfgdzoUUgNfI1vGLQtG8YNVdfY9Xsh}

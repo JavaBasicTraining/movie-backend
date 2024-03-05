@@ -3,6 +3,7 @@ package com.example.movie_backend.controller;
 import com.example.movie_backend.controller.interfaces.IMovieController;
 import com.example.movie_backend.model.movie.CreateMovieRequest;
 import com.example.movie_backend.model.movie.MovieDTO;
+import com.example.movie_backend.model.movie.QueryRequest;
 import com.example.movie_backend.model.movie.UpdateMovieRequest;
 import com.example.movie_backend.services.interfaces.IMovieService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ public class MovieController implements IMovieController {
     private final IMovieService movieService;
     
     @Override
-    public ResponseEntity<List<MovieDTO>> query(Pageable pageable) {
+    public ResponseEntity<List<MovieDTO>> query(QueryRequest request, Pageable pageable) {
         return ResponseEntity.ok(
-            this.movieService.query(pageable)
+            this.movieService.query(request, pageable)
         );
     }
     

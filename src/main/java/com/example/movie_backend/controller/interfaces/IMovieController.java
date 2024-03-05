@@ -2,6 +2,7 @@ package com.example.movie_backend.controller.interfaces;
 
 import com.example.movie_backend.model.movie.CreateMovieRequest;
 import com.example.movie_backend.model.movie.MovieDTO;
+import com.example.movie_backend.model.movie.QueryRequest;
 import com.example.movie_backend.model.movie.UpdateMovieRequest;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public interface IMovieController {
     
     @GetMapping
-    ResponseEntity<List<MovieDTO>> query(@ParameterObject Pageable pageable);
+    ResponseEntity<List<MovieDTO>> query(@ParameterObject QueryRequest request, @ParameterObject Pageable pageable);
     
     @GetMapping("{id}")
     ResponseEntity<MovieDTO> find(@PathVariable("id") UUID id);
