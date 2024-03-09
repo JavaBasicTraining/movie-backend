@@ -12,16 +12,18 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 public class MovieDTO {
-    
+
     private UUID id;
-    
+
     private String name;
-    
+
     private String posterUrl;
-    
+
+    private String videoSourceUrl;
+
     private String viTitle;
-    
+
     private String enTitle;
-    
+
     private String description;
 }

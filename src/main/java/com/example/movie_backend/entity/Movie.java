@@ -31,6 +31,9 @@ public class Movie {
     @Column(name = "poster_url")
     private String posterUrl;
 
+    @Column(name = "video_source_url")
+    private String videoSourceUrl;
+
     @Column(name = "vi_title")
     private String viTitle;
 

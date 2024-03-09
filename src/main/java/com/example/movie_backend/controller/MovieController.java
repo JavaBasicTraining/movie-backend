@@ -1,10 +1,13 @@
 package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.IMovieController;
+import com.example.movie_backend.model.file.UploadRequest;
+import com.example.movie_backend.model.file.UploadResponse;
 import com.example.movie_backend.model.movie.CreateMovieRequest;
 import com.example.movie_backend.model.movie.MovieDTO;
 import com.example.movie_backend.model.movie.QueryRequest;
 import com.example.movie_backend.model.movie.UpdateMovieRequest;
+import com.example.movie_backend.services.interfaces.IMinioService;
 import com.example.movie_backend.services.interfaces.IMovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +22,9 @@ import java.util.UUID;
 public class MovieController implements IMovieController {
     
     private final IMovieService movieService;
-    
+
+    private final IMinioService minioService;
+
     @Override
     public ResponseEntity<List<MovieDTO>> query(QueryRequest request, Pageable pageable) {
         return ResponseEntity.ok(
@@ -46,5 +51,10 @@ public class MovieController implements IMovieController {
         return ResponseEntity.ok(
             this.movieService.update(id, request)
         );
+    }
+
+    @Override
+    public ResponseEntity<UploadResponse> upload(UploadRequest request) {
+        return ResponseEntity.ok(this.minioService.upload(request));
     }
 }

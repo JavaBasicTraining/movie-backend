@@ -11,12 +11,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class CreateMovieRequest {
     private String name;
-    
+
     private String posterUrl;
-    
+
+    private String videoSourceUrl;
+
     private String viTitle;
-    
+
     private String enTitle;
-    
+
     private String description;
 }

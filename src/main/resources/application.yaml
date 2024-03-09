@@ -1,6 +1,10 @@
 server:
   port: ${SERVER_PORT:8081}
 spring:
+  servlet:
+    multipart:
+      max-request-size: 1GB
+      max-file-size: 1GB
   application:
     name: electronic_device_shop
   profiles:
@@ -45,4 +49,9 @@ keycloak:
   realm: ${PROFILE_REALM:movie-realm}
   resource: ${MOVIE_CLIENT_ID:movie-client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:CmMfgdzoUUgNfI1vGLQtG8YNVdfY9Xsh}
+    secret: ${MOVIE_CLIENT_SECRET:zo8DwOkVVwVnpoK5xjn3xj5fjoaTiIur}
+
+minio:
+  endpoint: http://localhost:9000
+  access_key: ROOTUSER
+  secret_key: CHANGEME123
