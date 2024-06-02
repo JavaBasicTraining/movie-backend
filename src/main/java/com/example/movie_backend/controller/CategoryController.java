@@ -2,6 +2,7 @@ package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.ICategoryController;
 import com.example.movie_backend.dto.category.CategoryDTO;
+import com.example.movie_backend.repository.CategoryRepository;
 import com.example.movie_backend.services.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController  implements ICategoryController {
 
     public final CategoryService categoryService;
+    public  final CategoryRepository repository;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, CategoryRepository repository) {
         this.categoryService = categoryService;
+        this.repository = repository;
     }
 
     @Override
@@ -35,4 +38,7 @@ public class CategoryController  implements ICategoryController {
          ResponseEntity.ok(categoryService.delete(id));
          return true;
     }
+
+
+
 }

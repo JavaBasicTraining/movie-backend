@@ -1,21 +1,21 @@
 package com.example.movie_backend.dto.movie;
 
+import com.example.movie_backend.dto.category.CategoryDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.Set;
 
 @Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class MovieDTO {
 
-    @JsonProperty (access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String name;
@@ -28,7 +28,10 @@ public class MovieDTO {
 
     private String description;
 
-    private String moviePackageId;
+    private String videoMinioPath;
 
+    private Set<Long> ids;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<CategoryDTO> categoryDTOSet;
 }

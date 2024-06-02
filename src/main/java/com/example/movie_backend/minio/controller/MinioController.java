@@ -59,4 +59,12 @@ public class MinioController implements IMinioController {
         }
     }
 
+    @Override
+    public ResponseEntity<String> getPreSignedLink(String object) {
+        return ResponseEntity.ok(iMinioService.getPreSignedLink(object));
+    }
+
+// http://localhost:8081/api/v1/minio/list/student/videos/congdianguc.mp4
+    // cái param vô tình tạo ra link khác vì có dấu /
+    // Như trường hợp này mình đổi nó thành dấu \ này nó nhận được đường link ko a -> k
 }

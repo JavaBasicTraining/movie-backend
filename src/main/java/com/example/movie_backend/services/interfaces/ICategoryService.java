@@ -1,6 +1,7 @@
 package com.example.movie_backend.services.interfaces;
 
 import com.example.movie_backend.dto.category.CategoryDTO;
+import com.example.movie_backend.dto.category.CreateCategoryRequest;
 import com.example.movie_backend.entity.Category;
 
 import java.util.List;

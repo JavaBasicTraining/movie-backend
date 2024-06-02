@@ -7,6 +7,7 @@ public enum MediaType {
     IMAGE("images"),
     VIDEO("videos"),
     FILE("files"),
+
     ;
     private final String path;
 

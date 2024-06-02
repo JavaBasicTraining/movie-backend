@@ -1,15 +1,14 @@
 package com.example.movie_backend.services.interfaces;
 
 import com.example.movie_backend.entity.User;
-import com.example.movie_backend.model.user.LoginRequest;
-import com.example.movie_backend.model.user.LoginResponse;
 import com.example.movie_backend.model.user.RegisterRequest;
-import com.example.movie_backend.model.user.RegisterResponse;
 
-import java.util.UUID;
+import java.util.List;
 
-public interface IUserService  {
-    LoginResponse login(LoginRequest request);
+public interface IUserService {
+    User create (User e);
 
-    RegisterResponse register(RegisterRequest request);
+    List<User> getList ();
+
+    void register(RegisterRequest request);
 }

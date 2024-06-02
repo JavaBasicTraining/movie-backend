@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Struct;
 import java.util.List;
 
 @RequestMapping("/api/v1/minio/")
@@ -22,4 +23,7 @@ public interface IMinioController {
 
     @PostMapping(value = "upload-by-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<FileInfo> uploadByFile(@ModelAttribute @Valid UploadByFile request);
+
+    @GetMapping("link")
+    ResponseEntity<String> getPreSignedLink (@RequestParam("object") String object);
 }

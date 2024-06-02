@@ -20,7 +20,10 @@ import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class MinioService implements IMinioService {
@@ -116,6 +119,24 @@ public class MinioService implements IMinioService {
         );
 
         return fileInfos;
+    }
+
+    @Override
+    public String getPreSignedLink(String object) {
+        try {
+
+            String url =
+                    minioClient.getPresignedObjectUrl(
+                            GetPresignedObjectUrlArgs.builder()
+                                    .method(Method.GET) // chỗ này PUT đổi sang GET
+                                    .bucket("student")
+                                    .object(object)
+                                    .expiry(2, TimeUnit.HOURS)
+                                    .build());
+            return  url;
+        } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
+            System.out.println("Error occurred: " + e);}
+       return null;
     }
 
     private String getUrlFile(String object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {

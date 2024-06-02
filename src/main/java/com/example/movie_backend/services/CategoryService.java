@@ -8,13 +8,12 @@ import com.example.movie_backend.services.interfaces.ICategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.BadRequestException;
-import java.util.List;
 
 @Service
 public class CategoryService implements ICategoryService {
 
     public final CategoryMapper mapper;
-    public  final CategoryRepository repository;
+    public final CategoryRepository repository;
 
     public CategoryService(CategoryMapper mapper, CategoryRepository repository) {
         this.mapper = mapper;
@@ -29,7 +28,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public CategoryDTO update(CategoryDTO entity, Long id) {
-        Category category = mapper.toEntity(entity,id);
+        Category category = mapper.toEntity(entity, id);
         return mapper.toDTO(repository.save(category));
     }
 
