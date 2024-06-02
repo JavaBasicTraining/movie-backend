@@ -58,6 +58,7 @@ public class AccountController {
     public String showUserPage() {
         return "user";
     }
+    
     @PostMapping("register")
     public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
         userService.register(request);

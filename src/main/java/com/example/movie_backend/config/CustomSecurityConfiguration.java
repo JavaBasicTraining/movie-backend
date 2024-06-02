@@ -28,7 +28,6 @@ public class CustomSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-
                 .cors()
                 .and()
                 .csrf()
@@ -42,10 +41,6 @@ public class CustomSecurityConfiguration {
         return http.build();
     }
 
-    /**
-     * @param http
-     * @throws Exception
-     */
     private void permitAll(HttpSecurity http) throws Exception {
         if (!Objects.isNull(commonProperties.getPermitAllPathPatterns())) {
             for (String path : commonProperties.getPermitAllPathPatterns()) {
@@ -62,11 +57,7 @@ public class CustomSecurityConfiguration {
                 .withUser("user").password(passwordEncoder().encode("userPass")).roles("USER");
     }
 
-
-    /**
-     * @param http
-     * @throws Exception
-     */
+    
     private void corsConfig(HttpSecurity http) throws Exception {
         CorsConfiguration configuration = new CorsConfiguration();
         if (!Objects.isNull(commonProperties.getCors().getOrigins())) {

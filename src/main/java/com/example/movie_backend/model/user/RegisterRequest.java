@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -16,5 +19,5 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String phoneNumber;
-
+    private List<String> authorities = new ArrayList<>();
 }

@@ -39,12 +39,6 @@ spring:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-  security:
-    oauth2:
-      resource-server:
-        jwt:
-          jwk-set-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}/protocol/openid-connect/certs
-          issuer-uri: ${KEYCLOAK_URI:http://localhost:8080}/realms/${PROFILE_REALM:movie_website_realm}
 
 common:
   permit-all-path-patterns:

@@ -1,8 +1,9 @@
 package com.example.movie_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jetbrains.annotations.NotNull;
@@ -10,15 +11,19 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A Authority.
  */
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "jhi_authority")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@JsonIgnoreProperties(value = { "new", "id" })
-@SuppressWarnings("common-java:DuplicatedBlocks")
+@JsonIgnoreProperties(value = {"new", "id"})
 public class Authority implements Serializable, Persistable<String> {
 
     private static final long serialVersionUID = 1L;
@@ -33,19 +38,6 @@ public class Authority implements Serializable, Persistable<String> {
     private boolean isPersisted;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Authority name(String name) {
-        this.setName(name);
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @PostLoad
     @PostPersist
@@ -63,6 +55,12 @@ public class Authority implements Serializable, Persistable<String> {
     public boolean isNew() {
         return !this.isPersisted;
     }
+    
+    
+    public Authority(String name) {
+        this.name = name;
+    }
+    
 
     public Authority setIsPersisted() {
         this.isPersisted = true;
@@ -91,7 +89,7 @@ public class Authority implements Serializable, Persistable<String> {
     @Override
     public String toString() {
         return "Authority{" +
-                "name=" + getName() +
-                "}";
+            "name=" + getName() +
+            "}";
     }
 }
