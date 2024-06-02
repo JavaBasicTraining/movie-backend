@@ -57,7 +57,7 @@ public class Authority implements Serializable, Persistable<String> {
     }
     
     
-    public Authority(String name) {
+    public Authority(@NotNull String name) {
         this.name = name;
     }
     

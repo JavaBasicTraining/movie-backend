@@ -4,6 +4,7 @@ package com.example.movie_backend.services;
 import com.example.movie_backend.entity.Authority;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.RegisterRequest;
+import com.example.movie_backend.repository.AuthorityRepository;
 import com.example.movie_backend.repository.UserRepository;
 import com.example.movie_backend.services.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
-
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder; // ma hoa password
+    private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User create(User e) {
@@ -36,14 +37,17 @@ public class UserService implements IUserService {
             .username(request.getUsername())
             .passwordHash(
                 passwordEncoder.encode(request.getPassword())
-                // password bắt buộc phải mã hóa, chứ k được lưu bản gốc
             )
             .firstName(request.getFistName())
             .lastName(request.getLastName())
             .authorities(
                 request.getAuthorities()
                     .stream()
-                    .map(Authority::new)
+                    .map(
+                        authority -> authorityRepository
+                            .findById(authority)
+                            .orElse(new Authority("USER"))
+                    )
                     .collect(Collectors.toSet())
             )
             .build();
