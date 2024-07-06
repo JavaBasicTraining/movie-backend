@@ -1,11 +1,10 @@
 package com.example.movie_backend.dto.movie;
 
 import com.example.movie_backend.dto.category.CategoryDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.movie_backend.dto.navbar.NavbarDTO;
+import com.example.movie_backend.entity.Movie;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
@@ -16,10 +15,12 @@ import java.util.Set;
 @NoArgsConstructor
 public class MovieDTO {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    private String name;
+    private String nameMovie;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String posterUrl;
 
     private String viTitle;
@@ -28,10 +29,23 @@ public class MovieDTO {
 
     private String description;
 
-    private String videoMinioPath;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private  String videoUrl;
 
-    private Set<Long> ids;
+    private Set<Long> idCategory;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Set<CategoryDTO> categoryDTOSet;
+    private Set<Long> idNavbar;
+
+
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<CategoryDTO> categories;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<NavbarDTO> navbarDTOSet;
+
+    public MovieDTO(Movie movie) {
+        this.id = movie.getId();
+    }
 }

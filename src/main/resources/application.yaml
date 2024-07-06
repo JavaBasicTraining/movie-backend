@@ -14,7 +14,7 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:FormosVN@123}
+    password: ${DATABASE_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -28,7 +28,7 @@ spring:
       maximum-pool-size: 20
     type: com.zaxxer.hikari.HikariDataSource
   jpa:
-    show-sql: false
+    show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate.format_sql: true
@@ -48,23 +48,13 @@ common:
     - /api/v1/user/login
     - /api/v1/user/register
     - /api/account/register
+    - /api/account/getListUser
     - /api/account/login
-    - /test/**
   cors:
     origins:
       - http://localhost:8081
       - http://localhost:3000
 
-#thai:
-#  name: thai
-#  age: 18
-#  clazz:
-#    name: lop 1
-#    ten-giao-vien: giao vien 1
-#  levels:
-#    - mot
-#    - hai
-#    - ba
 
 
 keycloak:

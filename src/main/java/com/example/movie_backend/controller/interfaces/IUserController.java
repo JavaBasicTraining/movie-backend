@@ -24,6 +24,6 @@ public interface IUserController {
     @SecurityRequirements
     ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request);
 
-//    @GetMapping("list")
-//    ResponseEntity<List<User>> getList();
+    @GetMapping("getListUser")
+    ResponseEntity<List<User>> getList();
 }

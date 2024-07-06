@@ -6,6 +6,7 @@ import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,20 +21,14 @@ import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@AllArgsConstructor
 public class MinioService implements IMinioService {
     private final MinioClient minioClient;
     private static final String BUCKET_NAME = "student";
-
-    public MinioService(MinioClient minioClient) {
-        this.minioClient = minioClient;
-    }
-
 
     @Override
     public FileInfo uploadByFile(MultipartFile file, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -92,9 +87,7 @@ public class MinioService implements IMinioService {
     public List<FileInfo> getList() {
         Iterable<Result<Item>> results = minioClient.listObjects(
                 ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
-
         List<FileInfo> fileInfos = new ArrayList<>();
-
         results.forEach(
                 value -> {
                     try {
@@ -128,15 +121,16 @@ public class MinioService implements IMinioService {
             String url =
                     minioClient.getPresignedObjectUrl(
                             GetPresignedObjectUrlArgs.builder()
-                                    .method(Method.GET) // chỗ này PUT đổi sang GET
-                                    .bucket("student")
+                                    .method(Method.GET)
+                                     .bucket("student")
                                     .object(object)
                                     .expiry(2, TimeUnit.HOURS)
                                     .build());
-            return  url;
+            return url;
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
-            System.out.println("Error occurred: " + e);}
-       return null;
+            System.out.println("Error occurred: " + e);
+        }
+        return null;
     }
 
     private String getUrlFile(String object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -144,7 +138,6 @@ public class MinioService implements IMinioService {
                 GetPresignedObjectUrlArgs.builder()
                         .object(object)
                         .bucket(BUCKET_NAME)
-                      //  .expiry(2, TimeUnit.HOURS)
                         .method(
                                 Method.GET
                         )

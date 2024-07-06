@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.BadRequestException;
 
 @Service
-public class EpisodeService  implements IEpisodeService {
-    public  final EpisodeRepository repository;
+public class EpisodeService implements IEpisodeService {
+    public final EpisodeRepository repository;
 
     public final EpisodeMapper mapper;
+
     public EpisodeService(EpisodeRepository repository, EpisodeMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
@@ -27,7 +28,7 @@ public class EpisodeService  implements IEpisodeService {
 
     @Override
     public EpisodeDTO update(EpisodeDTO dto, Long id) {
-        Episode comment = mapper.toEntity(dto,id);
+        Episode comment = mapper.toEntity(dto, id);
         return mapper.toDTO(repository.save(comment));
     }
 
@@ -37,7 +38,8 @@ public class EpisodeService  implements IEpisodeService {
                 .map(this.mapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
-                );    }
+                );
+    }
 
     @Override
     public Boolean delete(Long id) {

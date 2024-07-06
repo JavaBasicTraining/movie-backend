@@ -1,11 +1,15 @@
 package com.example.movie_backend.repository;
 
+import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.entity.Movie;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -15,9 +19,33 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                     SELECT m.* FROM movie m
                     left join movie_category mc on mc.movie_id = m.id 
                     left join category c on mc.category_id = c.id 
-                    where c.name is null or c.name like concat('%', :name, '%')
+                    where (:keyword is null or c.name like concat('%', :keyword, '%'))
+                    or (:keyword is null or m.name like concat('%', :keyword, '%'))
                     """,
-            nativeQuery = true // required , dang viet query native
+            nativeQuery = true
     )
-    Set<Movie> query(@Param("name") String name);
+    Page<Movie> query(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query(
+            value = """
+                    SELECT *
+                    FROM movie_website.movie m
+                    WHERE m.name LIKE %:name%
+                    """,
+            nativeQuery = true
+    )
+    Set<Movie> filterListMovie(@Param("name") String name);
+
+    @Query(
+            value = """
+                    SELECT *
+                    FROM movie_website.movie m
+                    WHERE m.name LIKE %:name%
+                    """,
+            nativeQuery = true
+    )
+    Optional<Movie> filterMovie(@Param("name") String name);
+
+
+
 }
