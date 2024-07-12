@@ -33,8 +33,7 @@ public class CommentController implements ICommentController {
 
     @Override
     public boolean delete(Long id) {
-         ResponseEntity.ok(service.delete(id));
-
+        ResponseEntity.ok(service.delete(id));
         return true;
     }
 }

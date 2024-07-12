@@ -1,11 +1,14 @@
 package com.example.movie_backend.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Table(name = "comment")
@@ -21,9 +24,11 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "episode_id")
-    private String episodeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Builder.Default
+    @ManyToMany(mappedBy = "comments")
+    private Set<Movie> movies = new HashSet<>();
 }

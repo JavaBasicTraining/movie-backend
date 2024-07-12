@@ -2,36 +2,30 @@ package com.example.movie_backend.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
-@Table(name = "evaluation")
+@Table(name = "genre")
 @Getter
 @Setter
 @Entity
 @SuperBuilder(toBuilder = true)
-public class Evaluation {
+@NoArgsConstructor
+public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "star")
-    private Long star;
-
-    @Column(name = "movie_id")
-    private Long movieId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "name")
+    private String name;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "evaluations")
+    @ManyToMany(mappedBy = "genres")
     private Set<Movie> movies = new HashSet<>();
+
 }

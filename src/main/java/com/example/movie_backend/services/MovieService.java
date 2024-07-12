@@ -89,12 +89,10 @@ public class MovieService implements IMovieService {
             throw new RuntimeException();
         }
 
-        if (Objects.nonNull(dto.getIdCategory()) && !dto.getIdCategory().isEmpty() && dto.getIdCategory().stream().noneMatch(id -> id == 0)) {
+        if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(id -> id == 0)) {
             return mapper.toDTO(repository.save(movie));
         } else {
-            HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Bad Request");
-            throw new HttpClientErrorException(handleHttpClientErrorException(ex).getStatusCode(), "Ids are null or empty or Ids = 0!!!");
-
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Ids are null or empty or Ids = 0!!!");
         }
     }
 
@@ -126,11 +124,11 @@ public class MovieService implements IMovieService {
             throw new RuntimeException();
         }
 
-        if (Objects.nonNull(dto.getIdCategory()) && !dto.getIdCategory().isEmpty() && dto.getIdCategory().stream().noneMatch(ids -> ids == 0)) {
+        if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(ids -> ids == 0)) {
             return mapper.toDTO(repository.save(movie));
         } else {
             HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Bad Request");
-            throw new HttpClientErrorException(handleHttpClientErrorException(ex).getStatusCode(), "Ids are null or empty or Ids = 0!!!");
+            throw new HttpClientErrorException(handleHttpClientErrorException(ex).getStatusCode(), "ids are null or empty or ids = 0!!!");
 
         }
 
@@ -145,23 +143,6 @@ public class MovieService implements IMovieService {
                 );
     }
 
-    @Override
-    public List<MovieDTO> getList() {
-        return repository.findAll()
-                .stream()
-                .map(item -> {
-                            MovieDTO movieDTO = mapper.toDTO(item);
-                            if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                                movieDTO.setPosterUrl(linkPoster);
-                                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                                movieDTO.setVideoUrl(linkVideo);
-                            }
-                            return movieDTO;
-                        }
-                )
-                .collect(Collectors.toList());
-    }
 
     @Override
     public Boolean delete(Long id) {

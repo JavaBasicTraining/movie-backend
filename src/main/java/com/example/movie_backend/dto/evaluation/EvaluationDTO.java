@@ -13,9 +13,9 @@ public class EvaluationDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    private Integer star;
+    private Long star;
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer movieId;
+    private Long movieId;
 }

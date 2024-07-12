@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MoviePackageController implements IMoviePackageController {
     public final MoviePackageService service;
 
-    public MoviePackageController(MoviePackageService service) {
+    public MoviePackageController (MoviePackageService service) {
         this.service = service;
     }
 

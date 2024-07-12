@@ -2,11 +2,9 @@ package com.example.movie_backend.services;
 
 
 import com.example.movie_backend.controller.exception.ConflictDataException;
-import com.example.movie_backend.dto.category.CategoryDTO;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.entity.Authority;
-import com.example.movie_backend.entity.Category;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.RegisterRequest;
 import com.example.movie_backend.repository.AuthorityRepository;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.BadRequestException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

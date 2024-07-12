@@ -1,20 +1,21 @@
-package com.example.movie_backend.dto.category;
+package com.example.movie_backend.dto.genre;
 
-import com.example.movie_backend.entity.Category;
+import com.example.movie_backend.entity.Genre;
 import com.example.movie_backend.entity.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
+
 @Component
-public class CategoryMapper {
-    public Category toEntity(CategoryDTO dto) {
-        return Category.builder()
+public class GenreMapper {
+    public Genre toEntity(GenreDTO dto) {
+        return Genre.builder()
                 .name(dto.getName())
                 .build();
     }
 
-    public Category toEntity(CategoryDTO dto, Long id) {
-        return Category.builder()
+    public Genre toEntity(GenreDTO dto, Long id) {
+        return Genre.builder()
                 .name(dto.getName())
                 .movies(dto.getMovies().stream()
                         .map(movie -> Movie.builder()
@@ -23,14 +24,15 @@ public class CategoryMapper {
                 .build();
     }
 
-    public CategoryDTO toDTO(Category entity) {
-        return CategoryDTO.builder()
+    public GenreDTO toDTO(Genre entity) {
+        return GenreDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .movieIds(entity.getMovies().stream()
                         .map(
-                                Movie::getId
+                                item -> item.getId()
                         ).collect(Collectors.toSet()))
                 .build();
     }
+
 }

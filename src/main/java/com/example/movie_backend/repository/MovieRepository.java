@@ -16,9 +16,9 @@ import java.util.Set;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
-                    SELECT m.* FROM movie m
-                    left join movie_category mc on mc.movie_id = m.id 
-                    left join category c on mc.category_id = c.id 
+                    SELECT distinct  m.* FROM movie m
+                    left join movie_genres mc on mc.movie_id = m.id
+                    left join genre c on mc.genres_id = c.id
                     where (:keyword is null or c.name like concat('%', :keyword, '%'))
                     or (:keyword is null or m.name like concat('%', :keyword, '%'))
                     """,
@@ -29,7 +29,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
                     SELECT *
-                    FROM movie_website.movie m
+                    FROM movie_website.movie m, 
                     WHERE m.name LIKE %:name%
                     """,
             nativeQuery = true
@@ -40,6 +40,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             value = """
                     SELECT *
                     FROM movie_website.movie m
+                    inner join movie_website.movie_genres mc
+                    on m.id =mc.movie_id
+                    inner join movie_website.genre c
+                    on mc.genres_id = c .id
                     WHERE m.name LIKE %:name%
                     """,
             nativeQuery = true

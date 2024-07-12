@@ -1,5 +1,6 @@
 package com.example.movie_backend.dto.episode;
 
+import com.example.movie_backend.entity.Movie;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,8 @@ public class EpisodeDTO {
 
     private String videoUrl;
 
-    private String movieId;
+    private Long movieId;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Movie movie;
 }

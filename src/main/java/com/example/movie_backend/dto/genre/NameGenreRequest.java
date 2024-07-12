@@ -1,12 +1,11 @@
-package com.example.movie_backend.dto.category;
+package com.example.movie_backend.dto.genre;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder(toBuilder = true)
-public class NameCategoryRequest {
+public class NameGenreRequest {
 
     private String name;
 }

@@ -20,7 +20,7 @@ public interface IMovieService{
 
     MovieDTO getById(Long id);
 
-    List<MovieDTO> getList();
+
 
     Boolean delete(Long id);
 

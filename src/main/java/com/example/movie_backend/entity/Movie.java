@@ -44,18 +44,57 @@ public class Movie {
     @Column(name = "video_url")
     private String videoUrl ;
 
+    @Column(name = "country")
+    private String country ;
+
+    @Column(name = "year")
+    private Long year ;
 
     @Builder.Default
     @ManyToMany
     @JoinTable(
-            name = "movie_category",
+            name = "movie_genres",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            inverseJoinColumns = @JoinColumn(name = "genres_id")
     )
-    private Set<Category> categories = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
 
-    public void addCategory(Category category) {
-        this.categories.add(category);
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+            name = "movie_comment",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
+    private Set<Comment> comments = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+            name = "movie_evaluation",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "evaluation_id")
+    )
+    private Set<Evaluation> evaluations = new HashSet<>();
+
+
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private Set<Episode> episodes;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+
+    public void addCategory(Genre genre) {
+        this.genres.add(genre);
     }
 
 }

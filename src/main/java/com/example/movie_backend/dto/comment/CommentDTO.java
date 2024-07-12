@@ -1,11 +1,14 @@
 package com.example.movie_backend.dto.comment;
 
+import com.example.movie_backend.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
+import java.util.Set;
+
 @Getter
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
@@ -15,7 +18,7 @@ public class CommentDTO {
 
     private String content;
 
-    private String episodeId;
+    private Long idUser;
 
-    private Integer userId;
+    private  Set<Long> idMovies;
 }

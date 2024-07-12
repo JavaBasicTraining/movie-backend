@@ -1,17 +1,24 @@
 package com.example.movie_backend.dto.comment;
 
-import com.example.movie_backend.dto.category.CategoryDTO;
-import com.example.movie_backend.entity.Category;
 import com.example.movie_backend.entity.Comment;
+import com.example.movie_backend.entity.Movie;
+import com.example.movie_backend.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class CommentMapper {
     public Comment toEntity(CommentDTO dto) {
         return Comment.builder()
+                .id(dto.getId())
                 .content(dto.getContent())
-                .episodeId(dto.getEpisodeId())
-                .userId(dto.getUserId())
+                .user(User.builder().Id(dto.getIdUser()).build())
+
+                .movies(dto.getIdMovies().stream().map(item ->
+                        Movie.builder()
+                                .id(item)
+                                .build()).collect(Collectors.toSet()))
                 .build();
 
     }
@@ -21,15 +28,22 @@ public class CommentMapper {
         return CommentDTO.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
-                .episodeId(entity.getEpisodeId())
-                .userId(entity.getUserId())
+                .idUser(entity.getUser().getId())
+
+                .idMovies(entity.getMovies().stream()
+                        .map(item-> item.getId())
+                        .collect(Collectors.toSet()))
                 .build();
     }
     public Comment toEntity(CommentDTO dto,Long id) {
         return Comment.builder()
+                .id(id)
                 .content(dto.getContent())
-                .episodeId(dto.getEpisodeId())
-                .userId(dto.getUserId())
+                .user(User.builder().Id(dto.getIdUser()).build())
+                .movies(dto.getIdMovies().stream().map(item ->
+                        Movie.builder()
+                                .id(item)
+                                .build()).collect(Collectors.toSet()))
                 .build();
 
     }

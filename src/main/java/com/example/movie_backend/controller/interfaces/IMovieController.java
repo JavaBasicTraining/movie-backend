@@ -3,7 +3,6 @@ package com.example.movie_backend.controller.interfaces;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
-import com.example.movie_backend.dto.movie.QueryMovieResponse;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,5 @@ public interface IMovieController {
     @GetMapping("{id}")
     ResponseEntity<MovieDTO> getById(@RequestParam Long id);
 
-    @GetMapping("get_list")
-    ResponseEntity<List<MovieDTO>> getList();
+
 }

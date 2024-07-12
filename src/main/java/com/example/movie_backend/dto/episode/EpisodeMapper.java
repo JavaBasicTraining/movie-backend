@@ -1,6 +1,7 @@
 package com.example.movie_backend.dto.episode;
 
 import com.example.movie_backend.entity.Episode;
+import com.example.movie_backend.entity.Movie;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ public class EpisodeMapper {
                 .episodeCount(dto.getEpisodeCount())
                 .posterUrl(dto.getPosterUrl())
                 .videoUrl(dto.getVideoUrl())
-                .movieId(dto.getMovieId())
+                .movie(Movie.builder().id(dto.getMovieId()).build())
                 .build();
     }
 
@@ -23,7 +24,7 @@ public class EpisodeMapper {
                 .episodeCount(dto.getEpisodeCount())
                 .posterUrl(dto.getPosterUrl())
                 .videoUrl(dto.getVideoUrl())
-                .movieId(dto.getMovieId())
+                .movie(Movie.builder().id(dto.getMovieId()).build())
                 .build();
     }
 
@@ -33,7 +34,7 @@ public class EpisodeMapper {
                 .id(entity.getId())
                 .posterUrl(entity.getPosterUrl())
                 .videoUrl(entity.getVideoUrl())
-                .movieId(entity.getMovieId())
+                .movieId(entity.getMovie().getId())
                 .build();
     }
 }

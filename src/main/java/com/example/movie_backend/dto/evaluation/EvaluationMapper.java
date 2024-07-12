@@ -1,5 +1,6 @@
 package com.example.movie_backend.dto.evaluation;
 import com.example.movie_backend.entity.Evaluation;
+import com.example.movie_backend.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,7 +9,8 @@ public class EvaluationMapper {
     {
         return Evaluation.builder()
                 .star(dto.getStar())
-                .userId(dto.getUserId())
+                .user(User.builder()
+                        .Id(dto.getUserId()).build())
                 .movieId(dto.getMovieId())
                 .build();
     }
@@ -17,7 +19,8 @@ public class EvaluationMapper {
     {
         return Evaluation.builder()
                 .star(dto.getStar())
-                .userId(dto.getUserId())
+                .user(User.builder()
+                        .Id(dto.getUserId()).build())
                 .movieId(dto.getMovieId())
                 .build();
     }
@@ -28,7 +31,7 @@ public class EvaluationMapper {
         return EvaluationDTO.builder()
                 .id(entity.getId())
                 .star(entity.getStar())
-                .userId(entity.getUserId())
+                .userId(entity.getUser().getId())
                 .movieId(entity.getMovieId())
                 .build();
     }

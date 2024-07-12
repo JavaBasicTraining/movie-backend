@@ -21,8 +21,7 @@ import java.util.List;
 public class MovieController implements IMovieController {
 
     public final MovieService service;
-    public final MovieRepository repository;
-    public final MovieMapper mapper;
+
 
     @Override
     public ResponseEntity<List<MovieDTOWithoutJoin>> query(
@@ -35,12 +34,6 @@ public class MovieController implements IMovieController {
     @Override
     public ResponseEntity<MovieDTO> getById(Long id) {
         return ResponseEntity.ok(service.getById(id));
-    }
-
-    @Override
-    public ResponseEntity<List<MovieDTO>> getList() {
-
-        return ResponseEntity.ok(service.getList());
     }
 
     @GetMapping("name/{nameMovie}")

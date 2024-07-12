@@ -1,21 +1,19 @@
 package com.example.movie_backend.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Table(name = "category")
 @Getter
 @Setter
-@Entity
-@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@SuperBuilder(toBuilder = true)
+@Entity
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +22,8 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "categories")
-    private Set<Movie> movies = new HashSet<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<Movie> movies;
+
 
 }

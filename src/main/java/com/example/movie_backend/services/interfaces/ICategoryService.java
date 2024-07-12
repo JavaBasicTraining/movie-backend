@@ -6,7 +6,6 @@ import com.example.movie_backend.dto.category.CategoryDTO;
 import java.util.List;
 
 public interface ICategoryService {
-
     CategoryDTO create(CategoryDTO dto);
 
     CategoryDTO update(CategoryDTO dto, Long id);
@@ -16,6 +15,5 @@ public interface ICategoryService {
     List<CategoryDTO> getList(GetCategoriesFilter filter);
 
     Boolean delete(Long id);
-
 
 }

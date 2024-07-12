@@ -26,6 +26,10 @@ public class Episode {
     @Column(name = "video_url")
     private String videoUrl;
 
-    @Column(name = "movie_id")
-    private String movieId;
+    @Column(name = "descriptions")
+    private String descriptions;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 }
