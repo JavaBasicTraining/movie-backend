@@ -2,9 +2,11 @@ package com.example.movie_backend.controller;
 
 
 import com.example.movie_backend.dto.user.UserDTO;
+import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.LoginRequest;
 import com.example.movie_backend.model.user.RegisterRequest;
+import com.example.movie_backend.repository.UserRepository;
 import com.example.movie_backend.services.interfaces.IUserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +44,8 @@ public class AccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtEncoder jwtEncoder;
     private final IUserService userService;
+    private final UserRepository repository;
+    private final UserMapper mapper;
 
     private static final long TOKEN_VALIDITY_IN_SECONDS = 86400;
     private static final long TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME = 86400;
@@ -74,7 +79,7 @@ public class AccountController {
         return ResponseEntity.ok(userService.getList());
     }
 
-    @PostMapping("getUser")
+    @GetMapping("getUser")
     public ResponseEntity<UserDTO> getUser(@RequestParam String userName) {
         return ResponseEntity.ok(userService.getUser(userName));
     }
@@ -82,19 +87,13 @@ public class AccountController {
     @GetMapping("info")
     public ResponseEntity<UserDTO> getAccountInfo(Principal principal) {
         if (principal instanceof JwtAuthenticationToken token) {
-            return ResponseEntity.ok(
-                    UserDTO.builder()
-                            .userName(token.getName())
-                            .authorities(
-                                    token.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
-                            .build()
-            );
+            UserDTO userDTO = userService.getUser(token.getName());
+            return ResponseEntity.ok(userDTO);
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.notFound().build();
     }
-
     @PostMapping("getUserAuthority")
-    public ResponseEntity<Set> getUserAuthority() {
+    public ResponseEntity<Set<User>> getUserAuthority() {
         return ResponseEntity.ok(userService.getUserAuthority());
     }
 

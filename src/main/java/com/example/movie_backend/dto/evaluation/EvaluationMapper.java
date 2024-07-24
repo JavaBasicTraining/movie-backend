@@ -8,6 +8,7 @@ public class EvaluationMapper {
     public Evaluation toEntity(EvaluationDTO dto)
     {
         return Evaluation.builder()
+                .id(dto.getId())
                 .star(dto.getStar())
                 .user(User.builder()
                         .Id(dto.getUserId()).build())
@@ -18,12 +19,14 @@ public class EvaluationMapper {
     public Evaluation toEntity(EvaluationDTO dto, Long id)
     {
         return Evaluation.builder()
+                .id(id)
                 .star(dto.getStar())
                 .user(User.builder()
                         .Id(dto.getUserId()).build())
                 .movieId(dto.getMovieId())
                 .build();
     }
+
 
 
     public EvaluationDTO toDTO (Evaluation entity)

@@ -6,11 +6,13 @@ import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Movie;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.util.Set;
 
@@ -41,15 +43,17 @@ public class MovieDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private  String videoUrl;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
 
     private Set<Long> idComment;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idEvaluation;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
 
-    private Set<Long>  idEpisode;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Episode> episodes;
@@ -57,6 +61,7 @@ public class MovieDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<GenreDTO> genres;
 
+    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private CategoryDTO category;
 
@@ -65,9 +70,6 @@ public class MovieDTO {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<CommentDTO> comments;
-
-
-
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();

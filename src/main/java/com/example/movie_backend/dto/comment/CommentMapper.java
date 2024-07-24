@@ -14,7 +14,6 @@ public class CommentMapper {
                 .id(dto.getId())
                 .content(dto.getContent())
                 .user(User.builder().Id(dto.getIdUser()).build())
-
                 .movies(dto.getIdMovies().stream().map(item ->
                         Movie.builder()
                                 .id(item)
@@ -23,19 +22,19 @@ public class CommentMapper {
 
     }
 
-    public CommentDTO toDTO (Comment entity)
-    {
+    public CommentDTO toDTO(Comment entity) {
         return CommentDTO.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
                 .idUser(entity.getUser().getId())
 
                 .idMovies(entity.getMovies().stream()
-                        .map(item-> item.getId())
+                        .map(item -> item.getId())
                         .collect(Collectors.toSet()))
                 .build();
     }
-    public Comment toEntity(CommentDTO dto,Long id) {
+
+    public Comment toEntity(CommentDTO dto, Long id) {
         return Comment.builder()
                 .id(id)
                 .content(dto.getContent())

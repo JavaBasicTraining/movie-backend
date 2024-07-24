@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class    QueryMovieRequest {
+public class QueryMovieRequest {
     private String keyword;
 }

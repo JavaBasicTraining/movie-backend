@@ -1,5 +1,7 @@
 server:
   port: ${SERVER_PORT:8081}
+error:
+  include-binding-errors: always
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -52,8 +54,8 @@ common:
     - /api/account/login
     - /api/v1/movies/**
     - /api/v1/categories/list
-    - /api/v1/movies/name/**
     - /api/v1/genre/**
+    - /api/v1/evaluations/average/**
 
   cors:
     origins:

@@ -10,6 +10,7 @@ import org.checkerframework.common.aliasing.qual.Unique;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Table(name = "movie")
 @Getter
@@ -83,6 +84,7 @@ public class Movie {
     private Set<Episode> episodes;
 
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -95,6 +97,9 @@ public class Movie {
 
     public void addCategory(Genre genre) {
         this.genres.add(genre);
+    }
+    public void addEvaluation (Evaluation evaluation) {
+        this.evaluations.add(evaluation);
     }
 
 }

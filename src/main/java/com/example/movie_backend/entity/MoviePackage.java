@@ -2,6 +2,7 @@ package com.example.movie_backend.entity;
 
 import com.example.movie_backend.entity.enumerate.MoviePackageType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @SuperBuilder(toBuilder = true)
+@NoArgsConstructor
 public class MoviePackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

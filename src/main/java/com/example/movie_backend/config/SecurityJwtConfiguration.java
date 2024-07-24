@@ -1,4 +1,5 @@
 package com.example.movie_backend.config;
+
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import org.slf4j.Logger;
@@ -23,14 +24,14 @@ public class SecurityJwtConfiguration {
     private final Logger log = LoggerFactory.getLogger(SecurityJwtConfiguration.class);
     public static final String AUTHORITIES_KEY = "auth";
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
-
     private final String jwtKey = "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNjA5ODczNSwiaWF0IjoxNzE2MDk4NzM1fQ.t3wybMNtL0tu57btu9bcluyXCQ0uemMibCG70oFqgLxl17Gvufa4btcVAHXVGtkK6Vv-krgLWWqWIaWHpPx-vg";
-
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
+
         return token -> {
             try {
+
                 return jwtDecoder.decode(token);
             } catch (Exception e) {
                 throw e;

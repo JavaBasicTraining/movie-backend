@@ -4,8 +4,10 @@ import com.example.movie_backend.entity.enumerate.MoviePackageType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+@Setter
 @Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor

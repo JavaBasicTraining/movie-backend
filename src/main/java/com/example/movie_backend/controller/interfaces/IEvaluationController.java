@@ -1,20 +1,25 @@
 package com.example.movie_backend.controller.interfaces;
 
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/evaluation/")
+import javax.validation.Valid;
+
+@RequestMapping("/api/v1/evaluations")
 public interface IEvaluationController {
 
-    @PostMapping("create")
-    ResponseEntity<EvaluationDTO> create(@RequestBody EvaluationDTO evaluation);
+    @PostMapping
+    ResponseEntity<EvaluationDTO> create(@RequestBody @Valid EvaluationDTO evaluation);
 
-    @PutMapping("update")
-    ResponseEntity<EvaluationDTO> update(@RequestBody EvaluationDTO evaluation, @RequestParam Long id);
+    @PutMapping("{id}")
+    ResponseEntity<EvaluationDTO> update(@RequestBody @Valid EvaluationDTO evaluation,
+                                         @PathVariable("id") Long id);
 
-    @GetMapping("getById/{id}")
-    ResponseEntity<EvaluationDTO> getById(@RequestParam Long id);
-    @DeleteMapping("delete{id}")
-    boolean delete(@RequestParam Long id);
+    @GetMapping("{id}")
+    ResponseEntity<EvaluationDTO> getById(@PathVariable("id") Long id);
+
+    @DeleteMapping("{id}")
+    boolean delete(@PathVariable("id") Long id);
 }
