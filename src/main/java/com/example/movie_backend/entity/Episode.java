@@ -31,8 +31,8 @@ public class Episode {
 
     @Column(name = "video_url")
     private String videoUrl;
-    public String setVideoUrl(String posterUrl) {
-        this.posterUrl = posterUrl;
+    public String setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
         return videoUrl;
     }
 

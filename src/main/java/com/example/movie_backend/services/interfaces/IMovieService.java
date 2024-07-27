@@ -19,17 +19,16 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
+
 public interface IMovieService{
     MovieDTO create(CreateMovieRequest dto, MultipartFile filePoster, MultipartFile fileMovie ) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     MovieDTO update(CreateMovieRequest dto, Long id , MultipartFile filePoster, MultipartFile fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     MovieDTO getById(Long id);
-    MovieDTO createFileMovie(CreateRequestFileMovie fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException ;
+    MovieDTO createFileMovie(CreateRequestFileMovie fileMovie, Long movieId, Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException ;
 
     MovieDTO createWithEpisode(MovieEpisodeRequest dto);
-
-
     Boolean delete(Long id);
 
     List<MovieDTOWithoutJoin> query(String name);

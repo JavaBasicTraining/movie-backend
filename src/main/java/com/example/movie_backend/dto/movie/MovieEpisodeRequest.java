@@ -1,7 +1,6 @@
 package com.example.movie_backend.dto.movie;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 
-import com.example.movie_backend.entity.Episode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -42,8 +41,6 @@ public class MovieEpisodeRequest {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
-
-
 
     private Set<EpisodeDTO> episodesDTO= new HashSet<>();
 

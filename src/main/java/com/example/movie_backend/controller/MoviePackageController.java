@@ -28,7 +28,6 @@ public class MoviePackageController implements IMoviePackageController {
     @Override
     public ResponseEntity<MoviePackageDTO> getById(Long id, String a) {
         return ResponseEntity.ok(service.getById(id));
-
     }
 
     @Override

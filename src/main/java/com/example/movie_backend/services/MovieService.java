@@ -9,6 +9,7 @@ import com.example.movie_backend.dto.movie.*;
 import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.minio.service.MinioService;
+import com.example.movie_backend.repository.EpisodeRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IMovieService;
 import io.minio.MinioClient;
@@ -43,6 +44,7 @@ public class MovieService implements IMovieService {
     public final EpisodeMapper episodeMapper;
     public final MinioService minioService;
     public final ErrorHandler errorHandler;
+    public final EpisodeRepository episodeRepository;
 
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -68,63 +70,77 @@ public class MovieService implements IMovieService {
                 || contentType.equals("video/vnd.dlna.mpeg-tts");
     }
 
+
     @Override
-    public MovieDTO createFileMovie(CreateRequestFileMovie fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        Movie movie = new Movie();
+    public MovieDTO createFileMovie(CreateRequestFileMovie fileMovie, Long movieId, Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        Movie movie = repository.findById(movieId).orElse(new Movie());
+        Set<Episode> episodes = movie.getEpisodes();
 
         String contentTypePoster = fileMovie.getFilePoster().getContentType();
         if (isImage(contentTypePoster)) {
             String posterPathMovie = "poster" + "/" + fileMovie.getFilePoster().getOriginalFilename();
             uploadByFile(fileMovie.getFilePoster(), posterPathMovie);
+            movie.setId(movieId);
             movie.setPosterUrl(posterPathMovie);
         } else {
             throw new RuntimeException();
         }
-
-        String contentTypeMovie = fileMovie.getFileMovieEpisode().getContentType();
-
+        String contentTypeMovie = fileMovie.getFileMovie().getContentType();
         if (isVideo(contentTypeMovie)) {
             String videoPath = "video" + "/" + fileMovie.getFileMovie().getOriginalFilename();
             uploadByFile(fileMovie.getFileMovie(), videoPath);
+            movie.setId(movieId);
             movie.setVideoUrl(videoPath);
 
         } else {
             throw new RuntimeException();
         }
 
-
-        String contentPosterEpisode = fileMovie.getFilePoster().getContentType();
-        if (isImage(contentPosterEpisode)) {
-            String posterPathMovieEpisode = "poster" + "/" + fileMovie.getFilePosterEpisode().getOriginalFilename();
-            uploadByFile(fileMovie.getFilePosterEpisode(), posterPathMovieEpisode);
-            movie.getEpisodes().stream().map(item -> Episode.builder()
-                    .posterUrl(item.setPosterUrl(posterPathMovieEpisode))
-                    .build()).collect(Collectors.toSet());
-
+        if (episodeId == null) {
+            return null;
         } else {
-            throw new RuntimeException();
+            Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+            for (String content : contentPosterEpisode) {
+                if (isImage(content)) {
+                    for (MultipartFile path : fileMovie.getFilePosterEpisode()) {
+                        String posterPathEpisode = "poster/" + path.getOriginalFilename();
+                        uploadByFile(path, posterPathEpisode);
+                        for (Long id : episodeId) {
+                            episodes.add(Episode.builder()
+                                    .id(id)
+                                    .movie(Movie.builder().id(movieId).build())
+                                    .videoUrl(posterPathEpisode)
+                                    .build());
+                        }
+                    }
+//                    movie.setEpisodes(episodes);
+                }
+            }
+            Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
+                    .stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+            for (String content : contentVideoEpisode) {
+                if (isVideo(content)) {
+                    for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
+                        String videoPathEpisode = "video/" + path.getOriginalFilename();
+                        uploadByFile(path, videoPathEpisode);
+                        for (Long id : episodeId) {
+                            episodes.add(Episode.builder()
+                                    .id(id)
+                                    .movie(Movie.builder().id(movieId).build())
+                                    .videoUrl(videoPathEpisode)
+                                    .build());
+                        }
+                    }
+                    movie.setEpisodes(episodes);
+                }
+            }
         }
-
-        String contentTypeMovieEpisode = fileMovie.getFileMovieEpisode().getContentType();
-
-        if (isVideo(contentTypeMovieEpisode)) {
-            String videoPathEpisode = "video" + "/" + fileMovie.getFileMovieEpisode().getOriginalFilename();
-            uploadByFile(fileMovie.getFileMovieEpisode(), videoPathEpisode);
-            movie.getEpisodes().stream().map(item -> Episode.builder()
-                    .videoUrl(item.setVideoUrl(videoPathEpisode))
-                    .build()).collect(Collectors.toSet());
-
-        } else {
-            throw new RuntimeException();
-        }
-
-
         return mapper.toDTO(repository.save(movie));
     }
 
-
     @Override
-    public MovieDTO create(CreateMovieRequest dto, MultipartFile filePoster, MultipartFile fileMovie) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public MovieDTO create(CreateMovieRequest dto, MultipartFile filePoster, MultipartFile fileMovie) throws
+            IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         Movie movie = mapper.toEntityCreateMovieRequest(dto);
         String contentTypePoster = filePoster.getContentType();
         if (isImage(contentTypePoster)) {
@@ -135,16 +151,13 @@ public class MovieService implements IMovieService {
             throw new RuntimeException();
         }
         String contentTypeMovie = fileMovie.getContentType();
-
         if (isVideo(contentTypeMovie)) {
             String videoPath = "video" + "/" + fileMovie.getOriginalFilename();
             uploadByFile(fileMovie, videoPath);
             movie.setVideoUrl(videoPath);
-
         } else {
             throw new RuntimeException();
         }
-
         if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(id -> id == 0)) {
             for (EpisodeDTO episode : dto.getEpisodes()) {
                 episode.setMovieDTO(mapper.toDTO(movie));
@@ -162,7 +175,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public MovieDTO update(CreateMovieRequest dto, Long id, MultipartFile filePoster, MultipartFile fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public MovieDTO update(CreateMovieRequest dto, Long id, MultipartFile filePoster, MultipartFile fileMovie) throws
+            ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         Movie movie = mapper.toEntityCreateMovieRequest(dto, id);
         String contentTypePoster = filePoster.getContentType();
         if (isImage(contentTypePoster)) {
@@ -263,7 +277,10 @@ public class MovieService implements IMovieService {
             for (EpisodeDTO episode : dto.getEpisodesDTO()) {
                 episode.setMovieDTO(mapper.toDTO(movie));
             }
-            movie.setEpisodes(dto.getEpisodesDTO().stream().map(item -> episodeMapper.toEntity(item)).collect(Collectors.toSet()));
+            movie.setEpisodes(dto.getEpisodesDTO()
+                    .stream()
+                    .map(item -> episodeMapper.toEntity(item))
+                    .collect(Collectors.toSet()));
             return mapper.toDTO(repository.save(movie));
         } else {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Ids are null or empty or Ids = 0!!!");

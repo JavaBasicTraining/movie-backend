@@ -23,6 +23,12 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public String setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+        return videoUrl;
+    }
+
+
     @Unique
     @Column(name = "name")
     private String nameMovie;
@@ -50,6 +56,8 @@ public class Movie {
 
     @Column(name = "year")
     private Long year ;
+
+    private Boolean status ;
 
     @Builder.Default
     @ManyToMany
@@ -81,7 +89,7 @@ public class Movie {
 
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    private Set<Episode> episodes;
+    private Set<Episode> episodes = new HashSet<>();
 
 
 

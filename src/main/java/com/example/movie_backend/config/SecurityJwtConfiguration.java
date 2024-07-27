@@ -27,11 +27,12 @@ public class SecurityJwtConfiguration {
     private final String jwtKey = "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNjA5ODczNSwiaWF0IjoxNzE2MDk4NzM1fQ.t3wybMNtL0tu57btu9bcluyXCQ0uemMibCG70oFqgLxl17Gvufa4btcVAHXVGtkK6Vv-krgLWWqWIaWHpPx-vg";
     @Bean
     public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
-
+        NimbusJwtDecoder jwtDecoder =
+                NimbusJwtDecoder
+                        .withSecretKey(getSecretKey())
+                        .macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
             try {
-
                 return jwtDecoder.decode(token);
             } catch (Exception e) {
                 throw e;

@@ -12,7 +12,7 @@ public class EpisodeMapper {
                 .descriptions(dto.getDescriptions())
                 .videoUrl(dto.getVideoUrl())
                 .posterUrl(dto.getPosterUrl())
-                .movie(
+                .movie(dto.getMovieDTO().getId() == null ? null :
                         Movie.builder().id(
                                 dto.getMovieId()
                         ).build()

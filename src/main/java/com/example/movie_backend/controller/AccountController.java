@@ -2,11 +2,9 @@ package com.example.movie_backend.controller;
 
 
 import com.example.movie_backend.dto.user.UserDTO;
-import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.LoginRequest;
 import com.example.movie_backend.model.user.RegisterRequest;
-import com.example.movie_backend.repository.UserRepository;
 import com.example.movie_backend.services.interfaces.IUserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +42,6 @@ public class AccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtEncoder jwtEncoder;
     private final IUserService userService;
-    private final UserRepository repository;
-    private final UserMapper mapper;
-
     private static final long TOKEN_VALIDITY_IN_SECONDS = 86400;
     private static final long TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME = 86400;
 

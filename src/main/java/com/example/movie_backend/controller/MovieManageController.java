@@ -6,8 +6,6 @@ import com.example.movie_backend.dto.movie.CreateRequestFileMovie;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
 import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
-import com.example.movie_backend.entity.Episode;
-import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IMovieService;
 import io.minio.errors.*;
@@ -19,9 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -57,10 +53,10 @@ public class MovieManageController {
         );
     }
 
-    @PostMapping(value = "createFileMovie",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MovieDTO> createFileMovie(@ModelAttribute @Valid CreateRequestFileMovie fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @PostMapping(value = "createFileMovie/movieId/{movieId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MovieDTO> createFileMovie(@ModelAttribute @Valid CreateRequestFileMovie fileMovie, @PathVariable @Valid Long movieId, @RequestParam Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return ResponseEntity.ok(
-                movieService.createFileMovie(fileMovie)
+                movieService.createFileMovie(fileMovie,movieId, episodeId)
         );
     }
 
