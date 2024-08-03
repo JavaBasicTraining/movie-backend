@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -53,10 +54,10 @@ public class MovieManageController {
         );
     }
 
-    @PostMapping(value = "createFileMovie/movieId/{movieId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "createFileMovie/movieId/{movieId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MovieDTO> createFileMovie(@ModelAttribute @Valid CreateRequestFileMovie fileMovie, @PathVariable @Valid Long movieId, @RequestParam Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return ResponseEntity.ok(
-                movieService.createFileMovie(fileMovie,movieId, episodeId)
+                movieService.createFileMovie(fileMovie, movieId, episodeId)
         );
     }
 
@@ -66,6 +67,24 @@ public class MovieManageController {
                 movieService.createWithEpisode(movieEpisodeRequest)
         );
     }
+
+    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadFile(@PathVariable("id") Long id,
+                                           @RequestPart("poster") MultipartFile poster,
+                                           @RequestPart("video") MultipartFile video) {
+        movieService.uploadMovieFile(id, poster, video);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "{id}/episodes/{episodeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadEpisodeFile(@PathVariable("id") Long id,
+                                                  @PathVariable("episodeId") Long episodeId,
+                                                  @RequestPart("poster") MultipartFile poster,
+                                                  @RequestPart("video") MultipartFile video) {
+        movieService.uploadEpisodeFile(id, episodeId, poster, video);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MovieDTO> update(@ModelAttribute @Valid CreateMovieRequest movieDTO, @PathVariable Long id) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {

@@ -1,5 +1,6 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.EntityNotFoundException;
 import com.example.movie_backend.controller.exception.ErrorHandler;
 import com.example.movie_backend.controller.request.CreateMovieRequest;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
@@ -13,10 +14,10 @@ import com.example.movie_backend.repository.EpisodeRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IMovieService;
 import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MovieService implements IMovieService {
@@ -48,7 +50,7 @@ public class MovieService implements IMovieService {
 
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        ObjectWriteResponse responsePoster = minioClient.putObject(
+        minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(BUCKET_NAME)
                         .object(object)
@@ -113,29 +115,105 @@ public class MovieService implements IMovieService {
                                     .build());
                         }
                     }
-//                    movie.setEpisodes(episodes);
-                }
-            }
-            Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
-                    .stream().map(item -> item.getContentType()).collect(Collectors.toSet());
-            for (String content : contentVideoEpisode) {
-                if (isVideo(content)) {
-                    for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
-                        String videoPathEpisode = "video/" + path.getOriginalFilename();
-                        uploadByFile(path, videoPathEpisode);
-                        for (Long id : episodeId) {
-                            episodes.add(Episode.builder()
-                                    .id(id)
-                                    .movie(Movie.builder().id(movieId).build())
-                                    .videoUrl(videoPathEpisode)
-                                    .build());
-                        }
-                    }
-                    movie.setEpisodes(episodes);
                 }
             }
         }
+        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
+                .stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+        for (String content : contentVideoEpisode) {
+            if (isVideo(content)) {
+                for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
+                    String videoPathEpisode = "video/" + path.getOriginalFilename();
+                    uploadByFile(path, videoPathEpisode);
+                    for (Long id : episodeId) {
+                        episodes.add(Episode.builder()
+                                .id(id)
+                                .movie(Movie.builder().id(movieId).build())
+                                .videoUrl(videoPathEpisode)
+                                .build());
+                    }
+                }
+            }
+
+        }
         return mapper.toDTO(repository.save(movie));
+    }
+
+    public void uploadMovieFile(Long movieId, MultipartFile file, String type) {
+        try {
+            Movie movie = repository.findById(movieId).orElseThrow(
+                    () -> new EntityNotFoundException()
+            );
+            uploadMovieFile(movie, file, type);
+        } catch (Exception exception) {
+            log.error("Upload movie file failed {}", exception.getMessage());
+            throw new RuntimeException("Upload movie file failed by id: " + movieId);
+        }
+    }
+
+    public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
+        try {
+            String object = "movies/" + movie.getId() + "/" + type + "/" + file.getOriginalFilename();
+            if ("poster".equals(type)) {
+                movie.setPosterUrl(object);
+            } else {
+                movie.setVideoUrl(object);
+            }
+                repository.save(movie);
+            uploadByFile(file, object);
+        } catch (Exception exception) {
+            log.error("Upload movie file failed {}", exception.getMessage());
+            throw new RuntimeException("Upload movie file failed by id: " + movie.getId());
+        }
+    }
+
+    @Override
+    public void uploadMovieFile(Long id, MultipartFile poster, MultipartFile video) {
+        Movie movie = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException()
+        );
+        uploadMovieFile(movie, poster, video);
+    }
+
+    @Override
+    public void uploadMovieFile(Movie movie, MultipartFile poster, MultipartFile video) {
+        uploadMovieFile(movie, poster, "poster");
+        uploadMovieFile(movie, video, "video");
+
+    }
+
+    @Override
+    public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile poster, MultipartFile video) {
+        if (!repository.existsById(movieId)) {
+            throw new EntityNotFoundException();
+        }
+        Episode episode = episodeRepository.findById(episodeId).orElseThrow(
+                () -> new EntityNotFoundException()
+        );
+        uploadEpisodeFile(episode, movieId, poster, "poster");
+        uploadEpisodeFile(episode, movieId, video, "video");
+    }
+    public void uploadEpisodeFile(Episode episode, Long movieId, MultipartFile file, String type) {
+        try {
+            String object = String.format(
+                    "movies/%s/episodes/%s/%s/%s",
+                    movieId,
+                    episode.getId(),
+                    type,
+                    file.getOriginalFilename()
+            );
+            if ("poster".equals(type)) {
+                episode.setPosterUrl(object);
+            } else {
+                episode.setVideoUrl(object);
+            }
+            episodeRepository.save(episode);
+
+            uploadByFile(file, object);
+        } catch (Exception ex) {
+            log.error("Upload episode file failed {}", ex.getMessage());
+            throw new RuntimeException("Upload episode file failed by id: " + episode.getId());
+        }
     }
 
     @Override
@@ -274,10 +352,10 @@ public class MovieService implements IMovieService {
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
         Movie movie = mapper.toEntityMovieEpisode(dto);
         if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(id -> id == 0)) {
-            for (EpisodeDTO episode : dto.getEpisodesDTO()) {
+            for (EpisodeDTO episode : dto.getEpisodes()) {
                 episode.setMovieDTO(mapper.toDTO(movie));
             }
-            movie.setEpisodes(dto.getEpisodesDTO()
+            movie.setEpisodes(dto.getEpisodes()
                     .stream()
                     .map(item -> episodeMapper.toEntity(item))
                     .collect(Collectors.toSet()));

@@ -24,4 +24,12 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
             WHERE movie_id = :movieId
             """, nativeQuery = true)
     Float average (@Param("movieId") float movieId);
+
+
+    @Query ( value = """
+            SELECT COUNT(*) FROM evaluation where movie_id = :movieId 
+                                         
+            """, nativeQuery = true)
+    Long numberOfReviews (@Param("movieId") Long movieId);
+
 }

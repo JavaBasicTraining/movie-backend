@@ -2,12 +2,11 @@ package com.example.movie_backend.services.interfaces;
 
 import com.example.movie_backend.controller.request.CreateMovieRequest;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
-import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.movie.CreateRequestFileMovie;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
 import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
-import com.example.movie_backend.entity.Episode;
+import com.example.movie_backend.entity.Movie;
 import io.minio.errors.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,4 +33,12 @@ public interface IMovieService{
     List<MovieDTOWithoutJoin> query(String name);
 
     Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable);
+
+    void uploadMovieFile(Long id, MultipartFile file, String poster);
+
+    void uploadMovieFile(Long id, MultipartFile poster, MultipartFile video);
+
+    void uploadMovieFile(Movie movie, MultipartFile poster, MultipartFile video);
+
+    void uploadEpisodeFile(Long id, Long episodeId, MultipartFile poster, MultipartFile video);
 }

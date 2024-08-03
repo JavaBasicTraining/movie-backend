@@ -34,15 +34,13 @@ public class MovieEpisodeRequest {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
 
-    private Set<Long> idComment;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Set<Long> idEvaluation;
+
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
 
-    private Set<EpisodeDTO> episodesDTO= new HashSet<>();
+    private Set<EpisodeDTO> episodes= new HashSet<>();
 
 //
 //    // Episode

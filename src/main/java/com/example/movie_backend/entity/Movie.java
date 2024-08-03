@@ -28,6 +28,10 @@ public class Movie {
         return videoUrl;
     }
 
+    public String setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
+        return trailerUrl;
+    }
 
     @Unique
     @Column(name = "name")
@@ -45,11 +49,11 @@ public class Movie {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "movie_package_id")
-    private String moviePackageId;
-
     @Column(name = "video_url")
     private String videoUrl ;
+
+    @Column(name = "trailer_url")
+    private String trailerUrl ;
 
     @Column(name = "country")
     private String country ;
@@ -57,7 +61,7 @@ public class Movie {
     @Column(name = "year")
     private Long year ;
 
-    private Boolean status ;
+//    private Boolean status ;
 
     @Builder.Default
     @ManyToMany

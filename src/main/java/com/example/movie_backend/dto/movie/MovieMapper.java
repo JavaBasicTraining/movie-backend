@@ -50,7 +50,7 @@ public class MovieMapper {
                 .year(dto.getYear())
                 .country(dto.getCountry())
 
-                .category(Category.builder().id(dto.getIdCategory()).build()).videoUrl(dto.getVideoUrl())
+                .category(dto.getIdCategory()== null ? null: Category.builder().id(dto.getIdCategory()).build()).videoUrl(dto.getVideoUrl())
 
                 .genres(dto.getIdGenre() == null ? null : dto.getIdGenre().stream().map(ids -> Genre.builder().id(ids).build()).collect(Collectors.toSet()))
 
@@ -83,7 +83,7 @@ public class MovieMapper {
 
                 .country(dto.getCountry())
 
-                .category(Category.builder()
+                .category(dto.getIdCategory() == null ? null : Category.builder()
                         .id(dto.getIdCategory())
                         .build())
                 .genres(dto.getIdGenre() == null ? null : dto.getIdGenre()
@@ -93,9 +93,8 @@ public class MovieMapper {
                                 .build())
                         .collect(Collectors.toSet()))
 
-                .comments(dto.getIdComment() == null ? null : dto.getIdComment().stream().map(ids -> Comment.builder().id(ids).build()).collect(Collectors.toSet())).evaluations(dto.getIdEvaluation() == null ? null : dto.getIdEvaluation().stream().map(ids -> Evaluation.builder().id(ids).build()).collect(Collectors.toSet()))
 
-                .episodes(dto.getEpisodesDTO() == null ? null : dto.getEpisodesDTO().stream()
+                .episodes(dto.getEpisodes() == null ? null : dto.getEpisodes().stream()
                         .map(item -> Episode.builder()
                                 .id(item.getId())
                                 .episodeCount(item.getEpisodeCount())

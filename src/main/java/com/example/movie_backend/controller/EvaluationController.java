@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.GET;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -68,6 +70,17 @@ public class EvaluationController implements IEvaluationController {
     public ResponseEntity<Float> Average (@PathVariable float movieId)
     {
         return ResponseEntity.ok(service.average(movieId));
+    }
+
+
+    @GetMapping("numberOfReviews/{movieId}")
+    public ResponseEntity<Long> numberOfReviews ( @PathVariable Long movieId)
+    {
+        if(Objects.isNull(movieId))
+        {
+            return null;
+        }else
+        return ResponseEntity.ok(repository.numberOfReviews(movieId));
     }
 
 }
