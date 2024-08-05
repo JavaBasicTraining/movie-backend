@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 @RestController
 
@@ -46,5 +47,15 @@ public class EpisodeController implements IEpisodeController {
          ResponseEntity.ok(service.delete(id));
 
         return true;
+    }
+
+    @Override
+    public ResponseEntity<Set<EpisodeDTO>> getListEpisodeByMovieId(Long movieId) {
+        return ResponseEntity.ok(service.getListEpisodeByMovieId(movieId));
+    }
+
+    @Override
+    public ResponseEntity<EpisodeDTO> getEpisodeByMovieId(Long movieId, Long episodeCount) {
+        return ResponseEntity.ok(service.getEpisodeByMovieId(movieId, episodeCount));
     }
 }

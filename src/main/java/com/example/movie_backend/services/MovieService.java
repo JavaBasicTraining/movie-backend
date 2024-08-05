@@ -178,7 +178,13 @@ public class MovieService implements IMovieService {
     @Override
     public void uploadMovieFile(Movie movie, MultipartFile poster, MultipartFile video) {
         uploadMovieFile(movie, poster, "poster");
-        uploadMovieFile(movie, video, "video");
+       if (video == null)
+       {
+           return;
+       }else
+       {
+           uploadMovieFile(movie, video, "video");
+       }
 
     }
 
@@ -238,7 +244,7 @@ public class MovieService implements IMovieService {
         }
         if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(id -> id == 0)) {
             for (EpisodeDTO episode : dto.getEpisodes()) {
-                episode.setMovieDTO(mapper.toDTO(movie));
+                episode.setMovie(mapper.toDTO(movie));
             }
             movie.setEpisodes(dto.getEpisodes().stream().map(item -> episodeMapper.toEntity(item)).collect(Collectors.toSet()));
             return mapper.toDTO(repository.save(movie));
@@ -350,20 +356,18 @@ public class MovieService implements IMovieService {
     }
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
-        Movie movie = mapper.toEntityMovieEpisode(dto);
-        if (Objects.nonNull(dto.getIdGenre()) && !dto.getIdGenre().isEmpty() && dto.getIdGenre().stream().noneMatch(id -> id == 0)) {
-            for (EpisodeDTO episode : dto.getEpisodes()) {
-                episode.setMovieDTO(mapper.toDTO(movie));
-            }
-            movie.setEpisodes(dto.getEpisodes()
-                    .stream()
-                    .map(item -> episodeMapper.toEntity(item))
-                    .collect(Collectors.toSet()));
-            return mapper.toDTO(repository.save(movie));
-        } else {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Ids are null or empty or Ids = 0!!!");
-        }
+        Movie movie = mapper.toNewMovieWithEpisodes(dto);
+        return mapper.toDTO(repository.save(movie));
     }
 
+    public MovieDTO updateWithEpisode(MovieEpisodeRequest dto, Long id ) {
+        if (!repository.existsById(id)) {
+            throw new EntityNotFoundException();
+        }
+      {
+          Movie movie = mapper.toNewMovieWithEpisodes(dto,id);
+          return mapper.toDTO(repository.save(movie));
+      }
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.movie_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class Genre {
 
     @Builder.Default
     @ManyToMany(mappedBy = "genres")
+    @JsonIgnoreProperties(value = "genres", allowSetters = true) // ignore chứ k thì nó map lặp vô tận
+
     private Set<Movie> movies = new HashSet<>();
 
 }

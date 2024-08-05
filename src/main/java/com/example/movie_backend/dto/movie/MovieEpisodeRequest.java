@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class MovieEpisodeRequest {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long movieIdPk;
+    private Long id;
 
     private String nameMovie;
 
@@ -33,23 +33,12 @@ public class MovieEpisodeRequest {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
-
-
-
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
 
     private Set<EpisodeDTO> episodes= new HashSet<>();
 
-//
-//    // Episode
-//
-//    private Long episodeCount;
-//
-//    private String descriptions;
-//
-//    private Long movieId;
+//    private Set<Long> movieId;
 
     @JsonIgnore
     private MovieDTO movieDTO;

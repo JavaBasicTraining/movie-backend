@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 @RequestMapping("/api/v1/episode/")
 public interface IEpisodeController {
@@ -18,9 +19,19 @@ public interface IEpisodeController {
     ResponseEntity<EpisodeDTO> create(@ModelAttribute @Valid CreateEpisodeRequest episode) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     @PutMapping("update")
-        ResponseEntity<EpisodeDTO> update(@ModelAttribute @Valid CreateEpisodeRequest episode, @RequestParam Long id);
+    ResponseEntity<EpisodeDTO> update(@ModelAttribute @Valid CreateEpisodeRequest episode, @RequestParam Long id);
 
     @GetMapping("getById/{id}")
     ResponseEntity<EpisodeDTO> getById(@RequestParam Long id);
+
     @DeleteMapping("delete{id}")
-    boolean delete(@RequestParam Long id);}
+    boolean delete(@RequestParam Long id);
+
+    @GetMapping("getEpisodeByMovieId/{movieId}")
+    ResponseEntity<Set<EpisodeDTO>> getListEpisodeByMovieId(@PathVariable Long movieId);
+
+    @GetMapping("getEpisodeByMovieId/movieId/{movieId}/episode/{episodeCount}")
+    ResponseEntity<EpisodeDTO> getEpisodeByMovieId(@PathVariable Long movieId, @PathVariable Long episodeCount);
+
+}
+

@@ -11,16 +11,15 @@ import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EpisodeService implements IEpisodeService {
@@ -85,12 +84,6 @@ public class EpisodeService implements IEpisodeService {
             throw new RuntimeException();
         }
         return mapper.toDTO(repository.save(episode));
-//        if (Objects.nonNull(dto.getMovieId()) && !dto.getMovieId().describeConstable().isEmpty() && dto.getMovieId() == 0) {
-//            return mapper.toDTO(repository.save(episode));
-//        } else {
-//            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Ids are null or empty or Ids = 0!!!");
-//        }
-
 
     }
 
@@ -105,7 +98,7 @@ public class EpisodeService implements IEpisodeService {
         return this.repository.findById(id)
                 .map(this.mapper::toDTO)
                 .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
+                        () -> new BadRequestException("Episode not found")
                 );
     }
 
@@ -113,5 +106,38 @@ public class EpisodeService implements IEpisodeService {
     public Boolean delete(Long id) {
         repository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
+        return this.repository.getListEpisodeByMovieId(movieId)
+                .stream().map(this.mapper::toDTO)
+                .collect(Collectors.toSet());
+
+    }
+
+    @Override
+    public EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount) {
+
+        if (episodeCount == null || episodeCount == 0) {
+            return null;
+        } else {
+        return repository.getEpisodeByMovieId(movieId, episodeCount)
+                    .map(item -> {
+                        EpisodeDTO episodeDTO = mapper.toDTO(item);
+                        if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
+                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                            episodeDTO.setPosterUrl(linkPoster);
+                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                            episodeDTO.setVideoUrl(linkVideo);
+                        }
+                        return episodeDTO;
+                    })
+                    .orElseThrow(
+                            () -> new BadRequestException("Movie not found")
+                    );
+
+        }
+
     }
 }

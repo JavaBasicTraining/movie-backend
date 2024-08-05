@@ -1,5 +1,7 @@
 package com.example.movie_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,5 +43,11 @@ public class Episode {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
+    @JsonIgnoreProperties({"episodes"})
     private Movie movie;
+
+    // cái này dùng để đánh dấu với cái file
+    @JsonIgnoreProperties({"episodes"})
+    @Transient
+    private String tempId;
 }

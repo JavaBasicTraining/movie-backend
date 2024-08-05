@@ -68,10 +68,16 @@ public class MovieManageController {
         );
     }
 
+    @PutMapping(value = "updateWithEpisode/{id}")
+    public ResponseEntity<MovieDTO> updateWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest, @PathVariable Long id) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        return ResponseEntity.ok(
+                movieService.updateWithEpisode(movieEpisodeRequest,id )
+        );
+    }
     @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadFile(@PathVariable("id") Long id,
                                            @RequestPart("poster") MultipartFile poster,
-                                           @RequestPart("video") MultipartFile video) {
+                                           @RequestPart(value = "video", required = false) MultipartFile video) {
         movieService.uploadMovieFile(id, poster, video);
         return ResponseEntity.noContent().build();
     }
@@ -80,7 +86,7 @@ public class MovieManageController {
     public ResponseEntity<Void> uploadEpisodeFile(@PathVariable("id") Long id,
                                                   @PathVariable("episodeId") Long episodeId,
                                                   @RequestPart("poster") MultipartFile poster,
-                                                  @RequestPart("video") MultipartFile video) {
+                                                  @RequestPart(value = "video", required = false) MultipartFile video) {
         movieService.uploadEpisodeFile(id, episodeId, poster, video);
         return ResponseEntity.noContent().build();
     }

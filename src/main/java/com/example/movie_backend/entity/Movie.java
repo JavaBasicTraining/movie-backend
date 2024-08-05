@@ -1,5 +1,6 @@
 package com.example.movie_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,6 @@ import org.checkerframework.common.aliasing.qual.Unique;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Table(name = "movie")
 @Getter
@@ -49,17 +49,17 @@ public class Movie {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "video_url")
-    private String videoUrl ;
+    @Column(name = "video_url", nullable = true)
+    private String videoUrl;
 
     @Column(name = "trailer_url")
-    private String trailerUrl ;
+    private String trailerUrl;
 
     @Column(name = "country")
-    private String country ;
+    private String country;
 
     @Column(name = "year")
-    private Long year ;
+    private Long year;
 
 //    private Boolean status ;
 
@@ -70,6 +70,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genres_id")
     )
+    @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
 
     @Builder.Default
@@ -79,6 +80,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id")
     )
+    @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Comment> comments = new HashSet<>();
 
     @Builder.Default
@@ -88,19 +90,18 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "evaluation_id")
     )
+    @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Evaluation> evaluations = new HashSet<>();
 
 
-
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"movie"})
     private Set<Episode> episodes = new HashSet<>();
-
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;
-
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
@@ -110,8 +111,23 @@ public class Movie {
     public void addCategory(Genre genre) {
         this.genres.add(genre);
     }
-    public void addEvaluation (Evaluation evaluation) {
+
+    public void addEvaluation(Evaluation evaluation) {
         this.evaluations.add(evaluation);
     }
 
+    // cái movieID em chưa có nhập nên nó ko cso dữ leieuj á a, k cần
+    public Movie addEpisode(Episode episode) {
+        episode.setMovie(this);
+        this.episodes.add(episode);
+        return this;
+    }
+
+    public Movie setEpisodes(Set<Episode> episodes) {
+        episodes.stream().forEach(episode -> {
+            episode.setMovie(this);
+        });
+        this.episodes = episodes;
+        return this;
+    }
 }
