@@ -49,13 +49,9 @@ public class MovieMapper {
                 .posterUrl(dto.getPosterUrl())
                 .year(dto.getYear())
                 .country(dto.getCountry())
-
                 .category(dto.getIdCategory() == null ? null : Category.builder().id(dto.getIdCategory()).build()).videoUrl(dto.getVideoUrl())
-
                 .genres(dto.getIdGenre() == null ? null : dto.getIdGenre().stream().map(ids -> Genre.builder().id(ids).build()).collect(Collectors.toSet()))
-
                 .comments(dto.getIdComment() == null ? null : dto.getIdComment().stream().map(ids -> Comment.builder().id(ids).build()).collect(Collectors.toSet())).evaluations(dto.getIdEvaluation() == null ? null : dto.getIdEvaluation().stream().map(ids -> Evaluation.builder().id(ids).build()).collect(Collectors.toSet()))
-
                 .episodes(dto.getEpisodes() == null ? null : dto.getEpisodes().stream()
                         .map(item -> Episode.builder()
                                 .id(item.getId())
@@ -71,7 +67,7 @@ public class MovieMapper {
     }
 
 
-    public Movie toNewMovieWithEpisodes(MovieEpisodeRequest dto) {
+    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto) {
         Movie movie = Movie.builder()
                 .nameMovie(dto.getNameMovie())
                 .enTitle(dto.getViTitle())
@@ -104,9 +100,9 @@ public class MovieMapper {
         return movie;
     }
 
-    public Movie toNewMovieWithEpisodes(MovieEpisodeRequest dto,Long id) {
+    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto, Long movieId) {
         Movie movie = Movie.builder()
-                .id(id)
+                .id(movieId)
                 .nameMovie(dto.getNameMovie())
                 .enTitle(dto.getViTitle())
                 .viTitle(dto.getEnTitle())
@@ -137,34 +133,6 @@ public class MovieMapper {
         movie.setEpisodes(movie.getEpisodes());
         return movie;
     }
-//    public MovieEpisodeRequest toDTOMovieEpisode(Movie movie, Episode episode) {
-//        return MovieEpisodeRequest.builder()
-//
-//                .nameMovie(movie.getNameMovie())
-//                .enTitle(movie.getViTitle())
-//                .viTitle(movie.getEnTitle())
-//
-//                .description(movie.getDescription())
-//
-//                .year(movie.getYear())
-//
-//                .country(movie.getCountry())
-//                .idCategory(movie.getCategory().getId())
-//                .idGenre(movie.getGenres() == null ? null :
-//                        movie.getGenres().stream()
-//                        .map(item-> item.getId()).collect(Collectors.toSet()))
-//                .episodes(movie.getEpisodes() == null ? null : movie.getEpisodes().stream()
-//                        .map(item -> EpisodeDTO.builder()
-//                                .id(item.getId())
-//                                .episodeCount(item.getEpisodeCount())
-//                                .descriptions(item.getDescriptions())
-//                                .videoUrl(item.getVideoUrl())
-//                                .posterUrl(item.getPosterUrl())
-//                                .build())
-//                        .collect(Collectors.toSet()))
-//
-//                .build();
-//    }
 
 
     public Movie toEntityCreateMovieRequest(CreateMovieRequest dto, Long id) {

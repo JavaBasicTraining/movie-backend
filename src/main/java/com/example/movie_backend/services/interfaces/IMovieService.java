@@ -20,16 +20,13 @@ import java.util.Set;
 
 
 public interface IMovieService{
-    MovieDTO create(CreateMovieRequest dto, MultipartFile filePoster, MultipartFile fileMovie ) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
-
-    MovieDTO update(CreateMovieRequest dto, Long id , MultipartFile filePoster, MultipartFile fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     MovieDTO getById(Long id);
     MovieDTO createFileMovie(CreateRequestFileMovie fileMovie, Long movieId, Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException ;
 
 
     MovieDTO createWithEpisode(MovieEpisodeRequest dto);
-    MovieDTO updateWithEpisode(MovieEpisodeRequest dto, Long id);
+    MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request);
 
     Boolean delete(Long id);
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class EpisodeMapper {
     public Episode toEntity(EpisodeDTO dto) {
         return Episode.builder()
+                .id(dto.getId())
                 .episodeCount(dto.getEpisodeCount())
                 .descriptions(dto.getDescriptions())
                 .videoUrl(dto.getVideoUrl())
@@ -48,27 +49,3 @@ public class EpisodeMapper {
                 .build();
     }
 }
-
-
-//    public Episode toEntity(CreateEpisodeRequest dto)
-//    {
-//        return Episode.builder()
-//                .episodeCount(dto.getEpisodeCount())
-//                .descriptions(dto.getDescriptions())
-//                .videoUrl(dto.getVideoUrl())
-//                .posterUrl(dto.getPosterUrl())
-//                .movie(dto.getMovieDTO()==null? null:  Movie.builder().id(dto.getMovieId()).build())
-//                .build();
-//    }
-//
-//    public Episode toEntity(CreateEpisodeRequest dto,Long id)
-//    {
-//        return Episode.builder()
-//                .id(id)
-//                .episodeCount(dto.getEpisodeCount())
-//                .descriptions(dto.getDescriptions())
-//                .videoUrl(dto.getVideoUrl())
-//                .posterUrl(dto.getPosterUrl())
-//                .movie(dto.getMovieDTO()==null? null:  Movie.builder().id(dto.getMovieId()).build())
-//                .build();
-//    }

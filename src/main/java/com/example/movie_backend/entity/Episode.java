@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "episode")
 @Getter
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class Episode {
+public class Episode implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,8 +47,6 @@ public class Episode {
     @JsonIgnoreProperties({"episodes"})
     private Movie movie;
 
-    // cái này dùng để đánh dấu với cái file
-    @JsonIgnoreProperties({"episodes"})
     @Transient
     private String tempId;
 }

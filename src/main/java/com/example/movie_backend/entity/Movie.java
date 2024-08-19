@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class Movie {
+public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -93,12 +94,12 @@ public class Movie {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Evaluation> evaluations = new HashSet<>();
 
-
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"movie"})
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    // => thêm này vào để khi xóa thì nó tự đông xóa luon bên episode
+    @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
     private Set<Episode> episodes = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;
@@ -116,7 +117,6 @@ public class Movie {
         this.evaluations.add(evaluation);
     }
 
-    // cái movieID em chưa có nhập nên nó ko cso dữ leieuj á a, k cần
     public Movie addEpisode(Episode episode) {
         episode.setMovie(this);
         this.episodes.add(episode);

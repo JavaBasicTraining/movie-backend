@@ -1,6 +1,5 @@
 package com.example.movie_backend.controller;
 
-import com.example.movie_backend.controller.request.CreateMovieRequest;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
 import com.example.movie_backend.dto.movie.CreateRequestFileMovie;
 import com.example.movie_backend.dto.movie.MovieDTO;
@@ -47,12 +46,6 @@ public class MovieManageController {
         return ResponseEntity.ok(movieService.getById(id));
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MovieDTO> create(@ModelAttribute @Valid CreateMovieRequest movieDTO) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        return ResponseEntity.ok(
-                movieService.create(movieDTO, movieDTO.getFilePoster(), movieDTO.getFileMovie())
-        );
-    }
 
     @PostMapping(value = "createFileMovie/movieId/{movieId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MovieDTO> createFileMovie(@ModelAttribute @Valid CreateRequestFileMovie fileMovie, @PathVariable @Valid Long movieId, @RequestParam Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -68,12 +61,13 @@ public class MovieManageController {
         );
     }
 
-    @PutMapping(value = "updateWithEpisode/{id}")
-    public ResponseEntity<MovieDTO> updateWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest, @PathVariable Long id) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @PutMapping(value = "{id}")
+    public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieEpisodeRequest request) {
         return ResponseEntity.ok(
-                movieService.updateWithEpisode(movieEpisodeRequest,id )
+                movieService.updateWithEpisode(id, request)
         );
     }
+
     @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadFile(@PathVariable("id") Long id,
                                            @RequestPart("poster") MultipartFile poster,
@@ -91,11 +85,6 @@ public class MovieManageController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MovieDTO> update(@ModelAttribute @Valid CreateMovieRequest movieDTO, @PathVariable Long id) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        return ResponseEntity.ok(movieService.update(movieDTO, id, movieDTO.getFilePoster(), movieDTO.getFileMovie()));
-    }
 
     @DeleteMapping("{id}")
     public boolean delete(@PathVariable Long id) {

@@ -38,17 +38,20 @@ spring:
     hibernate:
       ddl-auto: update
       use-new-id-generator-mappings: false
+      enable_lazy_load_no_trans: true
+      event:
+        merge:
+          entity_copy_observer: allow
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
 
 common:
   permit-all-path-patterns:
     - /swagger-ui.html/**
     - /v3/api-docs/**
     - /swagger-ui/**
-    - /api/v1/user/login
-    - /api/v1/user/register
     - /api/account/register
     - /api/account/getListUser
     - /api/account/login
@@ -56,6 +59,10 @@ common:
     - /api/v1/categories/list
     - /api/v1/genre/**
     - /api/v1/evaluations/average/**
+    - /api/v1/evaluations/numberOfReviews/**
+    - /api/account/info/**
+    - /api/v1/evaluations/numberOfReviews/**
+
 
   cors:
     origins:

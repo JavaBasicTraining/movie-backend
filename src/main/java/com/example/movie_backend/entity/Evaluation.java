@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class Evaluation {
+public class Evaluation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -18,25 +18,20 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL) // cái này nó sẽ bỏ hết những field null
 public class EpisodeDTO {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private Long episodeCount;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String posterUrl;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String videoUrl;
 
     private String descriptions;
 
     private Long movieId;
 
-    private MovieDTO movie;
-
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Set<Episode> episodes;
+    private MovieDTO movie;
 
     private String tempId;
 }
