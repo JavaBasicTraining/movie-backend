@@ -47,26 +47,15 @@ public class MovieService implements IMovieService {
 
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket(BUCKET_NAME)
-                        .object(object)
-                        .contentType(file.getContentType())
-                        .stream(file.getInputStream(), file.getSize(), -1)
-                        .build()
-        );
+        minioClient.putObject(PutObjectArgs.builder().bucket(BUCKET_NAME).object(object).contentType(file.getContentType()).stream(file.getInputStream(), file.getSize(), -1).build());
     }
 
     private boolean isImage(String contentType) {
-        return contentType.equals("image/png")
-                || contentType.equals("image/jpg")
-                || contentType.equals("image/jpeg");
+        return contentType.equals("image/png") || contentType.equals("image/jpg") || contentType.equals("image/jpeg");
     }
 
     private boolean isVideo(String contentType) {
-        return contentType.equals("video/mp4")
-                || contentType.equals("video/quicktime")
-                || contentType.equals("video/vnd.dlna.mpeg-tts");
+        return contentType.equals("video/mp4") || contentType.equals("video/quicktime") || contentType.equals("video/vnd.dlna.mpeg-tts");
     }
 
 
@@ -105,29 +94,20 @@ public class MovieService implements IMovieService {
                         String posterPathEpisode = "poster/" + path.getOriginalFilename();
                         uploadByFile(path, posterPathEpisode);
                         for (Long id : episodeId) {
-                            episodes.add(Episode.builder()
-                                    .id(id)
-                                    .movie(Movie.builder().id(movieId).build())
-                                    .videoUrl(posterPathEpisode)
-                                    .build());
+                            episodes.add(Episode.builder().id(id).movie(Movie.builder().id(movieId).build()).videoUrl(posterPathEpisode).build());
                         }
                     }
                 }
             }
         }
-        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
-                .stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
         for (String content : contentVideoEpisode) {
             if (isVideo(content)) {
                 for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
                     String videoPathEpisode = "video/" + path.getOriginalFilename();
                     uploadByFile(path, videoPathEpisode);
                     for (Long id : episodeId) {
-                        episodes.add(Episode.builder()
-                                .id(id)
-                                .movie(Movie.builder().id(movieId).build())
-                                .videoUrl(videoPathEpisode)
-                                .build());
+                        episodes.add(Episode.builder().id(id).movie(Movie.builder().id(movieId).build()).videoUrl(videoPathEpisode).build());
                     }
                 }
             }
@@ -136,17 +116,6 @@ public class MovieService implements IMovieService {
         return mapper.toDTO(repository.save(movie));
     }
 
-    public void uploadMovieFile(Long movieId, MultipartFile file, String type) {
-        try {
-            Movie movie = repository.findById(movieId).orElseThrow(
-                    () -> new EntityNotFoundException()
-            );
-            uploadMovieFile(movie, file, type);
-        } catch (Exception exception) {
-            log.error("Upload movie file failed {}", exception.getMessage());
-            throw new RuntimeException("Upload movie file failed by id: " + movieId);
-        }
-    }
 
     public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
         try {
@@ -165,29 +134,23 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public void uploadMovieFile(Long id, MultipartFile poster, MultipartFile video) {
-        Movie movie = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException()
-        );
-        uploadMovieFile(movie, poster, video);
-    }
-
-    @Override
-    public void uploadMovieFile(Movie movie, MultipartFile poster, MultipartFile video) {
-        uploadMovieFile(movie, poster, "poster");
-        if (video != null) {
-            uploadMovieFile(movie, video, "video");
+    public void uploadMovieFile(Long id, MultipartFile file, String type) {
+        try {
+            Movie movie = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+            uploadMovieFile(movie, file, type);
+        } catch (Exception exception) {
+            log.error("Upload movie file failed {}", exception.getMessage());
+            throw new RuntimeException("Upload movie file failed by id: " + id);
         }
     }
+
 
     @Override
     public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile poster, MultipartFile video) {
         if (!repository.existsById(movieId) && poster == null && video == null) {
             throw new EntityNotFoundException();
         }
-        Episode episode = episodeRepository.findById(episodeId).orElseThrow(
-                () -> new EntityNotFoundException()
-        );
+        Episode episode = episodeRepository.findById(episodeId).orElseThrow(() -> new EntityNotFoundException());
         uploadEpisodeFile(episode, movieId, poster, "poster");
         uploadEpisodeFile(episode, movieId, video, "video");
     }
@@ -195,13 +158,7 @@ public class MovieService implements IMovieService {
     public void uploadEpisodeFile(Episode episode, Long movieId, MultipartFile file, String type) {
         try {
 
-            String object = String.format(
-                    "movies/%s/episodes/%s/%s/%s",
-                    movieId,
-                    episode.getId(),
-                    type,
-                    file.getOriginalFilename()
-            );
+            String object = String.format("movies/%s/episodes/%s/%s/%s", movieId, episode.getId(), type, file.getOriginalFilename());
             if ("poster".equals(type)) {
                 episode.setPosterUrl(object);
             } else {
@@ -218,33 +175,26 @@ public class MovieService implements IMovieService {
 
     @Override
     public MovieDTO getById(Long id) {
-        return repository.findById(id)
-                .map(item -> {
-                    MovieDTO movieDTO = mapper.toDTO(item);
-                    movieDTO.setPosterUrl(  movieDTO.getPosterUrl() == null ? null :
-                            this.minioService.getPreSignedLink(movieDTO.getPosterUrl()));
-                    movieDTO.setVideoUrl(  movieDTO.getVideoUrl() == null ? null :
-                            this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
-                    List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream()
-                            .map(episode -> {
-                                String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
-                                String linkVideo = episode.getVideoUrl() ==null ? null:  this.minioService.getPreSignedLink(episode.getVideoUrl());
-                                EpisodeDTO episodeDTO = new EpisodeDTO();
-                                episodeDTO.setId(episode.getId());
-                                episodeDTO.setEpisodeCount(episode.getEpisodeCount());
-                                episodeDTO.setDescriptions(episode.getDescriptions());
-                                episodeDTO.setMovieId(episode.getMovie().getId());
-                                episodeDTO.setPosterUrl(linkPoster);
-                                episodeDTO.setVideoUrl(linkVideo);
-                                return episodeDTO;
-                            })
-                            .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
-                            .toList();
-                    movieDTO.setEpisodes(episodeDTOs);
+        return repository.findById(id).map(item -> {
+            MovieDTO movieDTO = mapper.toDTO(item);
+            movieDTO.setPosterUrl(movieDTO.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getPosterUrl()));
+            movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
+            List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
+                String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
+                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl());
+                EpisodeDTO episodeDTO = new EpisodeDTO();
+                episodeDTO.setId(episode.getId());
+                episodeDTO.setEpisodeCount(episode.getEpisodeCount());
+                episodeDTO.setDescriptions(episode.getDescriptions());
+                episodeDTO.setMovieId(episode.getMovie().getId());
+                episodeDTO.setPosterUrl(linkPoster);
+                episodeDTO.setVideoUrl(linkVideo);
+                return episodeDTO;
+            }).sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList();
+            movieDTO.setEpisodes(episodeDTOs);
 
-                    return movieDTO;
-                })
-                .orElse(null);
+            return movieDTO;
+        }).orElse(null);
     }
 
     @Override
@@ -255,50 +205,44 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTOWithoutJoin> query(String name) {
-        return repository.query(name, Pageable.ofSize(20)).stream().map(
-                mapper::toDTOWithoutJoin
-        ).toList();
+        return repository.query(name, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
     }
 
     @Override
     public Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable) {
-        return repository.query(request.getKeyword(), pageable)
-                .map(item -> {
-                            MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
-                            if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                                movieDTO.setPosterUrl(linkPoster);
+        return repository.query(request.getKeyword(), pageable).map(item -> {
+            MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
+            if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                movieDTO.setPosterUrl(linkPoster);
 
-                            } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                                movieDTO.setPosterUrl(linkPoster);
-                                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                                movieDTO.setVideoUrl(linkVideo);
-                            }
-                            return movieDTO;
-                        }
-                );
+            } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                movieDTO.setPosterUrl(linkPoster);
+                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                movieDTO.setVideoUrl(linkVideo);
+            }
+            return movieDTO;
+        });
     }
 
     public MovieDTO filterMovie(String nameMovie) {
-        return repository.filterMovie(nameMovie)
-                .map(item -> {
-                    MovieDTO movieDTO = mapper.toDTO(item);
-                    if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                        movieDTO.setPosterUrl(linkPoster);
 
-                    } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                        movieDTO.setPosterUrl(linkPoster);
-                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                        movieDTO.setVideoUrl(linkVideo);
-                    }
-                    return movieDTO;
-                })
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            return repository.filterMovie(nameMovie).map(item -> {
+                MovieDTO movieDTO = mapper.toDTO(item);
+                if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
+                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                    movieDTO.setPosterUrl(linkPoster);
+
+                } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
+                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                    movieDTO.setPosterUrl(linkPoster);
+                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                    movieDTO.setVideoUrl(linkVideo);
+                }
+                return movieDTO;
+            }).orElseThrow(() -> new BadRequestException("Movie not found"));
+
     }
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
@@ -307,43 +251,21 @@ public class MovieService implements IMovieService {
     }
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
-        Movie movie = repository.findById(movieId)
-                .orElseThrow(() -> new EntityNotFoundException());
+        Movie movie = repository.findById(movieId).orElseThrow(() -> new EntityNotFoundException());
         movie = mapper.toUpdateMovieWithEpisodes(request, movieId);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie); // lúc này có id
 
         // map id vào dto
         // này đâu phải sắp xếp
-        if (
-                Objects.nonNull(movieDTO.getEpisodes())
-                && !movieDTO.getEpisodes().isEmpty()
-                && Objects.nonNull(movie.getEpisodes())
-                && !movie.getEpisodes().isEmpty()
-        ) {
+        if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty() && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
             for (int i = 0; i < movie.getEpisodes().size(); i++) {
-                // sai khi lưu thì nó đổi lại thứ tự index nên phải sort theo count mới đúng,
-                EpisodeDTO episodeDTO = movieDTO.getEpisodes()
-                        .stream()
-                        .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
-                        .toList()
-                        .get(i);
-                Episode episode = movie.getEpisodes()
-                        .stream()
-                        .sorted(Comparator.comparingLong(Episode::getEpisodeCount))
-                        .toList()
-                        .get(i);
+                EpisodeDTO episodeDTO = movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList().get(i);
+                Episode episode = movie.getEpisodes().stream().sorted(Comparator.comparingLong(Episode::getEpisodeCount)).toList().get(i);
                 episodeDTO.setId(episode.getId());
             }
         }
-        return movieDTO.toBuilder()
-                .episodes(
-                        movieDTO.getEpisodes()
-                                .stream()
-                                .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
-                                .toList()
-                )
-                .build();
+        return movieDTO.toBuilder().episodes(movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList()).build();
     }
 
 }

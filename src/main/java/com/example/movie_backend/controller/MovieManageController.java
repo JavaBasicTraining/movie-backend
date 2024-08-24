@@ -70,9 +70,10 @@ public class MovieManageController {
 
     @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadFile(@PathVariable("id") Long id,
-                                           @RequestPart("poster") MultipartFile poster,
-                                           @RequestPart(value = "video", required = false) MultipartFile video) {
-        movieService.uploadMovieFile(id, poster, video);
+                                           @RequestParam("type") String  type,
+                                           @RequestPart("file") 
+                                               MultipartFile file) {
+        movieService.uploadMovieFile(id, file,type);
         return ResponseEntity.noContent().build();
     }
 
@@ -92,3 +93,4 @@ public class MovieManageController {
         return true;
     }
 }
+  

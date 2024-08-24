@@ -1,6 +1,5 @@
 package com.example.movie_backend.services.interfaces;
 
-import com.example.movie_backend.controller.request.CreateMovieRequest;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
 import com.example.movie_backend.dto.movie.CreateRequestFileMovie;
 import com.example.movie_backend.dto.movie.MovieDTO;
@@ -34,11 +33,9 @@ public interface IMovieService{
 
     Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable);
 
-    void uploadMovieFile(Long id, MultipartFile file, String poster);
 
-    void uploadMovieFile(Long id, MultipartFile poster, MultipartFile video);
+    void uploadMovieFile(Long id, MultipartFile file, String type );
 
-    void uploadMovieFile(Movie movie, MultipartFile poster, MultipartFile video);
 
     void uploadEpisodeFile(Long id, Long episodeId, MultipartFile poster, MultipartFile video);
 }

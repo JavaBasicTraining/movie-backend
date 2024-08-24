@@ -1,6 +1,5 @@
 package com.example.movie_backend.repository;
 
-import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +15,15 @@ import java.util.Set;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
-                    SELECT distinct  m.* FROM movie m
-                    left join movie_genres mc on mc.movie_id = m.id
-                    left join genre c on mc.genres_id = c.id
-                    where (:keyword is null or c.name like concat('%', :keyword, '%'))
-                    or (:keyword is null or m.name like concat('%', :keyword, '%'))
+                 SELECT DISTINCT m.*
+                 FROM movie m
+                 LEFT JOIN movie_genres mc ON mc.movie_id = m.id
+                 LEFT JOIN genre c ON mc.genres_id = c.id
+                 WHERE :keyword IS NULL
+                 OR c.name LIKE CONCAT('%', :keyword, '%')
+                 OR m.name LIKE CONCAT('%', :keyword, '%')
+                 OR m.country LIKE CONCAT('%', :keyword, '%')
+                                             
                     """,
             nativeQuery = true
     )
@@ -38,7 +41,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query(
             value = """
-                    SELECT *
+                    SELECT distinct m.*
                     FROM movie_website.movie m
                     inner join movie_website.movie_genres mc
                     on m.id =mc.movie_id
@@ -49,7 +52,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             nativeQuery = true
     )
     Optional<Movie> filterMovie(@Param("name") String name);
-
 
 
 }
