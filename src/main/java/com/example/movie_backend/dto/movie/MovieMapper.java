@@ -100,9 +100,8 @@ public class MovieMapper {
         return movie;
     }
 
-    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto, Long movieId) {
-        Movie movie = Movie.builder()
-                .id(movieId)
+    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto, Movie currentMovie) {
+        Movie movie = currentMovie.toBuilder() // nó đang buil mới đây cho nên mấy cái cũ sẽ mất nếu để null
                 .nameMovie(dto.getNameMovie())
                 .enTitle(dto.getViTitle())
                 .viTitle(dto.getEnTitle())

@@ -115,14 +115,14 @@ public class MinioService implements IMinioService {
     }
 
     @Override
-    public String getPreSignedLink(String object) {
+    public String getPreSignedLink(String object, String bucket) {
         try {
 
             String url =
                     minioClient.getPresignedObjectUrl(
                             GetPresignedObjectUrlArgs.builder()
                                     .method(Method.GET)
-                                     .bucket("student")
+                                     .bucket(bucket)
                                     .object(object)
                                     .expiry(2, TimeUnit.HOURS)
                                     .build());

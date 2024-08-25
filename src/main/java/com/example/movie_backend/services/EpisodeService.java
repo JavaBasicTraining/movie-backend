@@ -126,9 +126,9 @@ public class EpisodeService implements IEpisodeService {
                     .map(item -> {
                         EpisodeDTO episodeDTO = mapper.toDTO(item);
                         if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
                             episodeDTO.setPosterUrl(linkPoster);
-                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl(), "movie");
                             episodeDTO.setVideoUrl(linkVideo);
                         }
                         return episodeDTO;

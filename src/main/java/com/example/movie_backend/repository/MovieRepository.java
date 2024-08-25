@@ -31,13 +31,15 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query(
             value = """
-                    SELECT *
-                    FROM movie_website.movie m, 
-                    WHERE m.name LIKE %:name%
+                    SELECT m.*
+                    FROM movie_website.movie m
+                    JOIN movie_website.evaluation e ON m.id = e.movie_id
+                    ORDER BY e.star DESC
+                    LIMIT 5;                  
                     """,
             nativeQuery = true
     )
-    Set<Movie> filterListMovie(@Param("name") String name);
+    Set<Movie> nominatedFilm();
 
     @Query(
             value = """

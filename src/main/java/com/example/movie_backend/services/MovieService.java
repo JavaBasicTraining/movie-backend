@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MovieService implements IMovieService {
     private final MinioClient minioClient;
-    private static final String BUCKET_NAME = "student";
+    private static final String BUCKET_NAME = "movie";
     public final MovieRepository repository;
     public final MovieMapper mapper;
     public final EpisodeMapper episodeMapper;
@@ -177,11 +177,11 @@ public class MovieService implements IMovieService {
     public MovieDTO getById(Long id) {
         return repository.findById(id).map(item -> {
             MovieDTO movieDTO = mapper.toDTO(item);
-            movieDTO.setPosterUrl(movieDTO.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getPosterUrl()));
-            movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
+            movieDTO.setPosterUrl(movieDTO.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getPosterUrl(), "movie"));
+            movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl(), "movie"));
             List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
-                String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
-                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl());
+                String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl(),"movie");
+                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl(),"movie" );
                 EpisodeDTO episodeDTO = new EpisodeDTO();
                 episodeDTO.setId(episode.getId());
                 episodeDTO.setEpisodeCount(episode.getEpisodeCount());
@@ -213,13 +213,13 @@ public class MovieService implements IMovieService {
         return repository.query(request.getKeyword(), pageable).map(item -> {
             MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
             if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
                 movieDTO.setPosterUrl(linkPoster);
 
             } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
                 movieDTO.setPosterUrl(linkPoster);
-                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl(), "movie");
                 movieDTO.setVideoUrl(linkVideo);
             }
             return movieDTO;
@@ -231,13 +231,13 @@ public class MovieService implements IMovieService {
             return repository.filterMovie(nameMovie).map(item -> {
                 MovieDTO movieDTO = mapper.toDTO(item);
                 if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
                     movieDTO.setPosterUrl(linkPoster);
 
                 } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
                     movieDTO.setPosterUrl(linkPoster);
-                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl(), "movie");
                     movieDTO.setVideoUrl(linkVideo);
                 }
                 return movieDTO;
@@ -251,8 +251,9 @@ public class MovieService implements IMovieService {
     }
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
-        Movie movie = repository.findById(movieId).orElseThrow(() -> new EntityNotFoundException());
-        movie = mapper.toUpdateMovieWithEpisodes(request, movieId);
+        Movie movie = repository.findById(movieId)
+                .orElseThrow(EntityNotFoundException::new);
+        movie = mapper.toUpdateMovieWithEpisodes(request, movie); // đổi lại mapper, hiện tại nó đang tạo mới r
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie); // lúc này có id
 
