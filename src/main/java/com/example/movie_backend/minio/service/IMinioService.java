@@ -15,4 +15,4 @@ public interface IMinioService {
     FileInfo uploadByLink(String link, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     List<FileInfo> getList();   
-    String getPreSignedLink(String object,String bucket);}
+    String getPreSignedLink(String object);}

@@ -61,7 +61,7 @@ public class MinioController implements IMinioController {
 
     @Override
     public ResponseEntity<String> getPreSignedLink(String object) {
-        return ResponseEntity.ok(iMinioService.getPreSignedLink(object, "movie"));
+        return ResponseEntity.ok(iMinioService.getPreSignedLink(object));
     }
 
 }
