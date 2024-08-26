@@ -112,12 +112,12 @@ public class EpisodeService implements IEpisodeService {
     public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
         return this.repository.getListEpisodeByMovieId(movieId)
                 .stream().map(this.mapper::toDTO)
-                .collect(Collectors.toSet());
+                                .collect(Collectors.toSet());
 
     }
-
     @Override
     public EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount) {
+        
 
         if (episodeCount == null || episodeCount == 0) {
             return null;
@@ -126,9 +126,9 @@ public class EpisodeService implements IEpisodeService {
                     .map(item -> {
                         EpisodeDTO episodeDTO = mapper.toDTO(item);
                         if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl(), "movie");
+                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
                             episodeDTO.setPosterUrl(linkPoster);
-                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl(), "movie");
+                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
                             episodeDTO.setVideoUrl(linkVideo);
                         }
                         return episodeDTO;

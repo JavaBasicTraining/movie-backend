@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class MinioService implements IMinioService {
     private final MinioClient minioClient;
-    private static final String BUCKET_NAME = "student";
+    private static final String BUCKET_NAME = "movie";
 
     @Override
     public FileInfo uploadByFile(MultipartFile file, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -115,14 +115,14 @@ public class MinioService implements IMinioService {
     }
 
     @Override
-    public String getPreSignedLink(String object, String bucket) {
+    public String getPreSignedLink(String object) {
         try {
 
             String url =
                     minioClient.getPresignedObjectUrl(
                             GetPresignedObjectUrlArgs.builder()
                                     .method(Method.GET)
-                                     .bucket(bucket)
+                                     .bucket(BUCKET_NAME)
                                     .object(object)
                                     .expiry(2, TimeUnit.HOURS)
                                     .build());
