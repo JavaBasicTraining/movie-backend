@@ -181,7 +181,7 @@ public class MovieService implements IMovieService {
             movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
             List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
                 String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
-                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl() );
+                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl()   );
                 EpisodeDTO episodeDTO = new EpisodeDTO();
                 episodeDTO.setId(episode.getId());
                 episodeDTO.setEpisodeCount(episode.getEpisodeCount());
@@ -204,13 +204,13 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<MovieDTOWithoutJoin> query(String name) {
-        return repository.query(name, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
+    public List<MovieDTOWithoutJoin> query(String name, String genre, String country) {
+        return repository.query(name,genre,country, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
     }
 
     @Override
     public Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable) {
-        return repository.query(request.getKeyword(), pageable).map(item -> {
+        return repository.query(request.getKeyword(),request.getGenre(), request.getCountry(), pageable).map(item -> {
             MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
             if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
                 String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());

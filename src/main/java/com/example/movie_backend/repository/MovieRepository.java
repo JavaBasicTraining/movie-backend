@@ -15,19 +15,24 @@ import java.util.Set;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
-                 SELECT DISTINCT m.*
-                 FROM movie m
-                 LEFT JOIN movie_genres mc ON mc.movie_id = m.id
-                 LEFT JOIN genre c ON mc.genres_id = c.id
-                 WHERE :keyword IS NULL
-                 OR c.name LIKE CONCAT('%', :keyword, '%')
-                 OR m.name LIKE CONCAT('%', :keyword, '%')
-                 OR m.country LIKE CONCAT('%', :keyword, '%')
-                                             
-                    """,
+                SELECT DISTINCT m.*
+                FROM movie m
+                LEFT JOIN movie_genres mc ON mc.movie_id = m.id
+                LEFT JOIN genre c ON mc.genres_id = c.id
+                WHERE (:keyword IS NULL
+                       OR c.name IS NULL
+                       OR c.name LIKE CONCAT('%', :keyword, '%'))
+                  AND (:genre IS NULL OR c.name = :genre)
+                  AND (:country IS NULL OR m.country = :country)
+                """,
             nativeQuery = true
     )
-    Page<Movie> query(@Param("keyword") String keyword, Pageable pageable);
+    Page<Movie> query(
+            @Param("keyword") String keyword,
+            @Param("genre") String genre,
+            @Param("country") String country,
+            Pageable pageable
+    );
 
     @Query(
             value = """
