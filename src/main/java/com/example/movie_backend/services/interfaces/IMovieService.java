@@ -29,7 +29,7 @@ public interface IMovieService{
 
     Boolean delete(Long id);
 
-    List<MovieDTOWithoutJoin> query(String name);
+    List<MovieDTOWithoutJoin> query(String keyword, String genre, String country );
 
     Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable);
 

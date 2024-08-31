@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class QueryMovieRequest {
     private String keyword;
+    private String genre;
+    private String country;
 }

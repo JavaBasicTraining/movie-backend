@@ -54,7 +54,7 @@ public class MovieManageController {
         );
     }
 
-    @PostMapping(value = "createWithEpisode")
+ @PostMapping()
     public ResponseEntity<MovieDTO> createWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return ResponseEntity.ok(
                 movieService.createWithEpisode(movieEpisodeRequest)
