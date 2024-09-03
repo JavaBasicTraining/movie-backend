@@ -181,7 +181,7 @@ public class MovieService implements IMovieService {
             movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
             List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
                 String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
-                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl()   );
+                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl());
                 EpisodeDTO episodeDTO = new EpisodeDTO();
                 episodeDTO.setId(episode.getId());
                 episodeDTO.setEpisodeCount(episode.getEpisodeCount());
@@ -205,12 +205,12 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTOWithoutJoin> query(String name, String genre, String country) {
-        return repository.query(name,genre,country, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
+        return repository.query(name, genre, country, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
     }
 
     @Override
     public Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable) {
-        return repository.query(request.getKeyword(),request.getGenre(), request.getCountry(), pageable).map(item -> {
+        return repository.query(request.getKeyword(), request.getGenre(), request.getCountry(), pageable).map(item -> {
             MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
             if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
                 String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
@@ -243,6 +243,7 @@ public class MovieService implements IMovieService {
                 return movieDTO;
             }).orElseThrow(() -> new BadRequestException("Movie not found"));
 
+
     }
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
@@ -253,12 +254,10 @@ public class MovieService implements IMovieService {
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
                 .orElseThrow(EntityNotFoundException::new);
-        movie = mapper.toUpdateMovieWithEpisodes(request, movie); // đổi lại mapper, hiện tại nó đang tạo mới r
+        movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
-        movie = repository.save(movie); // lúc này có id
+        movie = repository.save(movie);
 
-        // map id vào dto
-        // này đâu phải sắp xếp
         if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty() && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
             for (int i = 0; i < movie.getEpisodes().size(); i++) {
                 EpisodeDTO episodeDTO = movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList().get(i);

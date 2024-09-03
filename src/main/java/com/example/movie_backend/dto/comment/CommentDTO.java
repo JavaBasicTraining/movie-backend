@@ -22,4 +22,6 @@ public class CommentDTO {
     private Long idUser;
 
     private  Set<Long> idMovies;
+    private String user;
+
 }

@@ -52,7 +52,7 @@ public class EvaluationController implements IEvaluationController {
         return true;
     }
 
-    @GetMapping("/evaluations/user/{userId}/movie/{movieId}")
+    @GetMapping("/user/{userId}/movie/{movieId}")
     public ResponseEntity<EvaluationDTO> getEvaluation(
             @PathVariable("userId") Long userId,
             @PathVariable("movieId") Long movieId) {

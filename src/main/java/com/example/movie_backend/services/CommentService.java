@@ -10,6 +10,7 @@ import com.example.movie_backend.services.interfaces.ICommentService;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.BadRequestException;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -60,6 +61,16 @@ public class CommentService  implements ICommentService {
     public Boolean delete(Long id) {
          repository.deleteById(id);
          return true;
+    }
+
+    @Override
+    public List<CommentDTO> getCommentByMovieId(Long movieId) {
+        return repository.getCommentByMovieId(movieId).stream().map(mapper::toDTO).toList();
+    }
+
+    @Override
+    public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
+        return repository.getListCommentByMovieIdUserId(userId,movieId).stream().map(mapper::toDTO).toList();
     }
 }
 

@@ -26,11 +26,12 @@ public class CommentMapper {
         return CommentDTO.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
-                .idUser(entity.getUser().getId())
+                .idUser(entity.getUser()== null ? null: entity.getUser().getId())
 
-                .idMovies(entity.getMovies().stream()
+                .idMovies(entity.getMovies()== null? null : entity.getMovies().stream()
                         .map(item -> item.getId())
                         .collect(Collectors.toSet()))
+                .user(entity.getUser()==null? null: entity.getUser().getUsername())
                 .build();
     }
 
@@ -38,7 +39,7 @@ public class CommentMapper {
         return Comment.builder()
                 .id(id)
                 .content(dto.getContent())
-                .user(User.builder().Id(dto.getIdUser()).build())
+                .user(dto.getUser()== null? null : User.builder().Id(dto.getIdUser()).build())
                 .movies(dto.getIdMovies().stream().map(item ->
                         Movie.builder()
                                 .id(item)

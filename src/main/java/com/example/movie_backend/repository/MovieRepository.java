@@ -20,8 +20,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                 LEFT JOIN movie_genres mc ON mc.movie_id = m.id
                 LEFT JOIN genre c ON mc.genres_id = c.id
                 WHERE (:keyword IS NULL
-                       OR c.name IS NULL
-                       OR c.name LIKE CONCAT('%', :keyword, '%'))
+                       OR m.name IS NULL
+                       OR m.name LIKE CONCAT('%', :keyword, '%'))
                   AND (:genre IS NULL OR c.name = :genre)
                   AND (:country IS NULL OR m.country = :country)
                 """,
@@ -54,7 +54,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                     on m.id =mc.movie_id
                     inner join movie_website.genre c
                     on mc.genres_id = c .id
-                    WHERE m.name LIKE %:name%
+                    WHERE m.name LIKE CONCAT("%", :name ,"%")
                     """,
             nativeQuery = true
     )

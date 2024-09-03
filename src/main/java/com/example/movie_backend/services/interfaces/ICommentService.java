@@ -2,6 +2,8 @@ package com.example.movie_backend.services.interfaces;
 
 import com.example.movie_backend.dto.comment.CommentDTO;
 
+import java.util.List;
+
 public interface ICommentService  {
     CommentDTO create(CommentDTO dto);
 
@@ -9,7 +11,9 @@ public interface ICommentService  {
 
     CommentDTO getById(Long id);
 
-
     Boolean delete(Long id);
+
+    List<CommentDTO> getCommentByMovieId (Long movieId);
+    List<CommentDTO> getListCommentByMovieIdUserId (Long  userId,  Long movieId);
 
 }
