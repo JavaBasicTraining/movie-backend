@@ -9,18 +9,18 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 
 @SecuritySchemes(value = {
-    @SecurityScheme(
-        name = "Authorization",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "Bearer [token]",
-        scheme = "bearer",
-        in = SecuritySchemeIn.HEADER,
-        description = "Access token"
-    )
+        @SecurityScheme(
+                name = "Authorization",
+                type = SecuritySchemeType.HTTP,
+                bearerFormat = "Bearer [token]",
+                scheme = "bearer",
+                in = SecuritySchemeIn.HEADER,
+                description = "Access token"
+        )
 })
 @OpenAPIDefinition(
-    info = @Info(title = "Movie API", version = "1.0.0", description = "Documentation Movie v1.0.0"),
-    security = @SecurityRequirement(name = "Authorization")
+        info = @Info(title = "Movie API", version = "1.0.0", description = "Documentation Movie v1.0.0"),
+        security = @SecurityRequirement(name = "Authorization")
 )
 public class OpenApiConfig {
 }

@@ -42,17 +42,17 @@ public class CategoryService implements ICategoryService {
     public CategoryDTO getById(Long id) {
 
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("Movie not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
     }
 
     @Override
     public List<CategoryDTO> getList(GetCategoriesFilter filter) {
         return repository.filterCategory(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-            .map(item -> mapper.toDTO(item))
-            .collect(Collectors.toList());
+                .map(item -> mapper.toDTO(item))
+                .collect(Collectors.toList());
     }
 
 

@@ -54,14 +54,14 @@ public class AccountController {
     @PostMapping("login")
     public ResponseEntity<JWTToken> login(@RequestBody LoginRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            request.getUsername(),
-            request.getPassword()
+                request.getUsername(),
+                request.getPassword()
 
         );
         Authentication authentication = authenticationManagerBuilder.getObject()
-            .authenticate(authenticationToken);
+                .authenticate(authenticationToken);
         SecurityContextHolder.getContext()
-            .setAuthentication(authentication);
+                .setAuthentication(authentication);
         String jwt = this.createToken(authentication, request.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
@@ -95,9 +95,9 @@ public class AccountController {
 
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(" "));
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
 
         Instant now = Instant.now();
         Instant validity;

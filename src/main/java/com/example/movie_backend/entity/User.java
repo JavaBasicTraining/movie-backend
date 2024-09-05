@@ -19,7 +19,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -32,9 +32,9 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-        name = "app_user_authority",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
+            name = "app_user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
     )
     @Builder.Default
     private Set<Authority> authorities = new HashSet<>();

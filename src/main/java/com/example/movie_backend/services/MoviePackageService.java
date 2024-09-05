@@ -36,10 +36,10 @@ public class MoviePackageService implements IMoviePackageService {
     @Override
     public MoviePackageDTO getById(Long id) {
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("Movie not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
     }
 
     @Override

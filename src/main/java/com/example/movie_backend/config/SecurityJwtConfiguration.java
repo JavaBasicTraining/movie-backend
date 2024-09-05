@@ -29,9 +29,9 @@ public class SecurityJwtConfiguration {
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder =
-            NimbusJwtDecoder
-                .withSecretKey(getSecretKey())
-                .macAlgorithm(JWT_ALGORITHM).build();
+                NimbusJwtDecoder
+                        .withSecretKey(getSecretKey())
+                        .macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
             try {
                 return jwtDecoder.decode(token);

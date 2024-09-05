@@ -12,19 +12,19 @@ import java.util.Set;
 @Repository
 public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query(value = """
-        SELECT * 
-        FROM movie_website.episode
-        WHERE movie_id = :movieId
-        ORDER BY episode_count asc;
-                                                                                             """, nativeQuery = true)
+            SELECT * 
+            FROM movie_website.episode
+            WHERE movie_id = :movieId
+            ORDER BY episode_count asc;
+                                                                                                 """, nativeQuery = true)
     Set<Episode> getListEpisodeByMovieId(@Param("movieId") Long movieId);
 
     @Query(value = """
-        SELECT * 
-        FROM movie_website.episode 
-        WHERE movie_id = :movieId  
-        and episode_count = :episodeCount  
-                                                                                                       """, nativeQuery = true)
+            SELECT * 
+            FROM movie_website.episode 
+            WHERE movie_id = :movieId  
+            and episode_count = :episodeCount  
+                                                                                                           """, nativeQuery = true)
     Optional<Episode> getEpisodeByMovieId(@Param("movieId") Long movieId,
                                           @Param("episodeCount") Long episodeCount);
 

@@ -49,17 +49,17 @@ public class GenreService implements IGenreService {
     public GenreDTO getById(Long id) {
 
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("Movie not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
     }
 
     @Override
     public List<GenreDTO> getList(GetCategoriesFilter filter) {
         return repository.filterGenre(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-            .map(mapper::toDTO)
-            .collect(Collectors.toList());
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 

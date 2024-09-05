@@ -30,12 +30,12 @@ public class CustomSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors()
-            .and()
-            .csrf()
-            .disable()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         corsConfig(http);
         permitAll(http);
         http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
@@ -54,9 +54,9 @@ public class CustomSecurityConfiguration {
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN")
-            .and()
-            .withUser("user").password(passwordEncoder().encode("userPass")).roles("USER");
+                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN")
+                .and()
+                .withUser("user").password(passwordEncoder().encode("userPass")).roles("USER");
     }
 
 

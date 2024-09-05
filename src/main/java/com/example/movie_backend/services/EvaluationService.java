@@ -38,24 +38,24 @@ public class EvaluationService implements IEvaluationService {
     @Override
     public EvaluationDTO update(EvaluationDTO dto, Long id) {
         return repository
-            .findById(id)
-            .map(evaluation -> {
-                evaluation.setStar(dto.getStar());
-                evaluation = repository.save(evaluation);
-                return mapper.toDTO(evaluation);
-            })
-            .orElseThrow(
-                () -> new RuntimeException("evaluation not found by id: " + id)
-            );
+                .findById(id)
+                .map(evaluation -> {
+                    evaluation.setStar(dto.getStar());
+                    evaluation = repository.save(evaluation);
+                    return mapper.toDTO(evaluation);
+                })
+                .orElseThrow(
+                        () -> new RuntimeException("evaluation not found by id: " + id)
+                );
     }
 
     @Override
     public EvaluationDTO getById(Long id) {
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("Movie not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
     }
 
     @Override

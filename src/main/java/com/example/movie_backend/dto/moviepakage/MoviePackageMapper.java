@@ -7,20 +7,20 @@ import org.springframework.stereotype.Component;
 public class MoviePackageMapper {
     public MoviePackage toEntity(MoviePackageDTO dto) {
         return MoviePackage.builder()
-            .type(dto.getType())
-            .build();
+                .type(dto.getType())
+                .build();
     }
 
     public MoviePackage toEntity(MoviePackageDTO dto, Long id) {
         return MoviePackage.builder()
-            .type(dto.getType())
-            .build();
+                .type(dto.getType())
+                .build();
     }
 
     public MoviePackageDTO toDTO(MoviePackage entity) {
         return MoviePackageDTO.builder()
-            .id(entity.getId())
-            .type(entity.getType())
-            .build();
+                .id(entity.getId())
+                .type(entity.getType())
+                .build();
     }
 }

@@ -28,6 +28,6 @@ public class CustomAuthorizationFilter extends HttpFilter {
 
     private boolean hasRole(Authentication authentication, String role) {
         return authentication != null && authentication.getAuthorities().stream()
-            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
     }
 }

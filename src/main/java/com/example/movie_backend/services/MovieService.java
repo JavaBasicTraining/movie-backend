@@ -253,7 +253,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
-            .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie);

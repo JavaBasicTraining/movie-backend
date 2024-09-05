@@ -12,13 +12,13 @@ import java.util.Set;
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     @Query(
-        value = """
-            SELECT *
-            FROM genre c
-            WHERE (:searchTerm is null or c.name LIKE %:searchTerm%)
-            and (coalesce(:excludeIds, null) is null or c.id not in (:excludeIds))
-            """,
-        nativeQuery = true
+            value = """
+                    SELECT *
+                    FROM genre c
+                    WHERE (:searchTerm is null or c.name LIKE %:searchTerm%)
+                    and (coalesce(:excludeIds, null) is null or c.id not in (:excludeIds))
+                    """,
+            nativeQuery = true
     )
     Set<Genre> filterGenre(@Param("searchTerm") String searchTerm,
                            @Param("excludeIds") List<Long> excludeIds);
