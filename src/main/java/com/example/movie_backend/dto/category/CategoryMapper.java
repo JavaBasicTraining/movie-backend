@@ -5,6 +5,7 @@ import com.example.movie_backend.entity.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
+
 @Component
 public class CategoryMapper {
     public Category toEntity(CategoryDTO dto) {

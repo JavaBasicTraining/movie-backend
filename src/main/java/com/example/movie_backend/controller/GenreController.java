@@ -4,14 +4,12 @@ import com.example.movie_backend.controller.interfaces.IGenreController;
 import com.example.movie_backend.controller.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.dto.genre.GenreMapper;
-import com.example.movie_backend.repository.CategoryRepository;
 import com.example.movie_backend.repository.GenreRepository;
 import com.example.movie_backend.services.GenreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class GenreController implements IGenreController {

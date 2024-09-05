@@ -18,18 +18,18 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     Optional<Evaluation> findByEvaluationByUserId(@Param("userId") Long userId,
                                                   @Param("movieId") Long movieId);
 
-    @Query ( value = """
+    @Query(value = """
             SELECT AVG(star)
             FROM evaluation
             WHERE movie_id = :movieId
             """, nativeQuery = true)
-    Float average (@Param("movieId") float movieId);
+    Float average(@Param("movieId") float movieId);
 
 
-    @Query ( value = """
+    @Query(value = """
             SELECT COUNT(*) FROM evaluation where movie_id = :movieId 
                                          
             """, nativeQuery = true)
-    Long numberOfReviews (@Param("movieId") Long movieId);
+    Long numberOfReviews(@Param("movieId") Long movieId);
 
 }

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +29,7 @@ public class GenreService implements IGenreService {
     @Transactional
     public GenreDTO create(GenreDTO dto) {
         Genre category = mapper.toEntity(dto);
-        for (Long id: dto.getMovieIds()) {
+        for (Long id : dto.getMovieIds()) {
             Movie movie = movieRepository.findById(id).orElse(null);
             if (Objects.nonNull(movie)) {
                 movie.addCategory(category);

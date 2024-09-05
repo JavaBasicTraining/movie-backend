@@ -25,6 +25,7 @@ public class SecurityJwtConfiguration {
     public static final String AUTHORITIES_KEY = "auth";
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
     private final String jwtKey = "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNjA5ODczNSwiaWF0IjoxNzE2MDk4NzM1fQ.t3wybMNtL0tu57btu9bcluyXCQ0uemMibCG70oFqgLxl17Gvufa4btcVAHXVGtkK6Vv-krgLWWqWIaWHpPx-vg";
+
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder =
@@ -60,6 +61,7 @@ public class SecurityJwtConfiguration {
         byte[] keyBytes = Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, JWT_ALGORITHM.getName());
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

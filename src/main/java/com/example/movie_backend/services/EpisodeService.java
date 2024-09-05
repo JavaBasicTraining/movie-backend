@@ -112,17 +112,18 @@ public class EpisodeService implements IEpisodeService {
     public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
         return this.repository.getListEpisodeByMovieId(movieId)
                 .stream().map(this.mapper::toDTO)
-                                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
 
     }
+
     @Override
     public EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount) {
-        
+
 
         if (episodeCount == null || episodeCount == 0) {
             return null;
         } else {
-        return repository.getEpisodeByMovieId(movieId, episodeCount)
+            return repository.getEpisodeByMovieId(movieId, episodeCount)
                     .map(item -> {
                         EpisodeDTO episodeDTO = mapper.toDTO(item);
                         if (item.getPosterUrl() != null && item.getVideoUrl() != null) {

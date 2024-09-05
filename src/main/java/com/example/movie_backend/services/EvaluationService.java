@@ -66,7 +66,7 @@ public class EvaluationService implements IEvaluationService {
 
     public Float average(float movieId) {
 
-        return   repository.average(movieId);
+        return repository.average(movieId);
     }
 
 }

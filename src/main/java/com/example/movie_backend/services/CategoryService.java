@@ -5,7 +5,6 @@ import com.example.movie_backend.controller.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.category.CategoryDTO;
 import com.example.movie_backend.dto.category.CategoryMapper;
 import com.example.movie_backend.entity.Category;
-
 import com.example.movie_backend.repository.CategoryRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.ICategoryService;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service

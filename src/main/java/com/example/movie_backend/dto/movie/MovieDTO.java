@@ -5,7 +5,6 @@ import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
-import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Movie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,7 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.util.List;
 import java.util.Set;
@@ -41,12 +39,12 @@ public class MovieDTO {
 
     private String description;
 
-    private Long year ;
+    private Long year;
 
     private String country;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY, required = false)
-    private  String videoUrl;
+    private String videoUrl;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;

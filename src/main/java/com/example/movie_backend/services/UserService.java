@@ -13,8 +13,8 @@ import com.example.movie_backend.services.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import javax.ws.rs.BadRequestException;
 
+import javax.ws.rs.BadRequestException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -50,7 +50,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public Set<User> getUserAuthority( ) {
+    public Set<User> getUserAuthority() {
         return userRepository.getUserAuthority();
     }
 

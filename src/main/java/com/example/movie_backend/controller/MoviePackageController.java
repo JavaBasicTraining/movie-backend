@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MoviePackageController implements IMoviePackageController {
     public final MoviePackageService service;
 
-    public MoviePackageController (MoviePackageService service) {
+    public MoviePackageController(MoviePackageService service) {
         this.service = service;
     }
 
@@ -21,7 +21,7 @@ public class MoviePackageController implements IMoviePackageController {
 
     @Override
     public ResponseEntity<MoviePackageDTO> update(MoviePackageDTO moviePackageDTO, Long id) {
-        return ResponseEntity.ok(service.update(moviePackageDTO,id));
+        return ResponseEntity.ok(service.update(moviePackageDTO, id));
 
     }
 
@@ -32,8 +32,8 @@ public class MoviePackageController implements IMoviePackageController {
 
     @Override
     public boolean delete(Long id) {
-         ResponseEntity.ok(service.delete(id));
-         return true;
+        ResponseEntity.ok(service.delete(id));
+        return true;
 
     }
 }

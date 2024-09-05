@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = "File")
 @Getter
 @Setter
-@SuperBuilder (toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class FileEntity {
@@ -23,7 +23,7 @@ public class FileEntity {
     @Column(length = 1000)
     String url;
 
-   private  byte[] content;
-   private String bucketName;
+    private byte[] content;
+    private String bucketName;
 
 }

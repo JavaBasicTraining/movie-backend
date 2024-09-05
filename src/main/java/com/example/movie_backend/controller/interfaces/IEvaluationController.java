@@ -1,7 +1,6 @@
 package com.example.movie_backend.controller.interfaces;
 
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

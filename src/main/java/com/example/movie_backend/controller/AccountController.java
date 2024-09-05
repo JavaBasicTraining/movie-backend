@@ -28,7 +28,6 @@ import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -87,6 +86,7 @@ public class AccountController {
         }
         return ResponseEntity.notFound().build();
     }
+
     @PostMapping("getUserAuthority")
     public ResponseEntity<Set<User>> getUserAuthority() {
         return ResponseEntity.ok(userService.getUserAuthority());

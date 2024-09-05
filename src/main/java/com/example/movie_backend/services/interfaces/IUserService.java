@@ -5,19 +5,18 @@ import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.RegisterRequest;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface IUserService {
-    User create (User user);
+    User create(User user);
 
-    List<User> getList ();
+    List<User> getList();
 
-    UserDTO getUser (String userName);
+    UserDTO getUser(String userName);
 
     void register(RegisterRequest request);
 
 
-    Set<User> getUserAuthority ();
+    Set<User> getUserAuthority();
 
 }

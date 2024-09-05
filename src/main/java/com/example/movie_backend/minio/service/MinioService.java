@@ -122,7 +122,7 @@ public class MinioService implements IMinioService {
                     minioClient.getPresignedObjectUrl(
                             GetPresignedObjectUrlArgs.builder()
                                     .method(Method.GET)
-                                     .bucket(BUCKET_NAME)
+                                    .bucket(BUCKET_NAME)
                                     .object(object)
                                     .expiry(2, TimeUnit.HOURS)
                                     .build());

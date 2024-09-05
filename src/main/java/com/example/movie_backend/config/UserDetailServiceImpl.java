@@ -28,11 +28,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     private User createSpringSecurityUser(String lowercaseLogin, com.example.movie_backend.entity.User user) {
         List<SimpleGrantedAuthority> grantedAuthorities = user
-            .getAuthorities()
-            .stream()
-            .map(Authority::getName)
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+                .getAuthorities()
+                .stream()
+                .map(Authority::getName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
         return new User(user.getUsername(), user.getPasswordHash(), grantedAuthorities);
     }
 }

@@ -59,7 +59,7 @@ public class CustomSecurityConfiguration {
                 .withUser("user").password(passwordEncoder().encode("userPass")).roles("USER");
     }
 
-    
+
     private void corsConfig(HttpSecurity http) throws Exception {
         CorsConfiguration configuration = new CorsConfiguration();
         if (!Objects.isNull(commonProperties.getCors().getOrigins())) {

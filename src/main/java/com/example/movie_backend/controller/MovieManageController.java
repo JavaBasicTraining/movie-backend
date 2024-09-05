@@ -54,7 +54,7 @@ public class MovieManageController {
         );
     }
 
- @PostMapping()
+    @PostMapping()
     public ResponseEntity<MovieDTO> createWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return ResponseEntity.ok(
                 movieService.createWithEpisode(movieEpisodeRequest)
@@ -70,10 +70,10 @@ public class MovieManageController {
 
     @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadFile(@PathVariable("id") Long id,
-                                           @RequestParam("type") String  type,
-                                           @RequestPart("file") 
-                                               MultipartFile file) {
-        movieService.uploadMovieFile(id, file,type);
+                                           @RequestParam("type") String type,
+                                           @RequestPart("file")
+                                           MultipartFile file) {
+        movieService.uploadMovieFile(id, file, type);
         return ResponseEntity.noContent().build();
     }
 

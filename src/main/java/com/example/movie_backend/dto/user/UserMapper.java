@@ -29,9 +29,9 @@ public class UserMapper {
                 .userName(entity.getUsername())
                 .authorities(
                         entity.getAuthorities()
-                            .stream()
-                            .map(nameAuthority -> nameAuthority.getName())
-                            .toList())
+                                .stream()
+                                .map(nameAuthority -> nameAuthority.getName())
+                                .toList())
                 .build();
     }
 

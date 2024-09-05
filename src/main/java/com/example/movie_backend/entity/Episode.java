@@ -1,6 +1,5 @@
 package com.example.movie_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +33,7 @@ public class Episode implements Serializable {
 
     @Column(name = "video_url")
     private String videoUrl;
+
     public String setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
         return videoUrl;

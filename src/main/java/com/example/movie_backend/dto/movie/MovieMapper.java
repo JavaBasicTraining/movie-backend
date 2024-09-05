@@ -122,7 +122,7 @@ public class MovieMapper {
                                 .id(item.getId())
                                 .episodeCount(item.getEpisodeCount())
                                 .descriptions(item.getDescriptions())
-                                .videoUrl(item.getVideoUrl()== null ? null : item.getVideoUrl())
+                                .videoUrl(item.getVideoUrl() == null ? null : item.getVideoUrl())
                                 .posterUrl(item.getPosterUrl())
                                 .tempId(item.getTempId())
                                 .build())
