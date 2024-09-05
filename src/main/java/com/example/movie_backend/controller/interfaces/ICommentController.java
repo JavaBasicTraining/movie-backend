@@ -23,9 +23,10 @@ public interface ICommentController {
     boolean delete(@PathVariable Long id);
 
     @GetMapping
-    ResponseEntity<List<CommentDTO>>  getCommentByMovieId (@RequestParam Long commentId);
+    ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long commentId);
+
     @GetMapping("getCommentByUserId")
-    ResponseEntity<List<CommentDTO>>  getListCommentByMovieIdUserId (@RequestParam Long userId, @RequestParam Long movieId);
+    ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId, @RequestParam Long movieId);
 
 
 }

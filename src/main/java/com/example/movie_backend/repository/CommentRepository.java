@@ -11,21 +11,21 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
-            value = """
-                    SELECT *
-                    FROM movie_website.comment c
-                    LEFT JOIN movie_website.movie_comment mc
-                    ON c.id = mc.comment_id
-                    LEFT JOIN movie_website.movie m
-                    ON mc.movie_id = m.id
-                    WHERE m.id = :movieId            
-                    """, nativeQuery = true
+        value = """
+            SELECT *
+            FROM movie_website.comment c
+            LEFT JOIN movie_website.movie_comment mc
+            ON c.id = mc.comment_id
+            LEFT JOIN movie_website.movie m
+            ON mc.movie_id = m.id
+            WHERE m.id = :movieId            
+            """, nativeQuery = true
     )
     List<Comment> getCommentByMovieId(@Param("movieId") Long movieId);
 
 
     @Query(
-            value = """
+        value = """
             SELECT c.*
             FROM movie_website.comment c
             LEFT JOIN movie_comment mc ON c.id = mc.comment_id

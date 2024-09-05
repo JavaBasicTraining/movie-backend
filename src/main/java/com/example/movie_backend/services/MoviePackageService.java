@@ -5,18 +5,17 @@ import com.example.movie_backend.dto.moviepakage.MoviePackageMapper;
 import com.example.movie_backend.entity.MoviePackage;
 import com.example.movie_backend.repository.MoviePackageRepository;
 import com.example.movie_backend.services.interfaces.IMoviePackageService;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.BadRequestException;
-import java.util.UUID;
 
 @Service
 public class MoviePackageService implements IMoviePackageService {
 
-    public  final MoviePackageRepository repository;
+    public final MoviePackageRepository repository;
 
     public final MoviePackageMapper mapper;
+
     public MoviePackageService(MoviePackageRepository repository, MoviePackageMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
@@ -30,17 +29,18 @@ public class MoviePackageService implements IMoviePackageService {
 
     @Override
     public MoviePackageDTO update(MoviePackageDTO dto, Long id) {
-        MoviePackage comment = mapper.toEntity(dto,id);
+        MoviePackage comment = mapper.toEntity(dto, id);
         return mapper.toDTO(repository.save(comment));
     }
 
     @Override
     public MoviePackageDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );    }
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
+    }
 
     @Override
     public Boolean delete(Long id) {

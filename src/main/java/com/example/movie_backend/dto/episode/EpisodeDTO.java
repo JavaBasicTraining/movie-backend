@@ -1,15 +1,12 @@
 package com.example.movie_backend.dto.episode;
 
 import com.example.movie_backend.dto.movie.MovieDTO;
-import com.example.movie_backend.entity.Episode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.util.Set;
 
 @Getter
 @Setter

@@ -228,20 +228,20 @@ public class MovieService implements IMovieService {
 
     public MovieDTO filterMovie(String nameMovie) {
 
-            return repository.filterMovie(nameMovie).map(item -> {
-                MovieDTO movieDTO = mapper.toDTO(item);
-                if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                    movieDTO.setPosterUrl(linkPoster);
+        return repository.filterMovie(nameMovie).map(item -> {
+            MovieDTO movieDTO = mapper.toDTO(item);
+            if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                movieDTO.setPosterUrl(linkPoster);
 
-                } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                    movieDTO.setPosterUrl(linkPoster);
-                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                    movieDTO.setVideoUrl(linkVideo);
-                }
-                return movieDTO;
-            }).orElseThrow(() -> new BadRequestException("Movie not found"));
+            } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
+                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                movieDTO.setPosterUrl(linkPoster);
+                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                movieDTO.setVideoUrl(linkVideo);
+            }
+            return movieDTO;
+        }).orElseThrow(() -> new BadRequestException("Movie not found"));
 
 
     }
@@ -253,7 +253,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
-                .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(EntityNotFoundException::new);
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie);

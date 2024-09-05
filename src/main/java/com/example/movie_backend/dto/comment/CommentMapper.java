@@ -11,40 +11,40 @@ import java.util.stream.Collectors;
 public class CommentMapper {
     public Comment toEntity(CommentDTO dto) {
         return Comment.builder()
-                .id(dto.getId())
-                .content(dto.getContent())
-                .user(User.builder().Id(dto.getIdUser()).build())
-                .movies(dto.getIdMovies().stream().map(item ->
-                        Movie.builder()
-                                .id(item)
-                                .build()).collect(Collectors.toSet()))
-                .build();
+            .id(dto.getId())
+            .content(dto.getContent())
+            .user(User.builder().Id(dto.getIdUser()).build())
+            .movies(dto.getIdMovies().stream().map(item ->
+                Movie.builder()
+                    .id(item)
+                    .build()).collect(Collectors.toSet()))
+            .build();
 
     }
 
     public CommentDTO toDTO(Comment entity) {
         return CommentDTO.builder()
-                .id(entity.getId())
-                .content(entity.getContent())
-                .idUser(entity.getUser()== null ? null: entity.getUser().getId())
+            .id(entity.getId())
+            .content(entity.getContent())
+            .idUser(entity.getUser() == null ? null : entity.getUser().getId())
 
-                .idMovies(entity.getMovies()== null? null : entity.getMovies().stream()
-                        .map(item -> item.getId())
-                        .collect(Collectors.toSet()))
-                .user(entity.getUser()==null? null: entity.getUser().getUsername())
-                .build();
+            .idMovies(entity.getMovies() == null ? null : entity.getMovies().stream()
+                .map(item -> item.getId())
+                .collect(Collectors.toSet()))
+            .user(entity.getUser() == null ? null : entity.getUser().getUsername())
+            .build();
     }
 
     public Comment toEntity(CommentDTO dto, Long id) {
         return Comment.builder()
-                .id(id)
-                .content(dto.getContent())
-                .user(dto.getUser()== null? null : User.builder().Id(dto.getIdUser()).build())
-                .movies(dto.getIdMovies().stream().map(item ->
-                        Movie.builder()
-                                .id(item)
-                                .build()).collect(Collectors.toSet()))
-                .build();
+            .id(id)
+            .content(dto.getContent())
+            .user(dto.getUser() == null ? null : User.builder().Id(dto.getIdUser()).build())
+            .movies(dto.getIdMovies().stream().map(item ->
+                Movie.builder()
+                    .id(item)
+                    .build()).collect(Collectors.toSet()))
+            .build();
 
     }
 

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomAuthorizationFilter extends HttpFilter {
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws  IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String path = request.getRequestURI();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -28,6 +28,6 @@ public class CustomAuthorizationFilter extends HttpFilter {
 
     private boolean hasRole(Authentication authentication, String role) {
         return authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
+            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
     }
 }

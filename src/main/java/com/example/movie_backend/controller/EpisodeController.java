@@ -26,13 +26,13 @@ public class EpisodeController implements IEpisodeController {
     @Override
 
     public ResponseEntity<EpisodeDTO> create(CreateEpisodeRequest episode) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        return ResponseEntity.ok(service.create(episode,episode.getFilePoster(),episode.getFileMovie()));
+        return ResponseEntity.ok(service.create(episode, episode.getFilePoster(), episode.getFileMovie()));
 
     }
 
     @Override
     public ResponseEntity<EpisodeDTO> update(CreateEpisodeRequest episode, Long id) {
-        return ResponseEntity.ok(service.update(episode,id));
+        return ResponseEntity.ok(service.update(episode, id));
 
     }
 
@@ -44,7 +44,7 @@ public class EpisodeController implements IEpisodeController {
 
     @Override
     public boolean delete(Long id) {
-         ResponseEntity.ok(service.delete(id));
+        ResponseEntity.ok(service.delete(id));
 
         return true;
     }

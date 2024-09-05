@@ -31,10 +31,10 @@ public class MinioController implements IMinioController {
     public ResponseEntity<FileInfo> uploadByLink(UploadByLink request) {
         try {
             return ResponseEntity.ok(
-                    iMinioService.uploadByLink(
-                            request.getLink(),
-                            request.getType().getPath()
-                    )
+                iMinioService.uploadByLink(
+                    request.getLink(),
+                    request.getType().getPath()
+                )
             );
         } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException |
                  NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
@@ -47,10 +47,10 @@ public class MinioController implements IMinioController {
     public ResponseEntity<FileInfo> uploadByFile(UploadByFile request) {
         try {
             return ResponseEntity.ok(
-                    iMinioService.uploadByFile(
-                            request.getFile(),
-                            request.getType().getPath()
-                    )
+                iMinioService.uploadByFile(
+                    request.getFile(),
+                    request.getType().getPath()
+                )
             );
         } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException |
                  NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |

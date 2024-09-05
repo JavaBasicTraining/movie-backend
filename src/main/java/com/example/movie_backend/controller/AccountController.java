@@ -28,7 +28,6 @@ import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,14 +54,14 @@ public class AccountController {
     @PostMapping("login")
     public ResponseEntity<JWTToken> login(@RequestBody LoginRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
+            request.getUsername(),
+            request.getPassword()
 
         );
         Authentication authentication = authenticationManagerBuilder.getObject()
-                .authenticate(authenticationToken);
+            .authenticate(authenticationToken);
         SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+            .setAuthentication(authentication);
         String jwt = this.createToken(authentication, request.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
@@ -87,6 +86,7 @@ public class AccountController {
         }
         return ResponseEntity.notFound().build();
     }
+
     @PostMapping("getUserAuthority")
     public ResponseEntity<Set<User>> getUserAuthority() {
         return ResponseEntity.ok(userService.getUserAuthority());
@@ -95,9 +95,9 @@ public class AccountController {
 
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(" "));
 
         Instant now = Instant.now();
         Instant validity;

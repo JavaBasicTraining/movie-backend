@@ -3,13 +3,11 @@ package com.example.movie_backend.services.interfaces;
 import com.example.movie_backend.controller.request.CreateEpisodeRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 import io.minio.errors.*;
-import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 import java.util.Set;
 
 public interface IEpisodeService {
@@ -23,5 +21,5 @@ public interface IEpisodeService {
 
     Set<EpisodeDTO> getListEpisodeByMovieId(Long id);
 
-    EpisodeDTO getEpisodeByMovieId (Long movieId, Long episodeCount);
+    EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount);
 }
