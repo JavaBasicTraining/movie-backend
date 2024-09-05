@@ -23,8 +23,8 @@ public class MovieController implements IMovieController {
 
     @Override
     public ResponseEntity<List<MovieDTOWithoutJoin>> query(
-            QueryMovieRequest request,
-            Pageable pageable
+        QueryMovieRequest request,
+        Pageable pageable
     ) {
         return ResponseEntity.ok(service.query(request, pageable).getContent());
     }
@@ -39,8 +39,6 @@ public class MovieController implements IMovieController {
 
         return ResponseEntity.ok(service.filterMovie(nameMovie));
     }
-
-
 
 
 }

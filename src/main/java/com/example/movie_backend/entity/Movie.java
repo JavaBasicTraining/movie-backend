@@ -67,9 +67,9 @@ public class Movie implements Serializable {
     @Builder.Default
     @ManyToMany
     @JoinTable(
-            name = "movie_genres",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genres_id")
+        name = "movie_genres",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "genres_id")
     )
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
@@ -77,9 +77,9 @@ public class Movie implements Serializable {
     @Builder.Default
     @ManyToMany
     @JoinTable(
-            name = "movie_comment",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id")
+        name = "movie_comment",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "comment_id")
     )
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Comment> comments = new HashSet<>();
@@ -87,9 +87,9 @@ public class Movie implements Serializable {
     @Builder.Default
     @ManyToMany
     @JoinTable(
-            name = "movie_evaluation",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "evaluation_id")
+        name = "movie_evaluation",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "evaluation_id")
     )
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Evaluation> evaluations = new HashSet<>();

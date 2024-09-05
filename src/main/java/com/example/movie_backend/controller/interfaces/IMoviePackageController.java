@@ -15,6 +15,7 @@ public interface IMoviePackageController {
 
     @GetMapping("{id}")
     ResponseEntity<MoviePackageDTO> getById(@PathVariable("id") Long id, @RequestParam String a);
+
     @DeleteMapping("{id}")
     boolean delete(@RequestParam Long id);
 }

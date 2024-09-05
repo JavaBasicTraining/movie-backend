@@ -1,8 +1,6 @@
 package com.example.movie_backend.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -26,8 +24,7 @@ public class Authority {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    public Authority (String name)
-    {
+    public Authority(String name) {
         super();
         this.name = name;
     }

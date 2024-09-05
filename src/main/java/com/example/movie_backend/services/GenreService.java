@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +29,7 @@ public class GenreService implements IGenreService {
     @Transactional
     public GenreDTO create(GenreDTO dto) {
         Genre category = mapper.toEntity(dto);
-        for (Long id: dto.getMovieIds()) {
+        for (Long id : dto.getMovieIds()) {
             Movie movie = movieRepository.findById(id).orElse(null);
             if (Objects.nonNull(movie)) {
                 movie.addCategory(category);
@@ -48,17 +49,17 @@ public class GenreService implements IGenreService {
     public GenreDTO getById(Long id) {
 
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
     }
 
     @Override
     public List<GenreDTO> getList(GetCategoriesFilter filter) {
         return repository.filterGenre(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+            .map(mapper::toDTO)
+            .collect(Collectors.toList());
     }
 
 

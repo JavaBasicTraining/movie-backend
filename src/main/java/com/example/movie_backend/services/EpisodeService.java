@@ -33,24 +33,24 @@ public class EpisodeService implements IEpisodeService {
 
     private boolean isImage(String contentType) {
         return contentType.equals("image/png")
-                || contentType.equals("image/jpg")
-                || contentType.equals("image/jpeg");
+            || contentType.equals("image/jpg")
+            || contentType.equals("image/jpeg");
     }
 
     private boolean isVideo(String contentType) {
         return contentType.equals("video/mp4")
-                || contentType.equals("video/quicktime")
-                || contentType.equals("video/vnd.dlna.mpeg-tts");
+            || contentType.equals("video/quicktime")
+            || contentType.equals("video/vnd.dlna.mpeg-tts");
     }
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         ObjectWriteResponse responsePoster = minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket(BUCKET_NAME)
-                        .object(object)
-                        .contentType(file.getContentType())
-                        .stream(file.getInputStream(), file.getSize(), -1)
-                        .build()
+            PutObjectArgs.builder()
+                .bucket(BUCKET_NAME)
+                .object(object)
+                .contentType(file.getContentType())
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .build()
         );
     }
 
@@ -96,10 +96,10 @@ public class EpisodeService implements IEpisodeService {
     @Override
     public EpisodeDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Episode not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Episode not found")
+            );
     }
 
     @Override
@@ -111,31 +111,32 @@ public class EpisodeService implements IEpisodeService {
     @Override
     public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
         return this.repository.getListEpisodeByMovieId(movieId)
-                .stream().map(this.mapper::toDTO)
-                                .collect(Collectors.toSet());
+            .stream().map(this.mapper::toDTO)
+            .collect(Collectors.toSet());
 
     }
+
     @Override
     public EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount) {
-        
+
 
         if (episodeCount == null || episodeCount == 0) {
             return null;
         } else {
-        return repository.getEpisodeByMovieId(movieId, episodeCount)
-                    .map(item -> {
-                        EpisodeDTO episodeDTO = mapper.toDTO(item);
-                        if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                            String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                            episodeDTO.setPosterUrl(linkPoster);
-                            String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                            episodeDTO.setVideoUrl(linkVideo);
-                        }
-                        return episodeDTO;
-                    })
-                    .orElseThrow(
-                            () -> new BadRequestException("Movie not found")
-                    );
+            return repository.getEpisodeByMovieId(movieId, episodeCount)
+                .map(item -> {
+                    EpisodeDTO episodeDTO = mapper.toDTO(item);
+                    if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
+                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                        episodeDTO.setPosterUrl(linkPoster);
+                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                        episodeDTO.setVideoUrl(linkVideo);
+                    }
+                    return episodeDTO;
+                })
+                .orElseThrow(
+                    () -> new BadRequestException("Movie not found")
+                );
 
         }
 

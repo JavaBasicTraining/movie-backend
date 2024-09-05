@@ -10,10 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.GET;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -52,10 +50,10 @@ public class EvaluationController implements IEvaluationController {
         return true;
     }
 
-    @GetMapping("/evaluations/user/{userId}/movie/{movieId}")
+    @GetMapping("/user/{userId}/movie/{movieId}")
     public ResponseEntity<EvaluationDTO> getEvaluation(
-            @PathVariable("userId") Long userId,
-            @PathVariable("movieId") Long movieId) {
+        @PathVariable("userId") Long userId,
+        @PathVariable("movieId") Long movieId) {
 
         Optional<Evaluation> evaluationOptional = repository.findByEvaluationByUserId(userId, movieId);
         if (!evaluationOptional.isPresent() && evaluationOptional.isEmpty()) {
@@ -66,21 +64,18 @@ public class EvaluationController implements IEvaluationController {
         return ResponseEntity.ok(evaluationDTO);
     }
 
-    @GetMapping ("/average/{movieId}")
-    public ResponseEntity<Float> Average (@PathVariable float movieId)
-    {
+    @GetMapping("/average/{movieId}")
+    public ResponseEntity<Float> Average(@PathVariable float movieId) {
         return ResponseEntity.ok(service.average(movieId));
     }
 
 
     @GetMapping("numberOfReviews/{movieId}")
-    public ResponseEntity<Long> numberOfReviews ( @PathVariable Long movieId)
-    {
-        if(Objects.isNull(movieId))
-        {
+    public ResponseEntity<Long> numberOfReviews(@PathVariable Long movieId) {
+        if (Objects.isNull(movieId)) {
             return null;
-        }else
-        return ResponseEntity.ok(repository.numberOfReviews(movieId));
+        } else
+            return ResponseEntity.ok(repository.numberOfReviews(movieId));
     }
 
 }

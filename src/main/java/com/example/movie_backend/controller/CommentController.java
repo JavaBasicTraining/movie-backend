@@ -6,6 +6,8 @@ import com.example.movie_backend.services.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 
 public class CommentController implements ICommentController {
@@ -17,13 +19,13 @@ public class CommentController implements ICommentController {
     }
 
     @Override
-    public ResponseEntity<CommentDTO>     create(CommentDTO comment) {
+    public ResponseEntity<CommentDTO> create(CommentDTO comment) {
         return ResponseEntity.ok(service.create(comment));
     }
 
     @Override
-    public ResponseEntity<CommentDTO> update(CommentDTO comment, Long id) {
-        return ResponseEntity.ok(service.update(comment,id));
+    public ResponseEntity<CommentDTO> update(CommentDTO comment, Long commentId) {
+        return ResponseEntity.ok(service.update(comment, commentId));
     }
 
     @Override
@@ -36,4 +38,16 @@ public class CommentController implements ICommentController {
         ResponseEntity.ok(service.delete(id));
         return true;
     }
+
+    @Override
+    public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId) {
+        return ResponseEntity.ok(service.getCommentByMovieId(movieId));
+    }
+
+    @Override
+    public ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(Long userId, Long movieId) {
+        return ResponseEntity.ok(service.getListCommentByMovieIdUserId(userId, movieId));
+    }
+
+
 }

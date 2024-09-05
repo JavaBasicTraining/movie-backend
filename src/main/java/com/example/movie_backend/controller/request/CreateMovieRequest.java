@@ -34,12 +34,12 @@ public class CreateMovieRequest {
 
     private String description;
 
-    private Long year ;
+    private Long year;
 
     private String country;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private  String videoUrl;
+    private String videoUrl;
 
     private Set<Long> idGenre;
 

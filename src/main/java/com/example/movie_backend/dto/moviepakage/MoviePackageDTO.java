@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class MoviePackageDTO {
 
-    @JsonProperty (access = JsonProperty.Access.READ_WRITE)
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private Long id;
 
     private MoviePackageType type;

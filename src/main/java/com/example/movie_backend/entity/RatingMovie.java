@@ -9,7 +9,6 @@ public class RatingMovie {
     private Long id;
 
 
-
     @Column(name = "comment")
     private String comment;
 
