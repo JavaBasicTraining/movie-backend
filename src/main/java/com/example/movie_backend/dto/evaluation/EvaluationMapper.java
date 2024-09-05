@@ -11,7 +11,7 @@ public class EvaluationMapper {
                 .id(dto.getId())
                 .star(dto.getStar())
                 .user(User.builder()
-                        .Id(dto.getUserId()).build())
+                        .id(dto.getUserId()).build())
                 .movieId(dto.getMovieId())
                 .build();
     }
@@ -22,7 +22,7 @@ public class EvaluationMapper {
                 .id(id)
                 .star(dto.getStar())
                 .user(User.builder()
-                        .Id(dto.getUserId()).build())
+                        .id(dto.getUserId()).build())
                 .movieId(dto.getMovieId())
                 .build();
     }

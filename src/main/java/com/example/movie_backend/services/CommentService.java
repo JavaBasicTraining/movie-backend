@@ -9,6 +9,7 @@ import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.ICommentService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
 import java.util.List;
 import java.util.Objects;
@@ -29,17 +30,11 @@ public class CommentService  implements ICommentService {
     }
 
     @Override
+    @Transactional
     public CommentDTO create(CommentDTO dto) {
         Comment comment = mapper.toEntity(dto);
-        for (Long id: dto.getIdMovies()) {
-            Movie movie = movieRepository.findById(id).orElse(null);
-            if (Objects.nonNull(movie)) {
-                movie.addComment(comment);
-            }
-        }
         comment = repository.save(comment);
-
-        return mapper.toDTO(repository.save(comment));
+        return mapper.toDTO(comment);
     }
 
     @Override

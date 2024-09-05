@@ -74,14 +74,9 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    @ManyToMany
-    @JoinTable(
-            name = "movie_comment",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id")
-    )
-    @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Comment> comments = new HashSet<>();
 
     @Builder.Default

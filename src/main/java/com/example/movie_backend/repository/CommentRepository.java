@@ -12,13 +12,9 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
             value = """
-                    SELECT *
-                    FROM movie_website.comment c
-                    LEFT JOIN movie_website.movie_comment mc
-                    ON c.id = mc.comment_id
-                    LEFT JOIN movie_website.movie m
-                    ON mc.movie_id = m.id
-                    WHERE m.id = :movieId            
+               SELECT c.*
+    FROM movie_website.comment c
+    WHERE  c.movie_id = :movieId     
                     """, nativeQuery = true
     )
     List<Comment> getCommentByMovieId(@Param("movieId") Long movieId);
@@ -26,13 +22,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query(
             value = """
-            SELECT c.*
-            FROM movie_website.comment c
-            LEFT JOIN movie_comment mc ON c.id = mc.comment_id
-            WHERE c.user_id = :userId AND mc.movie_id = :movieId
-            """, nativeQuery = true
+    SELECT c.*
+    FROM movie_website.comment c
+    WHERE c.user_id = :userId AND c.movie_id = :movieId
+    """, nativeQuery = true
     )
     List<Comment> getListCommentByMovieIdUserId(@Param("userId") Long userId,
-                                                @Param("movieId") Long movieId);
+                                                 @Param("movieId") Long movieId);
+
 
 }
