@@ -20,7 +20,7 @@ public class CommonProperties {
     @JsonProperty("cors")
     private Cors cors;
 
-    @JsonProperty("cors")
+    @JsonProperty("security")
     private Security security;
 
     @Getter

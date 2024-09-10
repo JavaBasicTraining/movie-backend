@@ -1,13 +1,13 @@
 package com.example.movie_backend.controller;
 
 
+import com.example.movie_backend.config.CommonProperties;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.LoginRequest;
 import com.example.movie_backend.model.user.RegisterRequest;
 import com.example.movie_backend.services.interfaces.IUserService;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +36,21 @@ import static com.example.movie_backend.config.SecurityJwtConfiguration.JWT_ALGO
 
 @RequestMapping("api/account")
 @RestController
-@RequiredArgsConstructor
 public class AccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtEncoder jwtEncoder;
     private final IUserService userService;
-    private static final long TOKEN_VALIDITY_IN_SECONDS = 86400;
-    private static final long TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME = 86400;
+    private final CommonProperties.Security securityProperties;
+
+    public AccountController(AuthenticationManagerBuilder authenticationManagerBuilder,
+                             JwtEncoder jwtEncoder,
+                             IUserService userService,
+                             CommonProperties commonProperties) {
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.jwtEncoder = jwtEncoder;
+        this.userService = userService;
+        this.securityProperties = commonProperties.getSecurity();
+    }
 
 
     @PostMapping("register")
@@ -102,12 +110,11 @@ public class AccountController {
         Instant now = Instant.now();
         Instant validity;
         if (rememberMe) {
-            validity = now.plus(TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME, ChronoUnit.SECONDS);
+            validity = now.plus(securityProperties.getJwt().getTokenValidityInSecondsForRememberMe(), ChronoUnit.SECONDS);
         } else {
-            validity = now.plus(TOKEN_VALIDITY_IN_SECONDS, ChronoUnit.SECONDS);
+            validity = now.plus(securityProperties.getJwt().getTokenValidityInSeconds(), ChronoUnit.SECONDS);
         }
 
-        // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
