@@ -21,7 +21,7 @@ public class CommonProperties {
     private Cors cors;
 
     @Data
-    static public class Cors {
+    public static class Cors {
         private List<String> origins;
     }
 }
