@@ -52,14 +52,6 @@ public class CustomSecurityConfiguration {
         http.authorizeHttpRequests().anyRequest().authenticated();
     }
 
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(passwordEncoder().encode("userPass")).roles("USER");
-    }
-
-
     private void corsConfig(HttpSecurity http) throws Exception {
         CorsConfiguration configuration = new CorsConfiguration();
         if (!Objects.isNull(commonProperties.getCors().getOrigins())) {

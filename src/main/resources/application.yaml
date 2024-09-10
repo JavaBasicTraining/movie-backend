@@ -41,17 +41,13 @@ spring:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-  security:
-    oauth2:
-      client:
-        registration:
-          facebook:
-            client-id: 801553318801251
-            client-secret: YOUR_FACEBOOK_APP_SECRET
-            redirect-uri: http://localhost:8080/login/oauth2/code/facebook
-            scope:
-              - email
-              - public_profile
+
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+  accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
+  secretKey: ${MINIO_SECRET_KEY:CHANGEME123}
+  fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
+  expiredDefault: ${EXPIRED:60}
 
 common:
   permit-all-path-patterns:
@@ -68,27 +64,15 @@ common:
     - /api/v1/evaluations/numberOfReviews/**
     - /api/account/info/**
     - /api/v1/evaluations/numberOfReviews/**
-
+  security:
+    jwt:
+      secret: ${JWT_SECRET:eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNjA5ODczNSwiaWF0IjoxNzE2MDk4NzM1fQ.t3wybMNtL0tu57btu9bcluyXCQ0uemMibCG70oFqgLxl17Gvufa4btcVAHXVGtkK6Vv-krgLWWqWIaWHpPx-vg}
+      token-validity-in-seconds: ${TOKEN_VALIDITY_IN_SECONDS:86400000}
+      token-validity-in-seconds-for-remember-me: ${TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME:Bearer }
 
   cors:
     origins:
       - http://localhost:8081
       - http://localhost:3000
-
-
-
-keycloak:
-  auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
-  realm: ${PROFILE_REALM:movie_website_realm}
-  resource: ${MOVIE_CLIENT_ID:movie_client}
-  credentials:
-    secret: ${MOVIE_CLIENT_SECRET:FduptFvHB3oU8HkBP69ZiSjST0rRMDOL}
-
-minio:
-  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
-  accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
-  secretKey: ${MINIO_SECRET_KEY:CHANGEME123}
-  fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
-  expiredDefault: ${EXPIRED:60}
 
 
