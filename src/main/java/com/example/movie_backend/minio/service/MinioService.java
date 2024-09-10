@@ -117,7 +117,6 @@ public class MinioService implements IMinioService {
     @Override
     public String getPreSignedLink(String object) {
         try {
-
             String url =
                     minioClient.getPresignedObjectUrl(
                             GetPresignedObjectUrlArgs.builder()

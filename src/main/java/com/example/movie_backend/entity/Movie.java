@@ -38,8 +38,8 @@ public class Movie implements Serializable {
     @Column(name = "name")
     private String nameMovie;
 
-    @Column(name = "poster_url") // trong database thì gạch chân để phần biệt với lại quy tắc chuẩn của database
-    private String posterUrl; // images/hinh.png
+    @Column(name = "poster_url")
+    private String posterUrl;
 
     @Column(name = "vi_title")
     private String viTitle;
@@ -61,8 +61,6 @@ public class Movie implements Serializable {
 
     @Column(name = "year")
     private Long year;
-
-//    private Boolean status ;
 
     @Builder.Default
     @ManyToMany
