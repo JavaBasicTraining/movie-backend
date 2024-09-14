@@ -1,6 +1,7 @@
 package com.example.movie_backend.services;
 
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.ConflictDataException;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.dto.user.UserMapper;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.BadRequestException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -42,10 +42,10 @@ public class UserService implements IUserService {
     @Override
     public UserDTO getUser(String username) {
         return this.userRepository.findByUsername(username)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("User not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("User not found")
+            );
     }
 
 
@@ -62,22 +62,22 @@ public class UserService implements IUserService {
             throw new ConflictDataException("This user is existed!");
         }
         User user = User.builder()
-                .username(request.getUsername())
-                .passwordHash(
-                        passwordEncoder.encode(request.getPassword())
-                )
-                .firstName(request.getFistName())
-                .lastName(request.getLastName())
-                .authorities(
-                        request.getAuthorities()
-                                .stream()
-                                .map(
-                                        authority -> authorityRepository.findById(authority)
-                                                .orElse(new Authority("User"))
-                                )
-                                .collect(Collectors.toSet())
-                )
-                .build();
+            .username(request.getUsername())
+            .passwordHash(
+                passwordEncoder.encode(request.getPassword())
+            )
+            .firstName(request.getFistName())
+            .lastName(request.getLastName())
+            .authorities(
+                request.getAuthorities()
+                    .stream()
+                    .map(
+                        authority -> authorityRepository.findById(authority)
+                            .orElse(new Authority("User"))
+                    )
+                    .collect(Collectors.toSet())
+            )
+            .build();
         this.userRepository.save(user);
     }
 }

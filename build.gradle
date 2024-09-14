@@ -40,16 +40,6 @@ dependencies {
      */
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    /**
-     * Lombok
-     */
-
-
-    /**
-     * Keycloak
-     */
-    implementation 'org.keycloak:keycloak-spring-boot-starter:19.0.1'
-    implementation 'org.keycloak:keycloak-admin-client:19.0.1'
 }
 
 tasks.named('test') {

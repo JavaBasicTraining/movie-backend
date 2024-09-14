@@ -15,20 +15,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     @Modifying
-    @Query(value = """
-            SELECT * 
-            FROM app_user_authority """, nativeQuery = true)
+    @Query(
+        value = """
+            SELECT *
+            FROM app_user_authority
+            """,
+        nativeQuery = true
+    )
     Set<User> getUserAuthority();
 
     @Query(
-            value = """
-                    SELECT *
-                    from movie_website.user
-                    WHERE username LIKE %:name%
-                       """,
-            nativeQuery = true
+        value = """
+            SELECT *
+            FROM movie_website.user
+            WHERE username LIKE %:name%
+               """,
+        nativeQuery = true
     )
     Optional<User> filterUser(@Param("name") String name);
-
-
 }

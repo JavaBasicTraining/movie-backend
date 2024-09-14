@@ -52,8 +52,8 @@ public class EvaluationController implements IEvaluationController {
 
     @GetMapping("/user/{userId}/movie/{movieId}")
     public ResponseEntity<EvaluationDTO> getEvaluation(
-            @PathVariable("userId") Long userId,
-            @PathVariable("movieId") Long movieId) {
+        @PathVariable("userId") Long userId,
+        @PathVariable("movieId") Long movieId) {
 
         Optional<Evaluation> evaluationOptional = repository.findByEvaluationByUserId(userId, movieId);
         if (!evaluationOptional.isPresent() && evaluationOptional.isEmpty()) {

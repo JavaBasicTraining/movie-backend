@@ -3,8 +3,6 @@ package com.example.movie_backend.config;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,9 +32,9 @@ public class SecurityJwtConfiguration {
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder =
-                NimbusJwtDecoder
-                        .withSecretKey(getSecretKey())
-                        .macAlgorithm(JWT_ALGORITHM).build();
+            NimbusJwtDecoder
+                .withSecretKey(getSecretKey())
+                .macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
             try {
                 return jwtDecoder.decode(token);

@@ -36,7 +36,7 @@ spring:
       hibernate.format_sql: true
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       use-new-id-generator-mappings: false
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
@@ -67,8 +67,8 @@ common:
   security:
     jwt:
       secret: ${JWT_SECRET:eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNjA5ODczNSwiaWF0IjoxNzE2MDk4NzM1fQ.t3wybMNtL0tu57btu9bcluyXCQ0uemMibCG70oFqgLxl17Gvufa4btcVAHXVGtkK6Vv-krgLWWqWIaWHpPx-vg}
-      token-validity-in-seconds: ${TOKEN_VALIDITY_IN_SECONDS:86400000}
-      token-validity-in-seconds-for-remember-me: ${TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME:Bearer }
+      token-validity-in-seconds: ${TOKEN_VALIDITY_IN_SECONDS:86400}
+      token-validity-in-seconds-for-remember-me: ${TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME:86400}
 
   cors:
     origins:

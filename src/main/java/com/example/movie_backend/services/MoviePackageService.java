@@ -1,13 +1,12 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.moviepakage.MoviePackageDTO;
 import com.example.movie_backend.dto.moviepakage.MoviePackageMapper;
 import com.example.movie_backend.entity.MoviePackage;
 import com.example.movie_backend.repository.MoviePackageRepository;
 import com.example.movie_backend.services.interfaces.IMoviePackageService;
 import org.springframework.stereotype.Service;
-
-import javax.ws.rs.BadRequestException;
 
 @Service
 public class MoviePackageService implements IMoviePackageService {
@@ -36,10 +35,10 @@ public class MoviePackageService implements IMoviePackageService {
     @Override
     public MoviePackageDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
     }
 
     @Override

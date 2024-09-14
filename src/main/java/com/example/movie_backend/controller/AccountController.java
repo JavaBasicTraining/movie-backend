@@ -52,7 +52,6 @@ public class AccountController {
         this.securityProperties = commonProperties.getSecurity();
     }
 
-
     @PostMapping("register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
         userService.register(request);
@@ -62,14 +61,14 @@ public class AccountController {
     @PostMapping("login")
     public ResponseEntity<JWTToken> login(@RequestBody LoginRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
+            request.getUsername(),
+            request.getPassword()
 
         );
         Authentication authentication = authenticationManagerBuilder.getObject()
-                .authenticate(authenticationToken);
+            .authenticate(authenticationToken);
         SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+            .setAuthentication(authentication);
         String jwt = this.createToken(authentication, request.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
@@ -103,9 +102,9 @@ public class AccountController {
 
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(" "));
 
         Instant now = Instant.now();
         Instant validity;
@@ -116,11 +115,11 @@ public class AccountController {
         }
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuedAt(now)
-                .expiresAt(validity)
-                .subject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .build();
+            .issuedAt(now)
+            .expiresAt(validity)
+            .subject(authentication.getName())
+            .claim(AUTHORITIES_KEY, authorities)
+            .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

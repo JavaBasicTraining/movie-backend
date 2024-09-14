@@ -1,5 +1,6 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.EntityNotFoundException;
 import com.example.movie_backend.controller.exception.ErrorHandler;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
@@ -22,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -253,7 +253,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
-                .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(EntityNotFoundException::new);
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie);

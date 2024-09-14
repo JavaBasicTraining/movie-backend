@@ -1,5 +1,6 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.evaluation.EvaluationMapper;
 import com.example.movie_backend.entity.Evaluation;
@@ -9,7 +10,6 @@ import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IEvaluationService;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.BadRequestException;
 import java.util.Objects;
 
 @Service
@@ -38,24 +38,24 @@ public class EvaluationService implements IEvaluationService {
     @Override
     public EvaluationDTO update(EvaluationDTO dto, Long id) {
         return repository
-                .findById(id)
-                .map(evaluation -> {
-                    evaluation.setStar(dto.getStar());
-                    evaluation = repository.save(evaluation);
-                    return mapper.toDTO(evaluation);
-                })
-                .orElseThrow(
-                        () -> new RuntimeException("evaluation not found by id: " + id)
-                );
+            .findById(id)
+            .map(evaluation -> {
+                evaluation.setStar(dto.getStar());
+                evaluation = repository.save(evaluation);
+                return mapper.toDTO(evaluation);
+            })
+            .orElseThrow(
+                () -> new RuntimeException("evaluation not found by id: " + id)
+            );
     }
 
     @Override
     public EvaluationDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
     }
 
     @Override

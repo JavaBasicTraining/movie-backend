@@ -1,8 +1,6 @@
 package com.example.movie_backend.dto.comment;
 
 import com.example.movie_backend.dto.movie.MovieDTO;
-import com.example.movie_backend.entity.Movie;
-import com.example.movie_backend.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

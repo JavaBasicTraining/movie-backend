@@ -1,6 +1,7 @@
 package com.example.movie_backend.services;
 
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.category.CategoryDTO;
 import com.example.movie_backend.dto.category.CategoryMapper;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.ws.rs.BadRequestException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,17 +42,17 @@ public class CategoryService implements ICategoryService {
     public CategoryDTO getById(Long id) {
 
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
     }
 
     @Override
     public List<CategoryDTO> getList(GetCategoriesFilter filter) {
         return repository.filterCategory(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-                .map(item -> mapper.toDTO(item))
-                .collect(Collectors.toList());
+            .map(mapper::toDTO)
+            .collect(Collectors.toList());
     }
 
 
