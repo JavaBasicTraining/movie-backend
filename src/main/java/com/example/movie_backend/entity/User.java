@@ -21,7 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique  = true, nullable = false)
     private String username;
 
     private String firstName;
@@ -44,5 +44,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Evaluation> evaluations;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<LikeComment> likeComments = new HashSet<>();
 
 }

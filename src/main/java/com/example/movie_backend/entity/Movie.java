@@ -77,6 +77,10 @@ public class Movie implements Serializable {
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<LikeComment> likeComments = new HashSet<>();
+
     @Builder.Default
     @ManyToMany
     @JoinTable(
@@ -88,7 +92,6 @@ public class Movie implements Serializable {
     private Set<Evaluation> evaluations = new HashSet<>();
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    // => thêm này vào để khi xóa thì nó tự đông xóa luon bên episode
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
     private Set<Episode> episodes = new HashSet<>();
 
@@ -109,6 +112,10 @@ public class Movie implements Serializable {
     public void addEvaluation(Evaluation evaluation) {
         this.evaluations.add(evaluation);
     }
+    public void addLikeComment(LikeComment likeComment) {
+        this.likeComments.add(likeComment);
+    }
+
 
     public Movie addEpisode(Episode episode) {
         episode.setMovie(this);

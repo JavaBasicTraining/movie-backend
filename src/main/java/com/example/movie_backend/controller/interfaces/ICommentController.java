@@ -16,8 +16,8 @@ public interface ICommentController {
     @PutMapping("update")
     ResponseEntity<CommentDTO> update(@RequestBody CommentDTO comment, @RequestParam Long movieId);
 
-    @GetMapping("getById/{id}")
-    ResponseEntity<CommentDTO> getById(@RequestParam Long id);
+    @GetMapping("/{id}")
+    ResponseEntity<CommentDTO> getById(@PathVariable Long id);
 
     @DeleteMapping("delete/{id}")
     boolean delete(@PathVariable Long id);
