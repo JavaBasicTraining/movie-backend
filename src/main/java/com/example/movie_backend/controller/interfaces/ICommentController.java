@@ -10,8 +10,8 @@ import java.util.List;
 
 @RequestMapping("/api/v1/comment")
 public interface ICommentController {
-    @PostMapping(value = "create")
-    ResponseEntity<CommentDTO> create(@ModelAttribute @Valid CommentDTO comment);
+    @PostMapping("create")
+    ResponseEntity<CommentDTO> create(@RequestBody CommentDTO comment);
 
     @PutMapping("update")
     ResponseEntity<CommentDTO> update(@RequestBody CommentDTO comment, @RequestParam Long movieId);

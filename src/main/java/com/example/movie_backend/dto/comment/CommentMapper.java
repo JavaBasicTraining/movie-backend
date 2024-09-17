@@ -20,6 +20,15 @@ public class CommentMapper {
                 .currentDate(new Date())
                 .build();
     }
+    public Comment toEntity(CommentDTO dto, Long id) {
+        return Comment.builder()
+                .id(id)
+                .content(dto.getContent())
+                .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
+                .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
+                .currentDate(new Date())
+                .build();
+    }
 
     public CommentDTO toDTO(Comment entity) {
         return CommentDTO.builder()
@@ -36,13 +45,5 @@ public class CommentMapper {
     }
 
 
-    public Comment toEntity(CommentDTO dto, Long id) {
-        return Comment.builder()
-                .id(id)
-                .content(dto.getContent())
-                .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
-                .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
-                .currentDate(new Date())
-                .build();
-    }
+
 }

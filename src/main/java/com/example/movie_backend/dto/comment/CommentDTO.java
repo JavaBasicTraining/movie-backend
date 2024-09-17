@@ -25,31 +25,28 @@ public class CommentDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank(message = "Nội dung không được để trống")
     private String content;
 
-    @NotNull(message = "ID người dùng không được để trống")
     private Long idUser;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-
     private UserDTO user;
 
-    @NotNull(message = "ID phim không được để trống")
     private Long idMovie;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date currentDate;
 
-
+    @JsonIgnore
     private MovieDTO movie;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long totalLikes;
 
-
+    @JsonIgnore
     private CommentDTO parentComment;
 
-
+    @JsonIgnore
     private LikeComment likeComment;
 
     private List<CommentDTO> subordinates = new ArrayList<>();
