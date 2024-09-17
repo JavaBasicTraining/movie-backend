@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,30 +22,35 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class CommentDTO {
-
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+    @NotBlank(message = "Nội dung không được để trống")
     private String content;
 
+    @NotNull(message = "ID người dùng không được để trống")
     private Long idUser;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
     private UserDTO user;
 
+    @NotNull(message = "ID phim không được để trống")
     private Long idMovie;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date currentDate;
 
-    @JsonIgnore
+
     private MovieDTO movie;
 
     private Long totalLikes;
 
+
     private CommentDTO parentComment;
 
-    @JsonIgnore
-    private LikeComment likeComment ;
+
+    private LikeComment likeComment;
 
     private List<CommentDTO> subordinates = new ArrayList<>();
 

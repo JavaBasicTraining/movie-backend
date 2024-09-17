@@ -23,13 +23,6 @@ public class CommentService  implements ICommentService {
     public final CommentRepository repository;
     public final MovieRepository movieRepository;
 
-//
-//    public CommentService(CommentMapper mapper, CommentRepository repository, MovieRepository movieRepository) {
-//        this.mapper = mapper;
-//        this.repository = repository;
-//        this.movieRepository = movieRepository;
-//    }
-
     @Override
     @Transactional
     public CommentDTO create(CommentDTO dto) {

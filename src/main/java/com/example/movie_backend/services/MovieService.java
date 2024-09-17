@@ -226,9 +226,9 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(String nameMovie) {
+    public MovieDTO filterMovie(Long idMovie) {
 
-        return repository.filterMovie(nameMovie).map(item -> {
+        return repository.filterMovie(idMovie).map(item -> {
             MovieDTO movieDTO = mapper.toDTO(item);
             if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
                 String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());

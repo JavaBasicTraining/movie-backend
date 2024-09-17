@@ -48,17 +48,17 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query(
             value = """
-                    SELECT distinct m.*
-                    FROM movie_website.movie m
-                    inner join movie_website.movie_genres mc
-                    on m.id =mc.movie_id
-                    inner join movie_website.genre c
-                    on mc.genres_id = c .id
-                    WHERE m.name LIKE CONCAT("%", :name ,"%")
+                   SELECT DISTINCT m.*
+                   FROM movie_website.movie m
+                   LEFT JOIN movie_website.movie_genres mc
+                       ON m.id = mc.movie_id
+                   LEFT JOIN movie_website.genre c
+                       ON mc.genres_id = c.id
+                   WHERE m.id = :idMovie               
                     """,
             nativeQuery = true
     )
-    Optional<Movie> filterMovie(@Param("name") String name);
+    Optional<Movie> filterMovie(@Param("idMovie") Long idMovie);
 
 
 }

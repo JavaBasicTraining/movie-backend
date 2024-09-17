@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/comment")
 public interface ICommentController {
-    @PostMapping(value = "create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "create")
     ResponseEntity<CommentDTO> create(@ModelAttribute @Valid CommentDTO comment);
 
     @PutMapping("update")

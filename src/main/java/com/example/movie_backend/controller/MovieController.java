@@ -34,10 +34,10 @@ public class MovieController implements IMovieController {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @GetMapping("name/{nameMovie}")
-    public ResponseEntity<MovieDTO> filterMovie(@PathVariable String nameMovie) {
+    @GetMapping("id/{idMovie}")
+    public ResponseEntity<MovieDTO> filterMovie(@PathVariable Long idMovie) {
 
-        return ResponseEntity.ok(service.filterMovie(nameMovie));
+        return ResponseEntity.ok(service.filterMovie(idMovie));
     }
 
 
