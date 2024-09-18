@@ -64,8 +64,7 @@ public class MovieService implements IMovieService {
     @Override
     public MovieDTO createFileMovie(CreateRequestFileMovie fileMovie, Long movieId, Set<Long> episodeId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         Movie movie = repository.findById(movieId).orElse(new Movie());
-        Set<Episode> episodes = movie.getEpisodes();
-
+        List<Episode> episodes = movie.getEpisodes();
         String contentTypePoster = fileMovie.getFilePoster().getContentType();
         if (isImage(contentTypePoster)) {
             String posterPathMovie = "poster" + "/" + fileMovie.getFilePoster().getOriginalFilename();

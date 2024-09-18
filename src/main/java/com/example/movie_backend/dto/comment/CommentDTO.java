@@ -1,5 +1,6 @@
 package com.example.movie_backend.dto.comment;
 
+import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Comment;
@@ -43,11 +44,9 @@ public class CommentDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long totalLikes;
 
-    @JsonIgnore
     private CommentDTO parentComment;
 
-    @JsonIgnore
-    private LikeComment likeComment;
+    private LikeCommentDTO likeComment;
 
     private List<CommentDTO> subordinates = new ArrayList<>();
 
@@ -57,9 +56,7 @@ public class CommentDTO {
         this.idUser = comment.getUser() != null ? comment.getUser().getId() : null;
         this.idMovie = comment.getMovie() != null ? comment.getMovie().getId() : null;
         this.totalLikes = totalLikes;
-        if (comment.getUser() != null) {
-            this.user = new UserDTO(comment.getUser());
-        }
+        if (comment.getUser() != null) {this.user = new UserDTO(comment.getUser());}
         this.currentDate = comment.getCurrentDate();
         if (comment.getSubordinates() != null) {
             this.subordinates = new ArrayList<>();

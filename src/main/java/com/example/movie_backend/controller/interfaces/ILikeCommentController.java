@@ -9,16 +9,11 @@ import javax.validation.Valid;
 @RequestMapping("api/v1/like_comment")
 public interface ILikeCommentController {
     @PostMapping
-    ResponseEntity<LikeCommentDTO> create (@RequestBody @Valid  LikeCommentDTO likeComment);
+    ResponseEntity<LikeCommentDTO> create(@RequestBody @Valid  LikeCommentDTO likeComment);
 
     @PutMapping("{id}")
-    ResponseEntity<LikeCommentDTO> update (@RequestBody @Valid LikeCommentDTO likeComment, @PathVariable Long id);
+    ResponseEntity<LikeCommentDTO> update(@RequestBody @Valid LikeCommentDTO likeComment, @PathVariable Long id);
 
     @DeleteMapping("{id}")
     boolean delete(@PathVariable("id") Long id);
-
-
-
-
-
 }

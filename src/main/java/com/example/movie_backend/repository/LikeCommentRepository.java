@@ -18,10 +18,4 @@ public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> 
             """, nativeQuery = true)
     List<LikeComment> findLikeCommentByUserIdAndMovieId(@Param("movieId") Long movieId,
                                                         @Param("userId") Long userId);
-
-
-//    @Query(value = "DELETE FROM movie_website.like_comment where id = :id and comment_id = :idComment", nativeQuery = true)
-//    Long deleteByIdComment(@Param("id") Long id, @Param("idComment") Long idComment);
-
-
 }

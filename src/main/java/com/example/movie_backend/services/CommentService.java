@@ -16,8 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class CommentService  implements ICommentService {
-
+public class CommentService implements ICommentService {
 
     public final CommentMapper mapper;
     public final CommentRepository repository;

@@ -15,7 +15,6 @@ public class LikeCommentDTO {
     private Long id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-
     private Long likeCount;
 
     private Long idUser;
@@ -23,6 +22,4 @@ public class LikeCommentDTO {
     private Long idMovie;
 
     private Long idComment;
-
-
 }

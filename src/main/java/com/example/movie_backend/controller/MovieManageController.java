@@ -60,7 +60,6 @@ public class MovieManageController {
             movieService.createWithEpisode(movieEpisodeRequest)
         );
     }
-
     @PutMapping(value = "{id}")
     public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieEpisodeRequest request) {
         return ResponseEntity.ok(

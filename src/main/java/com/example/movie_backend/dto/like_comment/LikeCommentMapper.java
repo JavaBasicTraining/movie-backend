@@ -43,5 +43,4 @@ public class LikeCommentMapper {
                 .idComment(entity.getComment() == null ? null : entity.getComment().getId())
                 .build();
     }
-
 }

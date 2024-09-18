@@ -43,7 +43,6 @@ public class GenreController implements IGenreController {
         return ResponseEntity.ok(categoryService.getList(filter));
     }
 
-
     @Override
     public boolean delete(Long id) {
         ResponseEntity.ok(categoryService.delete(id));
