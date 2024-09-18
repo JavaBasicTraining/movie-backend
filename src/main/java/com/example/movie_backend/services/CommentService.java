@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.ws.rs.BadRequestException;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +60,10 @@ public class CommentService  implements ICommentService {
 
     @Override
     public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
-        return repository.getListCommentByMovieIdUserId(userId,movieId).stream().map(mapper::toDTO).toList();
+        return repository.getListCommentByMovieIdUserId(userId,movieId)
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 }
 

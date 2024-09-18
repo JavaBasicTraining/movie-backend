@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -19,7 +18,6 @@ import java.util.List;
 public class MovieController implements IMovieController {
 
     public final MovieService service;
-
 
     @Override
     public ResponseEntity<List<MovieDTOWithoutJoin>> query(
@@ -34,11 +32,9 @@ public class MovieController implements IMovieController {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @GetMapping("id/{idMovie}")
-    public ResponseEntity<MovieDTO> filterMovie(@PathVariable Long idMovie) {
+    @GetMapping("{idMovie}")
+    public ResponseEntity<MovieDTO> filterMovie(@PathVariable Long id) {
 
-        return ResponseEntity.ok(service.filterMovie(idMovie));
+        return ResponseEntity.ok(service.filterMovie(id));
     }
-
-
 }

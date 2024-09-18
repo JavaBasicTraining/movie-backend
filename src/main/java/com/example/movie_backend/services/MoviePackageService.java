@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 public class MoviePackageService implements IMoviePackageService {
 
     public final MoviePackageRepository repository;
-
     public final MoviePackageMapper mapper;
-
     public MoviePackageService(MoviePackageRepository repository, MoviePackageMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
@@ -46,5 +44,4 @@ public class MoviePackageService implements IMoviePackageService {
         repository.deleteById(id);
         return true;
     }
-
 }

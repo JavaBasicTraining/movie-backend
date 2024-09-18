@@ -99,7 +99,6 @@ public class AccountController {
         return ResponseEntity.ok(userService.getUserAuthority());
     }
 
-
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities()
             .stream()
@@ -109,9 +108,12 @@ public class AccountController {
         Instant now = Instant.now();
         Instant validity;
         if (rememberMe) {
-            validity = now.plus(securityProperties.getJwt().getTokenValidityInSecondsForRememberMe(), ChronoUnit.SECONDS);
+            validity = now.plus(securityProperties
+                    .getJwt()
+                    .getTokenValidityInSecondsForRememberMe(), ChronoUnit.SECONDS);
         } else {
-            validity = now.plus(securityProperties.getJwt().getTokenValidityInSeconds(), ChronoUnit.SECONDS);
+            validity = now.plus(securityProperties
+                    .getJwt().getTokenValidityInSeconds(), ChronoUnit.SECONDS);
         }
 
         JwtClaimsSet claims = JwtClaimsSet.builder()

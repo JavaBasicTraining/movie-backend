@@ -11,8 +11,8 @@ public interface ILikeCommentController {
     @PostMapping
     ResponseEntity<LikeCommentDTO> create (@RequestBody @Valid  LikeCommentDTO likeComment);
 
-    @PutMapping
-    ResponseEntity<LikeCommentDTO> update (@RequestBody @Valid LikeCommentDTO likeComment, Long id);
+    @PutMapping("{id}")
+    ResponseEntity<LikeCommentDTO> update (@RequestBody @Valid LikeCommentDTO likeComment, @PathVariable Long id);
 
     @DeleteMapping("{id}")
     boolean delete(@PathVariable("id") Long id);

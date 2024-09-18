@@ -13,9 +13,9 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "comment")
+@Entity
 @Getter
 @Setter
-@Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class Comment implements Serializable {

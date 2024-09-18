@@ -14,6 +14,4 @@ import java.util.Set;
 @JsonIgnoreProperties({"categoryDTOSet", "ids"})
 public class MovieDTOWithoutJoin extends MovieDTO {
     private Set<String> genreName;
-
-
 }

@@ -22,13 +22,13 @@ public class MovieMapper {
                 .year(dto.getYear())
                 .country(dto.getCountry())
                 .videoUrl(dto.getVideoUrl() == null ? null : dto.getVideoUrl())
-
-
-                .category(Category.builder().id(dto.getId() == null ? null : dto.getId()).build()).genres(dto.getIdGenre() == null ? null : dto.getIdGenre().stream().map(ids -> Genre.builder().id(ids).build()).collect(Collectors.toSet()))
-
-                .comments(dto.getIdComment() == null ? null : dto.getIdComment().stream().map(ids -> Comment.builder().id(ids).build()).collect(Collectors.toSet())).evaluations(dto.getIdEvaluation() == null ? null : dto.getIdEvaluation().stream().map(ids -> Evaluation.builder().id(ids).build()).collect(Collectors.toSet()))
-
-                .episodes(dto.getEpisodes() == null ? null : dto.getEpisodes().stream()
+                .category(Category.builder()
+                        .id(dto.getId() == null ? null :
+                                dto.getId()).build()).genres(dto.getIdGenre() == null ? null : dto.getIdGenre().stream().map(ids -> Genre.builder().id(ids).build()).collect(Collectors.toSet()))
+                .comments(dto.getIdComment() == null ? null :
+                        dto.getIdComment().stream().map(ids -> Comment.builder().id(ids).build()).collect(Collectors.toSet())).evaluations(dto.getIdEvaluation() == null ? null : dto.getIdEvaluation().stream().map(ids -> Evaluation.builder().id(ids).build()).collect(Collectors.toSet()))
+                .episodes(dto.getEpisodes() == null ? null :
+                        dto.getEpisodes().stream()
                         .map(item -> Episode.builder()
                                 .id(item.getId())
                                 .episodeCount(item.getEpisodeCount())
@@ -61,8 +61,6 @@ public class MovieMapper {
                                 .posterUrl(item.getPosterUrl())
                                 .build())
                         .collect(Collectors.toSet()))
-
-
                 .build();
     }
 
@@ -133,7 +131,6 @@ public class MovieMapper {
         return movie;
     }
 
-
     public Movie toEntityCreateMovieRequest(CreateMovieRequest dto, Long id) {
         return Movie.builder().id(id).nameMovie(dto.getNameMovie()).viTitle(dto.getViTitle())
                 .enTitle(dto.getEnTitle()).description(dto.getDescription())
@@ -141,14 +138,10 @@ public class MovieMapper {
                 .year(dto.getYear())
                 .country(dto.getCountry())
                 .category(Category.builder().id(dto.getIdCategory()).build()).videoUrl(dto.getVideoUrl())
-
                 .genres(dto.getIdGenre() == null ? null : dto.getIdGenre().stream().map(ids -> Genre.builder().id(ids).build()).collect(Collectors.toSet()))
-
                 .comments(dto.getIdComment() == null ? null : dto.getIdComment().stream().map(ids -> Comment.builder().id(ids).build()).collect(Collectors.toSet())).evaluations(dto.getIdEvaluation() == null ? null : dto.getIdEvaluation().stream().map(ids -> Evaluation.builder().id(ids).build()).collect(Collectors.toSet()))
-
                 .build();
     }
-
 
     public Movie toEntity(MovieDTO dto, Long id) {
         return Movie.builder()
@@ -223,15 +216,6 @@ public class MovieMapper {
     }
 
 
-//
-//    public  Movie toEntity (CreateRequestFileMovie fileMovie)
-//    {
-//        return MovieDTO.builder()
-//                .videoUrl(file)
-//                .build();
-//    }
-
-
     public MovieDTO toDTO(Movie entity) {
         return MovieDTO.builder()
                 .id(entity.getId())
@@ -244,8 +228,6 @@ public class MovieMapper {
                 .year(entity.getYear())
                 .description(entity.getDescription())
                 .category(Objects.isNull(entity.getCategory()) ? null : CategoryDTO.builder().id(entity.getCategory().getId()).name(entity.getCategory().getName()).build())
-//                .comments(entity.getGenres() ==null ? null : entity.getComments().stream().map(item -> CommentDTO.builder().id(item.getId()).name(item.getName()).build()).collect(Collectors.toSet()))
-
                 .genres(entity.getGenres() == null ? null : entity.getGenres().stream().map(item -> GenreDTO.builder().id(item.getId()).name(item.getName()).build()).collect(Collectors.toSet()))
                 .episodes(entity.getEpisodes() == null ? null : entity.getEpisodes().stream().map(
                         this::toEpisodeDTO

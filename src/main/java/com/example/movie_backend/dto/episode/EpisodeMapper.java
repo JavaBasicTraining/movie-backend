@@ -20,9 +20,6 @@ public class EpisodeMapper {
             )
             .build();
     }
-
-// nayx em sửa chỗ này là nó lỗi á, chứ lúc đầu chạy bth
-
     public Episode toEntity(EpisodeDTO dto, Long id) {
         return Episode.builder()
             .id(id)

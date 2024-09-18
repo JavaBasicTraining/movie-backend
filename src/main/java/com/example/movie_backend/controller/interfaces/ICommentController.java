@@ -16,10 +16,10 @@ public interface ICommentController {
     @PutMapping("update")
     ResponseEntity<CommentDTO> update(@RequestBody CommentDTO comment, @RequestParam Long movieId);
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     ResponseEntity<CommentDTO> getById(@PathVariable Long id);
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("{id}")
     boolean delete(@PathVariable Long id);
 
     @GetMapping

@@ -35,7 +35,6 @@ public class LikeCommentMapper {
         if (entity == null) {
             return null;
         }
-
         return LikeCommentDTO.builder()
                 .id(entity.getId() == null ? null : entity.getId())
                 .likeCount(entity.getLikeCount())

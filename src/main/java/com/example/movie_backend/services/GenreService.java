@@ -11,7 +11,6 @@ import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.IGenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;

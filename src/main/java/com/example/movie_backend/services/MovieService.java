@@ -2,10 +2,8 @@ package com.example.movie_backend.services;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.EntityNotFoundException;
-import com.example.movie_backend.controller.exception.ErrorHandler;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
-import com.example.movie_backend.dto.episode.EpisodeMapper;
 import com.example.movie_backend.dto.movie.*;
 import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Movie;
@@ -22,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -46,12 +43,12 @@ public class MovieService implements IMovieService {
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         minioClient.putObject(
-            PutObjectArgs.builder()
-                .bucket(BUCKET_NAME)
-                .object(object)
-                .contentType(file.getContentType())
-                .stream(file.getInputStream(), file.getSize(), -1)
-                .build()
+                PutObjectArgs.builder()
+                        .bucket(BUCKET_NAME)
+                        .object(object)
+                        .contentType(file.getContentType())
+                        .stream(file.getInputStream(), file.getSize(), -1)
+                        .build()
         );
     }
 
@@ -231,9 +228,8 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(Long idMovie) {
-
-        return repository.filterMovie(idMovie).map(item -> {
+    public MovieDTO filterMovie(Long id) {
+        return repository.filterMovie(id).map(item -> {
             MovieDTO movieDTO = mapper.toDTO(item);
             if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
                 String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
@@ -258,7 +254,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
-            .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie);

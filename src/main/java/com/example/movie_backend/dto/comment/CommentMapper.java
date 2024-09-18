@@ -43,7 +43,4 @@ public class CommentMapper {
                 .currentDate(entity.getCurrentDate())
                 .build();
     }
-
-
-
 }

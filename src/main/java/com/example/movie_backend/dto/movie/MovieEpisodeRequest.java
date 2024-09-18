@@ -38,8 +38,6 @@ public class MovieEpisodeRequest {
 
     private Set<EpisodeDTO> episodes = new HashSet<>();
 
-//    private Set<Long> movieId;
-
     @JsonIgnore
     private MovieDTO movieDTO;
 }

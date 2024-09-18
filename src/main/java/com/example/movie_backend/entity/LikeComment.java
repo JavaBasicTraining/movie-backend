@@ -8,9 +8,9 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 @Table(name = "like_comment")
+@Entity
 @Getter
 @Setter
-@Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class LikeComment {

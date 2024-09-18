@@ -1,7 +1,6 @@
 package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.ILikeCommentController;
-import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import com.example.movie_backend.repository.LikeCommentRepository;
 import com.example.movie_backend.services.LikeCommentService;
@@ -37,11 +36,8 @@ public class LikeCommentController implements ILikeCommentController {
     }
 
     @GetMapping("/user/{userId}/movie/{movieId}")
-    public ResponseEntity<List<LikeCommentDTO>> findLikeCommentByUserIdAndMovieId(   @PathVariable("userId") Long userId,
-                                                                                     @PathVariable("movieId") Long movieId) {
-        return ResponseEntity.ok(service.findLikeCommentByUserIdAndMovieId(movieId,userId));
+    public ResponseEntity<List<LikeCommentDTO>> findLikeCommentByUserIdAndMovieId(@PathVariable("userId") Long userId,
+                                                                                  @PathVariable("movieId") Long movieId) {
+        return ResponseEntity.ok(service.findLikeCommentByUserIdAndMovieId(movieId, userId));
     }
-
-
-
 }

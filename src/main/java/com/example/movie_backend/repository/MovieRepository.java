@@ -54,11 +54,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                        ON m.id = mc.movie_id
                    LEFT JOIN movie_website.genre c
                        ON mc.genres_id = c.id
-                   WHERE m.id = :idMovie               
+                   WHERE m.id = :movieId               
                     """,
             nativeQuery = true
     )
-    Optional<Movie> filterMovie(@Param("idMovie") Long idMovie);
+    Optional<Movie> filterMovie(@Param("movieId") Long movieId);
 
 
 }
