@@ -1,7 +1,6 @@
 package com.example.movie_backend.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,9 +19,27 @@ public class CommonProperties {
     @JsonProperty("cors")
     private Cors cors;
 
-    @Data
-    static public class Cors {
+    @JsonProperty("security")
+    private Security security;
+
+    @Getter
+    @Setter
+    public static class Cors {
         private List<String> origins;
+    }
+
+    @Getter
+    @Setter
+    public static class Security {
+        private Jwt jwt;
+
+        @Getter
+        @Setter
+        public static class Jwt {
+            private String secret;
+            private Long tokenValidityInSeconds;
+            private Long tokenValidityInSecondsForRememberMe;
+        }
     }
 }
 

@@ -32,9 +32,9 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "app_user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
+        name = "app_user_authority",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
     )
     @Builder.Default
     private Set<Authority> authorities = new HashSet<>();

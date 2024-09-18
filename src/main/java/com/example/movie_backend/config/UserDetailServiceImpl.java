@@ -21,18 +21,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
-                .findByUsername(username)
-                .map(user -> createSpringSecurityUser(username, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User " + username + " was not found in the database"));
+            .findByUsername(username)
+            .map(user -> createSpringSecurityUser(username, user))
+            .orElseThrow(() -> new UsernameNotFoundException("User " + username + " was not found in the database"));
     }
 
     private User createSpringSecurityUser(String lowercaseLogin, com.example.movie_backend.entity.User user) {
         List<SimpleGrantedAuthority> grantedAuthorities = user
-                .getAuthorities()
-                .stream()
-                .map(Authority::getName)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+            .getAuthorities()
+            .stream()
+            .map(Authority::getName)
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
         return new User(user.getUsername(), user.getPasswordHash(), grantedAuthorities);
     }
 }

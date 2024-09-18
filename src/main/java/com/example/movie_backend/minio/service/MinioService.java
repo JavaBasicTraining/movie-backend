@@ -34,19 +34,19 @@ public class MinioService implements IMinioService {
     public FileInfo uploadByFile(MultipartFile file, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         String objectName = filePath + "/" + file.getOriginalFilename();
         ObjectWriteResponse response = minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket(BUCKET_NAME)
-                        .object(objectName)
-                        .contentType(file.getContentType())
-                        .stream(file.getInputStream(), file.getSize(), -1)
-                        .build()
+            PutObjectArgs.builder()
+                .bucket(BUCKET_NAME)
+                .object(objectName)
+                .contentType(file.getContentType())
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .build()
         );
 
         return FileInfo.builder()
-                .name(file.getOriginalFilename())
-                .size(file.getSize())
-                .url(getUrlFile(response.object()))
-                .build();
+            .name(file.getOriginalFilename())
+            .size(file.getSize())
+            .url(getUrlFile(response.object()))
+            .build();
     }
 
     @Override
@@ -68,47 +68,47 @@ public class MinioService implements IMinioService {
         }
 
         ObjectWriteResponse response = minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket(BUCKET_NAME)
-                        .object(filePath + "/" + fileName)
-                        .contentType(mimeType)
-                        .stream(fileInputStream, fileSize, -1)
-                        .build()
+            PutObjectArgs.builder()
+                .bucket(BUCKET_NAME)
+                .object(filePath + "/" + fileName)
+                .contentType(mimeType)
+                .stream(fileInputStream, fileSize, -1)
+                .build()
         );
 
         return FileInfo.builder()
-                .name(fileName)
-                .size((long) fileSize)
-                .url(getUrlFile(response.object()))
-                .build();
+            .name(fileName)
+            .size((long) fileSize)
+            .url(getUrlFile(response.object()))
+            .build();
     }
 
     @Override
     public List<FileInfo> getList() {
         Iterable<Result<Item>> results = minioClient.listObjects(
-                ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
+            ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
         List<FileInfo> fileInfos = new ArrayList<>();
         results.forEach(
-                value -> {
-                    try {
-                        Item item = value.get();
+            value -> {
+                try {
+                    Item item = value.get();
 
-                        fileInfos.add(
-                                FileInfo.builder()
-                                        .name(item.objectName())
-                                        .size(item.size())
-                                        .url(
-                                                getUrlFile(item.objectName())
-                                        )
-                                        .build()
-                        );
+                    fileInfos.add(
+                        FileInfo.builder()
+                            .name(item.objectName())
+                            .size(item.size())
+                            .url(
+                                getUrlFile(item.objectName())
+                            )
+                            .build()
+                    );
 
-                    } catch (ErrorResponseException | InsufficientDataException | InternalException |
-                             InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException |
-                             ServerException | XmlParserException e) {
-                        throw new RuntimeException(e);
-                    }
+                } catch (ErrorResponseException | InsufficientDataException | InternalException |
+                         InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException |
+                         ServerException | XmlParserException e) {
+                    throw new RuntimeException(e);
                 }
+            }
         );
 
         return fileInfos;
@@ -118,13 +118,13 @@ public class MinioService implements IMinioService {
     public String getPreSignedLink(String object) {
         try {
             String url =
-                    minioClient.getPresignedObjectUrl(
-                            GetPresignedObjectUrlArgs.builder()
-                                    .method(Method.GET)
-                                    .bucket(BUCKET_NAME)
-                                    .object(object)
-                                    .expiry(2, TimeUnit.HOURS)
-                                    .build());
+                minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket(BUCKET_NAME)
+                        .object(object)
+                        .expiry(2, TimeUnit.HOURS)
+                        .build());
             return url;
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
             System.out.println("Error occurred: " + e);
@@ -134,13 +134,13 @@ public class MinioService implements IMinioService {
 
     private String getUrlFile(String object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder()
-                        .object(object)
-                        .bucket(BUCKET_NAME)
-                        .method(
-                                Method.GET
-                        )
-                        .build()
+            GetPresignedObjectUrlArgs.builder()
+                .object(object)
+                .bucket(BUCKET_NAME)
+                .method(
+                    Method.GET
+                )
+                .build()
         );
     }
 

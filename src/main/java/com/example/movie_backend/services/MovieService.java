@@ -1,5 +1,6 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.EntityNotFoundException;
 import com.example.movie_backend.controller.exception.ErrorHandler;
 import com.example.movie_backend.controller.request.QueryMovieRequest;
@@ -22,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -36,18 +36,23 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class MovieService implements IMovieService {
-    private final MinioClient minioClient;
     private static final String BUCKET_NAME = "movie";
-    public final MovieRepository repository;
-    public final MovieMapper mapper;
-    public final EpisodeMapper episodeMapper;
-    public final MinioService minioService;
-    public final ErrorHandler errorHandler;
-    public final EpisodeRepository episodeRepository;
+    private final MinioClient minioClient;
+    private final MovieRepository repository;
+    private final MovieMapper mapper;
+    private final MinioService minioService;
+    private final EpisodeRepository episodeRepository;
 
 
     public void uploadByFile(MultipartFile file, String object) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        minioClient.putObject(PutObjectArgs.builder().bucket(BUCKET_NAME).object(object).contentType(file.getContentType()).stream(file.getInputStream(), file.getSize(), -1).build());
+        minioClient.putObject(
+            PutObjectArgs.builder()
+                .bucket(BUCKET_NAME)
+                .object(object)
+                .contentType(file.getContentType())
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .build()
+        );
     }
 
     private boolean isImage(String contentType) {
@@ -253,7 +258,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
-                .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(EntityNotFoundException::new);
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         movie = repository.save(movie);

@@ -26,8 +26,8 @@ public interface IMovieController {
      */
     @GetMapping
     ResponseEntity<List<MovieDTOWithoutJoin>> query(
-            @ParameterObject QueryMovieRequest request,
-            @ParameterObject Pageable pageable
+        @ParameterObject QueryMovieRequest request,
+        @ParameterObject Pageable pageable
     );
 
     @GetMapping("{id}")

@@ -1,5 +1,6 @@
 package com.example.movie_backend.services;
 
+import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.dto.comment.CommentMapper;
 import com.example.movie_backend.entity.Comment;
@@ -34,23 +35,23 @@ public class CommentService  implements ICommentService {
 
     @Override
     public CommentDTO update(CommentDTO dto, Long id) {
-        Comment comment = mapper.toEntity(dto,id);
+        Comment comment = mapper.toEntity(dto, id);
         return mapper.toDTO(repository.save(comment));
     }
 
     @Override
     public CommentDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(
-                        () -> new BadRequestException("Movie not found")
-                );
+            .map(this.mapper::toDTO)
+            .orElseThrow(
+                () -> new BadRequestException("Movie not found")
+            );
     }
 
     @Override
     public Boolean delete(Long id) {
-         repository.deleteById(id);
-         return true;
+        repository.deleteById(id);
+        return true;
     }
 
     @Override

@@ -10,28 +10,28 @@ import java.util.stream.Collectors;
 public class CategoryMapper {
     public Category toEntity(CategoryDTO dto) {
         return Category.builder()
-                .name(dto.getName())
-                .build();
+            .name(dto.getName())
+            .build();
     }
 
     public Category toEntity(CategoryDTO dto, Long id) {
         return Category.builder()
-                .name(dto.getName())
-                .movies(dto.getMovies().stream()
-                        .map(movie -> Movie.builder()
-                                .id(id)
-                                .build()).collect(Collectors.toSet()))
-                .build();
+            .name(dto.getName())
+            .movies(dto.getMovies().stream()
+                .map(movie -> Movie.builder()
+                    .id(id)
+                    .build()).collect(Collectors.toSet()))
+            .build();
     }
 
     public CategoryDTO toDTO(Category entity) {
         return CategoryDTO.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .movieIds(entity.getMovies().stream()
-                        .map(
-                                Movie::getId
-                        ).collect(Collectors.toSet()))
-                .build();
+            .id(entity.getId())
+            .name(entity.getName())
+            .movieIds(entity.getMovies().stream()
+                .map(
+                    Movie::getId
+                ).collect(Collectors.toSet()))
+            .build();
     }
 }

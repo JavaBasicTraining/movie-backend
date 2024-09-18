@@ -17,7 +17,7 @@ public class CommentMapper {
                 .content(dto.getContent())
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
                 .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
-                .currentDate(new Date())
+                      .currentDate(new Date())
                 .build();
     }
     public Comment toEntity(CommentDTO dto, Long id) {

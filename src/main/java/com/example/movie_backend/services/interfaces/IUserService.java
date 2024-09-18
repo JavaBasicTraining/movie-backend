@@ -16,7 +16,5 @@ public interface IUserService {
 
     void register(RegisterRequest request);
 
-
     Set<User> getUserAuthority();
-
 }

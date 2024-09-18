@@ -271,7 +271,7 @@ public class MovieMapper {
                 .nameMovie(entity.getNameMovie())
                 .posterUrl(entity.getPosterUrl())
                 .viTitle(entity.getViTitle()).enTitle(entity.getEnTitle()).country(entity.getCountry()).idCategory(entity.getCategory() == null ? null : entity.getCategory().getId()).description(entity.getDescription()).idGenre(entity.getGenres() == null ? null : entity.getGenres().stream().map(Genre::getId).filter(Objects::nonNull).collect(Collectors.toSet())).idComment(entity.getComments() == null ? null : entity.getComments().stream().map(Comment::getId).filter(Objects::nonNull).collect(Collectors.toSet()))
-                .genreName(entity.getGenres().stream().map(item-> item.getName()).collect(Collectors.toSet()))
+                .genres(entity.getGenres() == null ? null : entity.getGenres().stream().map(item -> GenreDTO.builder().id(item.getId()).name(item.getName()).build()).collect(Collectors.toSet()))
                 .idEvaluation(entity.getEvaluations() == null ? null : entity.getEvaluations().stream().map(Evaluation::getId).filter(Objects::nonNull).collect(Collectors.toSet())).build();
     }
 }
