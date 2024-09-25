@@ -30,6 +30,7 @@ public class SecurityJwtConfiguration {
     }
 
     @Bean
+
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder =
             NimbusJwtDecoder

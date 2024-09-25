@@ -32,7 +32,6 @@ public class CommonProperties {
     @Setter
     public static class Security {
         private Jwt jwt;
-
         @Getter
         @Setter
         public static class Jwt {

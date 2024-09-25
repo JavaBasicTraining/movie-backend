@@ -22,8 +22,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             WHERE (:keyword IS NULL
                    OR m.name IS NULL
                    OR m.name LIKE CONCAT('%', :keyword, '%'))
-              AND (:genre IS NULL OR c.name = :genre)
-              AND (:country IS NULL OR m.country = :country)
+              OR (:genre IS NULL OR c.name = :genre)
+              OR (:country IS NULL OR m.country = :country)
             """,
         nativeQuery = true
     )
