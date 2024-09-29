@@ -31,15 +31,23 @@ public class CommonProperties {
     @Getter
     @Setter
     public static class Security {
-        private Jwt jwt;
+        private Oauth2 oauth2;
+
         @Getter
         @Setter
-        public static class Jwt {
-            private String secret;
-            private Long tokenValidityInSeconds;
-            private Long tokenValidityInSecondsForRememberMe;
+        public static class Oauth2 {
+            private ResourceServer resourceServer;
+
+            @Getter
+            @Setter
+            public static class ResourceServer {
+                private Jwt jwt;
+                @Getter
+                @Setter
+                public static class Jwt {
+                    private String jwkSetUri;
+                }
+            }
         }
     }
 }
-
-
