@@ -1,5 +1,6 @@
 package com.example.movie_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class Comment implements Serializable {
     private Long id;
 
     @Column(name = "content")
-    @NotNull
+    @NotNull(message = "Content cannot be null")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,6 +44,7 @@ public class Comment implements Serializable {
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
-    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
-    private List<Comment> subordinates = new ArrayList<>();
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = "genres", allowSetters = true)
+    private List<Comment> replies = new ArrayList<>();
 }

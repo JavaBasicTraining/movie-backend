@@ -34,11 +34,9 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.keycloak:keycloak-spring-boot-starter:19.0.1'
     implementation 'org.keycloak:keycloak-admin-client:19.0.1'
-
     implementation 'io.minio:minio:8.4.6'
     /**
      * MySql

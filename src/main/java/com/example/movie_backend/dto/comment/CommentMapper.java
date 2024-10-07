@@ -7,6 +7,7 @@ import com.example.movie_backend.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class CommentMapper {
@@ -17,15 +18,21 @@ public class CommentMapper {
                 .content(dto.getContent())
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
                 .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
-                      .currentDate(new Date())
+                .currentDate(new Date())
+                .parentComment(dto.getParentCommentId() != null ?
+                        Comment.builder().id(dto.getParentCommentId()).build() : null)
                 .build();
     }
+
+
     public Comment toEntity(CommentDTO dto, Long id) {
         return Comment.builder()
                 .id(id)
                 .content(dto.getContent())
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
                 .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
+                .parentComment(dto.getParentCommentId() != null ?
+                        Comment.builder().id(dto.getParentCommentId()).build() : null)
                 .currentDate(new Date())
                 .build();
     }
@@ -41,6 +48,12 @@ public class CommentMapper {
                         .userName(entity.getUser().getUsername())
                         .build() : null)
                 .currentDate(entity.getCurrentDate())
+//                .subordinates(entity.getSubordinates().stream()
+//                        .map(this::toDTO) //
+//                        .collect(Collectors.toList()))
+                .parentCommentId(entity.getParentComment() != null ?
+                        entity.getParentComment().getId() : null)
                 .build();
     }
+
 }

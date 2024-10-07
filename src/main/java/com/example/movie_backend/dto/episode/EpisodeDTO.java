@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-@JsonInclude(JsonInclude.Include.NON_NULL) // cái này nó sẽ bỏ hết những field null
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EpisodeDTO {
 
     private Long id;

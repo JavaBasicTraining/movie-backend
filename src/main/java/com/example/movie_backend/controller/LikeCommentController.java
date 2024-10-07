@@ -15,7 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 public class LikeCommentController implements ILikeCommentController {
 
+
     private final LikeCommentRepository repository;
+
+ 
     private final LikeCommentService service;
 
     @Override

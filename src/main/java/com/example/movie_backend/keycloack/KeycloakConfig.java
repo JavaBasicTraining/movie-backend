@@ -1,11 +1,9 @@
 package com.example.movie_backend.keycloak;
 
 import com.example.movie_backend.keycloack.IKeyCloak;
-import com.example.movie_backend.model.user.RegisterRequest;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
-import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UserResource;
