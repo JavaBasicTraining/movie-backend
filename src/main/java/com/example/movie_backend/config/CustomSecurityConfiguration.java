@@ -24,6 +24,7 @@ import java.util.Objects;
 @Configuration
 public class CustomSecurityConfiguration {
     private final CommonProperties commonProperties;
+   
 
     public CustomSecurityConfiguration(CommonProperties commonProperties) {
         this.commonProperties = commonProperties;
@@ -40,8 +41,11 @@ public class CustomSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         corsConfig(http);
         permitAll(http);
-       http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
-
+       http.oauth2ResourceServer(oauth2 -> oauth2
+        .jwt(jwt -> jwt
+            .jwtAuthenticationConverter(token -> new CustomAuthenticationToken(token)) 
+        )
+    );
 
         return http.build();
     }

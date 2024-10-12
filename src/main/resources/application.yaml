@@ -36,7 +36,7 @@ spring:
       hibernate.format_sql: true
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       use-new-id-generator-mappings: false
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
@@ -68,8 +68,8 @@ common:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: http://localhost:8080/realms/movie_realm
-          jwk-set-uri: http://localhost:8080/realms/movie_realm/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/movie_website_realm
+          jwk-set-uri: http://localhost:8080/realms/movie_website_realm/protocol/openid-connect/certs
 
   cors:
     origins:
@@ -78,7 +78,7 @@ common:
 
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}
-  realm: ${PROFILE_REALM:movie_realm}
+  realm: ${PROFILE_REALM:movie_website_realm}
   resource: ${MOVIE_CLIENT_ID:movie_website_client}
   credentials:
-    secret: ${MOVIE_CLIENT_SECRET:mgmJlUQ1u6ai02C7qIEqNVV4WhnITdd9}
+    secret: ${MOVIE_CLIENT_SECRET:ryBcX7pKONjVb57gVK6UYOmlU9qQ1edA}

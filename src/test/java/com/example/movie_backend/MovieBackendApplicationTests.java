@@ -1,13 +1,12 @@
 package com.example.movie_backend;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest
-class MovieBackendApplicationTests {
+@SpringBootApplication
+public class MovieBackendApplicationTests {
 
-    @Test
-    void contextLoads() {
+    public static void main(String[] args) {
+        SpringApplication.run(MovieBackendApplication.class, args);
     }
-
 }

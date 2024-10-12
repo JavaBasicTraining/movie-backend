@@ -53,7 +53,7 @@
 //    @Bean
 //    public JwtAuthenticationConverter jwtAuthenticationConverter() {
 //        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-//        grantedAuthoritiesConverter.setAuthorityPrefix("");
+//        grantedAuthoritiesConverter.setAuthorityPrefix("");   
 //        grantedAuthoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_KEY);
 //
 //        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
