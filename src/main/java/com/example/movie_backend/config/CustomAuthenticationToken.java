@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +20,13 @@ public class CustomAuthenticationToken extends JwtAuthenticationToken {
     @SuppressWarnings("unchecked")
     private static Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-
         Map<String, Object> clientAccess = (Map<String, Object>) resourceAccess.get("movie_website_client");
+        List<String>  roles = (List<String>) clientAccess.get("roles");
 
-        List<String> roles = (List<String>) clientAccess.get("roles");
 
-        if (roles == null) {
-            return List.of();
-        }
+
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-    }   
+    }
 }

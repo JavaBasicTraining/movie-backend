@@ -27,8 +27,6 @@ public class MovieController implements IMovieController {
         return ResponseEntity.ok(service.query(request, pageable).getContent());
     }
 
-
-
  @Override
     public ResponseEntity<MovieDTO> filterMovie(Long id) {
         return ResponseEntity.ok(service.filterMovie(id));
