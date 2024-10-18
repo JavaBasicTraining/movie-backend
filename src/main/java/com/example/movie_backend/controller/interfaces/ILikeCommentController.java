@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequestMapping("api/v1/like_comment")
+@RequestMapping("api/v1/like-comment")
 public interface ILikeCommentController {
     @PostMapping
     ResponseEntity<LikeCommentDTO> create(@RequestBody @Valid  LikeCommentDTO likeComment);

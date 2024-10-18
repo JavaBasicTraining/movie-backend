@@ -61,7 +61,7 @@ public class EvaluationController implements IEvaluationController {
     }
 
     @GetMapping("/average/{movieId}")
-    public ResponseEntity<Float> Average(@PathVariable float movieId) {
+    public ResponseEntity<Float> average(@PathVariable float movieId) {
         return ResponseEntity.ok(service.average(movieId));
     }
 

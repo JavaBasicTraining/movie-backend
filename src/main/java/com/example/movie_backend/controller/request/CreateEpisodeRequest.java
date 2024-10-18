@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 @SuperBuilder
 @AllArgsConstructor
 public class CreateEpisodeRequest extends EpisodeDTO {
-    private transient MultipartFile filePoster;
+    private  MultipartFile filePoster;
 
-    private transient MultipartFile fileMovie;
+    private  MultipartFile fileMovie;
 
 }

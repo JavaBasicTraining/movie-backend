@@ -23,7 +23,7 @@ public class RegisterRequest {
     private String fistName;
     @NotBlank
     private String lastName;
-    @NotBlank // nos laf j a, từ front truyền về mà null haowjc rỗng thì báo lõi
+    @NotBlank
     private String email;
     @NotBlank
     private String phoneNumber;

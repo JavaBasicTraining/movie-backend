@@ -41,7 +41,6 @@ public class MinioService implements IMinioService {
                 .stream(file.getInputStream(), file.getSize(), -1)
                 .build()
         );
-
         return FileInfo.builder()
             .name(file.getOriginalFilename())
             .size(file.getSize())
@@ -52,10 +51,8 @@ public class MinioService implements IMinioService {
     @Override
     public FileInfo uploadByLink(String link, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         String fileName = StringUtils.substringAfterLast(link, "/");
-
         Path path = new File(fileName).toPath();
         String mimeType = Files.probeContentType(path);
-
         InputStream fileInputStream = null;
         int fileSize = 0;
         try {
@@ -75,14 +72,12 @@ public class MinioService implements IMinioService {
                 .stream(fileInputStream, fileSize, -1)
                 .build()
         );
-
         return FileInfo.builder()
             .name(fileName)
             .size((long) fileSize)
             .url(getUrlFile(response.object()))
             .build();
     }
-
     @Override
     public List<FileInfo> getList() {
         Iterable<Result<Item>> results = minioClient.listObjects(
@@ -131,7 +126,6 @@ public class MinioService implements IMinioService {
         }
         return null;
     }
-
     private String getUrlFile(String object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return minioClient.getPresignedObjectUrl(
             GetPresignedObjectUrlArgs.builder()

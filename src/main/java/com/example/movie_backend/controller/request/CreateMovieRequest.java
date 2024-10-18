@@ -61,7 +61,7 @@ public class CreateMovieRequest {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<CommentDTO> comments;
 
-    private transient MultipartFile filePoster;
+    private  MultipartFile filePoster;
 
-    private transient MultipartFile fileMovie;
+    private  MultipartFile fileMovie;
 }

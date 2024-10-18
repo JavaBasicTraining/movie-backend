@@ -3,6 +3,12 @@ server:
 error:
   include-binding-errors: always
 spring:
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/movie_website_realm
+          jwk-set-uri: http://localhost:8080/realms/movie_website_realm/protocol/openid-connect/certs
   main:
     allow-bean-definition-overriding: true
   servlet:
@@ -64,12 +70,7 @@ common:
     - /api/v1/evaluations/numberOfReviews/**
     - /api/account/info/**
     - /api/v1/evaluations/numberOfReviews/**
-  security:
-    oauth2:
-      resource-server:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/movie_website_realm
-          jwk-set-uri: http://localhost:8080/realms/movie_website_realm/protocol/openid-connect/certs
+
 
   cors:
     origins:

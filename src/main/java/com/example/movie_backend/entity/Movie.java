@@ -74,7 +74,6 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
 
-
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
@@ -102,11 +101,6 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-
-
     public void addCategory(Genre genre) {
         this.genres.add(genre);
     }
@@ -115,9 +109,6 @@ public class Movie implements Serializable {
         this.evaluations.add(evaluation);
     }
 
-    public void addLikeComment(LikeComment likeComment) {
-        this.likeComments.add(likeComment);
-    }
 
     public Movie addEpisode(Episode episode) {
         episode.setMovie(this);

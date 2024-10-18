@@ -1,12 +1,7 @@
-package com.example.movie_backend.keycloack;
+package com.example.movie_backend.keycloak;
 
 
-import com.example.movie_backend.model.user.RegisterRequest;
 import org.keycloak.representations.AccessTokenResponse;
-
-import java.util.UUID;
-
-import java.util.UUID;
 
 public interface IKeyCloak {
 

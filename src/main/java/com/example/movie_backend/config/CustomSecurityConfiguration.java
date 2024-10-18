@@ -1,17 +1,14 @@
 package com.example.movie_backend.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,14 +21,13 @@ import java.util.Objects;
 @Configuration
 public class CustomSecurityConfiguration {
     private final CommonProperties commonProperties;
-   
 
     public CustomSecurityConfiguration(CommonProperties commonProperties) {
         this.commonProperties = commonProperties;
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, KeycloakProperties keycloakProperties) throws Exception {
         http
                 .cors()
                 .and()
@@ -41,19 +37,14 @@ public class CustomSecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         corsConfig(http);
         permitAll(http);
-       http.oauth2ResourceServer(oauth2 -> oauth2
-        .jwt(jwt -> jwt
-            .jwtAuthenticationConverter(token -> new CustomAuthenticationToken(token)) 
-        )
-    );
-
+        http.oauth2ResourceServer(Customizer.withDefaults());
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                        .jwtAuthenticationConverter(token -> new CustomAuthenticationToken(token, keycloakProperties))
+                )
+        );
         return http.build();
     }
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withJwkSetUri(commonProperties.getSecurity().getOauth2().getResourceServer().getJwt().getJwkSetUri()).build();
-    }
-
 
     private void permitAll(HttpSecurity http) throws Exception {
         if (!Objects.isNull(commonProperties.getPermitAllPathPatterns())) {
