@@ -8,6 +8,12 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRange;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,18 +40,18 @@ public class MinioService implements IMinioService {
     public FileInfo uploadByFile(MultipartFile file, String filePath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         String objectName = filePath + "/" + file.getOriginalFilename();
         ObjectWriteResponse response = minioClient.putObject(
-            PutObjectArgs.builder()
-                .bucket(BUCKET_NAME)
-                .object(objectName)
-                .contentType(file.getContentType())
-                .stream(file.getInputStream(), file.getSize(), -1)
-                .build()
+                PutObjectArgs.builder()
+                        .bucket(BUCKET_NAME)
+                        .object(objectName)
+                        .contentType(file.getContentType())
+                        .stream(file.getInputStream(), file.getSize(), -1)
+                        .build()
         );
         return FileInfo.builder()
-            .name(file.getOriginalFilename())
-            .size(file.getSize())
-            .url(getUrlFile(response.object()))
-            .build();
+                .name(file.getOriginalFilename())
+                .size(file.getSize())
+                .url(getUrlFile(response.object()))
+                .build();
     }
 
     @Override
@@ -65,45 +71,46 @@ public class MinioService implements IMinioService {
         }
 
         ObjectWriteResponse response = minioClient.putObject(
-            PutObjectArgs.builder()
-                .bucket(BUCKET_NAME)
-                .object(filePath + "/" + fileName)
-                .contentType(mimeType)
-                .stream(fileInputStream, fileSize, -1)
-                .build()
+                PutObjectArgs.builder()
+                        .bucket(BUCKET_NAME)
+                        .object(filePath + "/" + fileName)
+                        .contentType(mimeType)
+                        .stream(fileInputStream, fileSize, -1)
+                        .build()
         );
         return FileInfo.builder()
-            .name(fileName)
-            .size((long) fileSize)
-            .url(getUrlFile(response.object()))
-            .build();
+                .name(fileName)
+                .size((long) fileSize)
+                .url(getUrlFile(response.object()))
+                .build();
     }
+
     @Override
     public List<FileInfo> getList() {
         Iterable<Result<Item>> results = minioClient.listObjects(
-            ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
+                ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
         List<FileInfo> fileInfos = new ArrayList<>();
         results.forEach(
-            value -> {
-                try {
-                    Item item = value.get();
+                value -> {
+                    try {
+                        Item item = value.get();
 
-                    fileInfos.add(
-                        FileInfo.builder()
-                            .name(item.objectName())
-                            .size(item.size())
-                            .url(
-                                getUrlFile(item.objectName())
-                            )
-                            .build()
-                    );
+                        fileInfos.add(
+                                FileInfo.builder()
+                                        .name(item.objectName())
+                                        .size(item.size())
+                                        .url(
+                                                getUrlFile(item.objectName())
+                                        )
+                                        .build()
+                        );
 
-                } catch (ErrorResponseException | InsufficientDataException | InternalException |
-                         InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException |
-                         ServerException | XmlParserException e) {
-                    throw new RuntimeException(e);
+                    } catch (ErrorResponseException | InsufficientDataException | InternalException |
+                             InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException |
+                             ServerException | XmlParserException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
         );
 
         return fileInfos;
@@ -113,29 +120,75 @@ public class MinioService implements IMinioService {
     public String getPreSignedLink(String object) {
         try {
             String url =
-                minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder()
-                        .method(Method.GET)
-                        .bucket(BUCKET_NAME)
-                        .object(object)
-                        .expiry(2, TimeUnit.HOURS)
-                        .build());
+                    minioClient.getPresignedObjectUrl(
+                            GetPresignedObjectUrlArgs.builder()
+                                    .method(Method.GET)
+                                    .bucket(BUCKET_NAME)
+                                    .object(object)
+                                    .expiry(2, TimeUnit.HOURS)
+                                    .build());
             return url;
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
             System.out.println("Error occurred: " + e);
         }
         return null;
     }
+
     private String getUrlFile(String object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return minioClient.getPresignedObjectUrl(
-            GetPresignedObjectUrlArgs.builder()
-                .object(object)
-                .bucket(BUCKET_NAME)
-                .method(
-                    Method.GET
-                )
-                .build()
+                GetPresignedObjectUrlArgs.builder()
+                        .object(object)
+                        .bucket(BUCKET_NAME)
+                        .method(
+                                Method.GET
+                        )
+                        .build()
         );
+    }
+
+    @Override
+    public InputStreamResource chunkVideo(HttpHeaders headers) {
+        try {
+            String objectName = "myvideo.mp4";
+            List<HttpRange> ranges = headers.getRange();
+            HttpRange range = ranges.isEmpty() ? null : ranges.get(0);
+            long fileSize = getFileSize(BUCKET_NAME, objectName);
+
+            InputStream stream;
+            if (range == null) {
+                stream = minioClient.getObject(
+                        GetObjectArgs.builder()
+                                .bucket(BUCKET_NAME)
+                                .object(objectName)
+                                .build()
+                );
+            } else {
+                long start = range.getRangeStart(0);
+                long end = range.getRangeEnd(fileSize - 1);
+                stream = minioClient.getObject(
+                        GetObjectArgs.builder()
+                                .bucket(BUCKET_NAME)
+                                .object(objectName)
+                                .offset(start)
+                                .length(end - start + 1)
+                                .build()
+                );
+            }
+            return new InputStreamResource(stream);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeyException |
+                 MinioException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public long getFileSize(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        return minioClient.statObject(
+                StatObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectName)
+                        .build()
+        ).size();
     }
 
 }
