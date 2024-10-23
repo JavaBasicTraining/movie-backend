@@ -7,9 +7,7 @@ import javax.validation.Valid;
 
 import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.repository.UserRepository;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,13 +26,10 @@ import com.example.movie_backend.services.interfaces.IUserService;
 @RequestMapping("api/account")
 @RestController
 public class AccountController {
-    // private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final IUserService userService;
 public final UserMapper mapper;
-//    private final KeycloakService keycloakService;
     private final UserRepository userRepository;
-//    private final CommonProperties.Security securityProperties;
 
     public AccountController(IUserService userService, UserMapper mapper, UserRepository userRepository) {
         this.userService = userService;
@@ -52,24 +47,6 @@ public final UserMapper mapper;
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("login")
-//    public ResponseEntity<JWTToken> login(@RequestBody LoginRequest request) {
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//            request.getUsername(),
-//            request.getPassword()
-//
-//        );
-//        Authentication authentication = authenticationManagerBuilder.getObject()
-//            .authenticate(authenticationToken);
-//        SecurityContextHolder.getContext()
-//            .setAuthentication(authentication);
-    ////        String jwt = this.createToken(authentication, request.isRememberMe());
-////        HttpHeaders httpHeaders = new HttpHeaders();
-////        httpHeaders.setBearerAuth(jwt);
-////        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
-//        return null;
-//    }
-
     @PostMapping("getListUser")
     public ResponseEntity<List<User>> getListUser() {
         return ResponseEntity.ok(userService.getList());
@@ -79,11 +56,6 @@ public final UserMapper mapper;
     public ResponseEntity<UserDTO> getUser(@RequestParam String userName) {
         return ResponseEntity.ok(userService.getUser(userName));
     }
-
-//    @GetMapping("users")
-//    public List<UserRepresentation> getUsers() {
-//        return keycloakService.getUsers();
-//    }
 
     @GetMapping("info")
     public ResponseEntity<UserDTO> getAccountInfo(@AuthenticationPrincipal Jwt jwt) {

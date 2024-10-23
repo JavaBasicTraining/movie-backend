@@ -35,6 +35,7 @@ public class MovieEpisodeRequest {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
 

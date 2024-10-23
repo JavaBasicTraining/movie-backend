@@ -88,7 +88,10 @@ public class MovieService implements IMovieService {
         if (episodeId == null) {
             return null;
         } else {
-            Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+            Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode()
+                    .stream()
+                    .map(item -> item.getContentType())
+                    .collect(Collectors.toSet());
             for (String content : contentPosterEpisode) {
                 if (isImage(content)) {
                     for (MultipartFile path : fileMovie.getFilePosterEpisode()) {
@@ -101,7 +104,10 @@ public class MovieService implements IMovieService {
                 }
             }
         }
-        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
+                .stream()
+                .map(item -> item.getContentType())
+                .collect(Collectors.toSet());
         for (String content : contentVideoEpisode) {
             if (isVideo(content)) {
                 for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
