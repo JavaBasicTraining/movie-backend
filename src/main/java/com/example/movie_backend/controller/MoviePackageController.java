@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MoviePackageController implements IMoviePackageController {
+
     public final MoviePackageService service;
 
     public MoviePackageController(MoviePackageService service) {
@@ -34,6 +35,5 @@ public class MoviePackageController implements IMoviePackageController {
     public boolean delete(Long id) {
         ResponseEntity.ok(service.delete(id));
         return true;
-
     }
 }

@@ -10,7 +10,9 @@ import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "movie")
@@ -72,10 +74,13 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
 
-
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @Builder.Default
+    private Set<LikeComment> likeComments = new HashSet<>();
 
     @Builder.Default
     @ManyToMany
@@ -89,17 +94,12 @@ public class Movie implements Serializable {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
-    private Set<Episode> episodes = new HashSet<>();
+    private List<Episode> episodes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;
-
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-
 
     public void addCategory(Genre genre) {
         this.genres.add(genre);
@@ -109,13 +109,14 @@ public class Movie implements Serializable {
         this.evaluations.add(evaluation);
     }
 
+
     public Movie addEpisode(Episode episode) {
         episode.setMovie(this);
         this.episodes.add(episode);
         return this;
     }
 
-    public Movie setEpisodes(Set<Episode> episodes) {
+    public Movie setEpisodes(List<Episode> episodes) {
         episodes.stream().forEach(episode -> {
             episode.setMovie(this);
         });

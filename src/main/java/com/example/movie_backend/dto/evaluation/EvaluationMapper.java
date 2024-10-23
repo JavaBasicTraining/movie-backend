@@ -26,7 +26,6 @@ public class EvaluationMapper {
             .build();
     }
 
-
     public EvaluationDTO toDTO(Evaluation entity) {
         return EvaluationDTO.builder()
             .id(entity.getId())

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface IUserService {
-    User create(User user);
+    UserDTO create(UserDTO user);
 
     List<User> getList();
 

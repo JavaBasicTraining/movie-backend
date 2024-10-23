@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -30,6 +29,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RestController
 public class MovieManageController {
+
     private final IMovieService movieService;
     private final MovieRepository repository;
 
@@ -60,7 +60,6 @@ public class MovieManageController {
             movieService.createWithEpisode(movieEpisodeRequest)
         );
     }
-
     @PutMapping(value = "{id}")
     public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieEpisodeRequest request) {
         return ResponseEntity.ok(

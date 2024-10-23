@@ -137,8 +137,6 @@ public class EpisodeService implements IEpisodeService {
                 .orElseThrow(
                     () -> new BadRequestException("Movie not found")
                 );
-
         }
-
     }
 }

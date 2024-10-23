@@ -55,7 +55,6 @@ public class CategoryService implements ICategoryService {
             .collect(Collectors.toList());
     }
 
-
     @Override
     public Boolean delete(Long id) {
         repository.deleteById(id);

@@ -19,28 +19,11 @@ public class CommonProperties {
     @JsonProperty("cors")
     private Cors cors;
 
-    @JsonProperty("security")
-    private Security security;
-
     @Getter
     @Setter
     public static class Cors {
         private List<String> origins;
     }
 
-    @Getter
-    @Setter
-    public static class Security {
-        private Jwt jwt;
 
-        @Getter
-        @Setter
-        public static class Jwt {
-            private String secret;
-            private Long tokenValidityInSeconds;
-            private Long tokenValidityInSecondsForRememberMe;
-        }
-    }
 }
-
-

@@ -30,8 +30,10 @@ public class UserService implements IUserService {
     private final UserMapper mapper;
 
     @Override
-    public User create(User e) {
-        return userRepository.save(e);
+    public UserDTO create(UserDTO userDTO) {
+        User user = mapper.toEntity(userDTO);
+        User savedUser = userRepository.save(user);
+        return mapper.toDTO(savedUser);
     }
 
     @Override
@@ -42,10 +44,8 @@ public class UserService implements IUserService {
     @Override
     public UserDTO getUser(String username) {
         return this.userRepository.findByUsername(username)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("User not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElse(null);
     }
 
 

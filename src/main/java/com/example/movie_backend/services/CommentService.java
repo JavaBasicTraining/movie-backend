@@ -7,30 +7,26 @@ import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.services.interfaces.ICommentService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CommentService implements ICommentService {
-
 
     public final CommentMapper mapper;
     public final CommentRepository repository;
     public final MovieRepository movieRepository;
 
-
-    public CommentService(CommentMapper mapper, CommentRepository repository, MovieRepository movieRepository) {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.movieRepository = movieRepository;
-    }
-
     @Override
     @Transactional
     public CommentDTO create(CommentDTO dto) {
         Comment comment = mapper.toEntity(dto);
+        comment.setCurrentDate(new Date());
         comment = repository.save(comment);
         return mapper.toDTO(comment);
     }
@@ -58,12 +54,15 @@ public class CommentService implements ICommentService {
 
     @Override
     public List<CommentDTO> getCommentByMovieId(Long movieId) {
-        return repository.getCommentByMovieId(movieId).stream().map(mapper::toDTO).toList();
+        return repository.getCommentByMovieId(movieId);
     }
 
     @Override
     public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
-        return repository.getListCommentByMovieIdUserId(userId, movieId).stream().map(mapper::toDTO).toList();
+        return repository.getListCommentByMovieIdUserId(userId,movieId)
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 }
 

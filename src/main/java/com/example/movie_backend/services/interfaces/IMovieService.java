@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 
-public interface IMovieService {
+public interface
+IMovieService {
 
     MovieDTO getById(Long id);
 
@@ -36,4 +37,6 @@ public interface IMovieService {
     void uploadMovieFile(Long id, MultipartFile file, String type);
 
     void uploadEpisodeFile(Long id, Long episodeId, MultipartFile poster, MultipartFile video);
+
+
 }

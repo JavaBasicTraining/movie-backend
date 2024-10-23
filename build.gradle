@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '17.0.12'
 
 configurations {
     developmentOnly
@@ -34,7 +34,11 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.keycloak:keycloak-spring-boot-starter:22.0.5'
+    implementation 'org.keycloak:keycloak-admin-client:22.0.5'
     implementation 'io.minio:minio:8.4.6'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     /**
      * MySql
      */

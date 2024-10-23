@@ -29,7 +29,6 @@ public class Genre implements Serializable {
     @Builder.Default
     @ManyToMany(mappedBy = "genres")
     @JsonIgnoreProperties(value = "genres", allowSetters = true) // ignore chứ k thì nó map lặp vô tận
-
     private Set<Movie> movies = new HashSet<>();
 
 }

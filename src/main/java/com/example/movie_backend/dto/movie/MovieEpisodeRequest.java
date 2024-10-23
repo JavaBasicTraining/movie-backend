@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,9 +38,7 @@ public class MovieEpisodeRequest {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long idCategory;
 
-    private Set<EpisodeDTO> episodes = new HashSet<>();
-
-//    private Set<Long> movieId;
+    private List<EpisodeDTO> episodes = new ArrayList<>();
 
     @JsonIgnore
     private MovieDTO movieDTO;

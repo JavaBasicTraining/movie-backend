@@ -9,7 +9,6 @@ import com.example.movie_backend.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -40,7 +39,6 @@ public class CategoryController implements ICategoryController {
     public ResponseEntity<List<CategoryDTO>> getListGenreByName(GetCategoriesFilter filter) {
         return ResponseEntity.ok(categoryService.getList(filter));
     }
-
 
     @Override
     public boolean delete(Long id) {

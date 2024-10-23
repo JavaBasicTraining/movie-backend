@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,11 +19,8 @@ import java.util.Optional;
 public class EvaluationController implements IEvaluationController {
 
     public final EvaluationService service;
-
     public final EvaluationRepository repository;
-
     public final EvaluationMapper mapper;
-
 
     @Override
     public ResponseEntity<EvaluationDTO> create(EvaluationDTO evaluation) {
@@ -65,10 +61,9 @@ public class EvaluationController implements IEvaluationController {
     }
 
     @GetMapping("/average/{movieId}")
-    public ResponseEntity<Float> Average(@PathVariable float movieId) {
+    public ResponseEntity<Float> average(@PathVariable float movieId) {
         return ResponseEntity.ok(service.average(movieId));
     }
-
 
     @GetMapping("numberOfReviews/{movieId}")
     public ResponseEntity<Long> numberOfReviews(@PathVariable Long movieId) {
@@ -77,5 +72,4 @@ public class EvaluationController implements IEvaluationController {
         } else
             return ResponseEntity.ok(repository.numberOfReviews(movieId));
     }
-
 }

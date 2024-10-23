@@ -8,7 +8,6 @@ import com.example.movie_backend.repository.GenreRepository;
 import com.example.movie_backend.services.GenreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -17,7 +16,6 @@ public class GenreController implements IGenreController {
     public final GenreService categoryService;
     public final GenreRepository repository;
     public final GenreMapper mapper;
-
 
     public GenreController(GenreService categoryService, GenreRepository repository, GenreMapper mapper) {
         this.categoryService = categoryService;
@@ -45,16 +43,9 @@ public class GenreController implements IGenreController {
         return ResponseEntity.ok(categoryService.getList(filter));
     }
 
-
     @Override
     public boolean delete(Long id) {
         ResponseEntity.ok(categoryService.delete(id));
         return true;
     }
-
-//    @GetMapping(path = {"/filter", "/filter/{categoryName}"})
-//    public ResponseEntity<Set<CategoryDTO>> filter(@PathVariable(required = false) String categoryName) {
-//        return ResponseEntity.ok(categoryService.filter(categoryName));
-//    }
-
 }

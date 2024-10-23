@@ -2,6 +2,8 @@ package com.example.movie_backend.minio.service;
 
 import com.example.movie_backend.minio.entity.FileInfo;
 import io.minio.errors.*;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,4 +19,8 @@ public interface IMinioService {
     List<FileInfo> getList();
 
     String getPreSignedLink(String object);
+
+    InputStreamResource chunkVideo(HttpHeaders headers);
+
+    long getFileSize(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 }

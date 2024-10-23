@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.sql.Struct;
+import java.util.Set;
+
 @Getter
 @SuperBuilder
 @NoArgsConstructor
 @JsonIgnoreProperties({"categoryDTOSet", "ids"})
 public class MovieDTOWithoutJoin extends MovieDTO {
-
-
+    private Set<String> genreName;
 }

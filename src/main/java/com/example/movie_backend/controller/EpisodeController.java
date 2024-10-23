@@ -7,14 +7,12 @@ import com.example.movie_backend.services.EpisodeService;
 import io.minio.errors.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 @RestController
-
 public class EpisodeController implements IEpisodeController {
 
     public final EpisodeService service;
@@ -24,7 +22,6 @@ public class EpisodeController implements IEpisodeController {
     }
 
     @Override
-
     public ResponseEntity<EpisodeDTO> create(CreateEpisodeRequest episode) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return ResponseEntity.ok(service.create(episode, episode.getFilePoster(), episode.getFileMovie()));
 

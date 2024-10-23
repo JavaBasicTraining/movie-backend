@@ -22,8 +22,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             WHERE (:keyword IS NULL
                    OR m.name IS NULL
                    OR m.name LIKE CONCAT('%', :keyword, '%'))
-              AND (:genre IS NULL OR c.name = :genre)
-              AND (:country IS NULL OR m.country = :country)
+              OR (:genre IS NULL OR c.name = :genre)
+              OR (:country IS NULL OR m.country = :country)
             """,
         nativeQuery = true
     )
@@ -47,18 +47,18 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Set<Movie> nominatedFilm();
 
     @Query(
-        value = """
-            SELECT distinct m.*
-            FROM movie_website.movie m
-            inner join movie_website.movie_genres mc
-            on m.id =mc.movie_id
-            inner join movie_website.genre c
-            on mc.genres_id = c .id
-            WHERE m.name LIKE CONCAT("%", :name ,"%")
-            """,
-        nativeQuery = true
+            value = """
+                   SELECT DISTINCT m.*
+                   FROM movie_website.movie m
+                   LEFT JOIN movie_website.movie_genres mc
+                       ON m.id = mc.movie_id
+                   LEFT JOIN movie_website.genre c
+                       ON mc.genres_id = c.id
+                   WHERE m.id = :movieId               
+                    """,
+            nativeQuery = true
     )
-    Optional<Movie> filterMovie(@Param("name") String name);
+    Optional<Movie> filterMovie(@Param("movieId") Long movieId);
 
 
 }
