@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.server.ServerWebExchange;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +49,11 @@ public class CustomSecurityConfiguration {
         return http.build();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     private void permitAll(HttpSecurity http) throws Exception {
         if (!Objects.isNull(commonProperties.getPermitAllPathPatterns())) {
             for (String path : commonProperties.getPermitAllPathPatterns()) {
@@ -63,14 +71,10 @@ public class CustomSecurityConfiguration {
 
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         http.cors(cors -> cors.configurationSource(source));
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

@@ -46,6 +46,8 @@ public class MovieDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY, required = false)
     private String videoUrl;
 
+    private String videoPresignedUrl;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
 

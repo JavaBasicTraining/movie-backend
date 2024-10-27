@@ -3,6 +3,7 @@ package com.example.movie_backend.services.interfaces;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.model.user.RegisterRequest;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.List;
 import java.util.Set;
@@ -17,4 +18,6 @@ public interface IUserService {
     void register(RegisterRequest request);
 
     Set<User> getUserAuthority();
+
+    UserDTO getUserFromJwt(Jwt jwt);
 }

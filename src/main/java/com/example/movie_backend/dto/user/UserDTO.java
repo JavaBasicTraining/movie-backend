@@ -18,6 +18,8 @@ import java.util.Set;
 public class UserDTO {
     private Long id;
     private String userName;
+    private String firstName;
+    private String lastName;
     private List<String> authorities;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Authority> authoritySet;
@@ -25,5 +27,8 @@ public class UserDTO {
     public UserDTO(User user) {
         this.id = user.getId();
         this.userName = user.getUsername();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.authorities = user.getAuthorities().stream().map(Authority::getName).toList();
     }
 }

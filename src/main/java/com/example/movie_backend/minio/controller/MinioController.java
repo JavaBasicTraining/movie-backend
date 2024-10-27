@@ -7,22 +7,22 @@ import com.example.movie_backend.minio.service.IMinioService;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
-import lombok.SneakyThrows;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -112,50 +112,65 @@ public class MinioController implements IMinioController {
 //    }
 
 
-    @SneakyThrows
+//    @GetMapping(value = "/video")
+//    public Flux<Void> streamVideo(@RequestParam("fileName") String fileName, ServerHttpResponse response) {
+//        try {
+//            InputStream videoStream = minioClient.getObject(
+//                    GetObjectArgs.builder()
+//                            .bucket(BUCKET_NAME)
+//                            .object(fileName)
+//                            .build()
+//            );
+//
+//            response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"");
+//
+//            return DataBufferUtils
+//                    .readInputStream(() -> videoStream, response.bufferFactory(), 1024)
+//                    .flatMap(dataBuffer -> response.writeWith(Mono.just(dataBuffer)))
+//                    .publishOn(Schedulers.boundedElastic())
+//                    .doOnTerminate(() -> {
+//                        try {
+//                            videoStream.close(); // Close InputStream after streaming
+//                        } catch (IOException e) {
+//                            throw new RuntimeException("Error closing video stream", e);
+//                        }
+//                    });
+//        } catch (Exception e) {
+//            return Flux.error(new RuntimeException("Error streaming video", e));
+//        }
+//    }
+
     @GetMapping(value = "/video")
-    public Flux<DataBuffer> streamVideo(@RequestParam String fileName, HttpServletResponse response) {
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        InputStream inputStream;
+    public Mono<ResponseEntity<Flux<DataBuffer>>> streamVideo(@RequestParam String fileName) {
         try {
-            inputStream = minioClient.getObject(
+            InputStream videoStream = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(BUCKET_NAME)
                             .object(fileName)
                             .build()
             );
 
-
-        } catch (Exception e) {
-            return Flux.error(new RuntimeException("Error fetching video from Minio", e));
-        }
-        return Flux.generate(
-                () -> inputStream,
-                (input, sink) -> {
-                    try {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead = input.read(buffer);
-                        if (bytesRead != -1) {
-                            byte[] data = Arrays.copyOf(buffer, bytesRead);
-                            DataBuffer dataBuffer = new DefaultDataBufferFactory().wrap(data);
-                            sink.next(dataBuffer);
-                        } else {
-                            sink.complete();
+            Flux<DataBuffer> dataBufferFlux = DataBufferUtils
+                    .readInputStream(() -> videoStream, new DefaultDataBufferFactory(), 1024)
+                    .doOnTerminate(() -> {
+                        try {
+                            videoStream.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error closing video stream", e);
                         }
-                    } catch (Exception e) {
-                        sink.error(e);
-                    }
-                    return input;
-                },
-                input -> {
-                    try {
-                        input.close();
-                    } catch (IOException e) {
-                      e.printStackTrace();
-                    }
-                }
-        );
+                    });
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("video/mp4"));
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"");
+
+            // Add Accept-Ranges header
+            headers.set(HttpHeaders.ACCEPT_RANGES, "bytes");
+
+            return Mono.just(ResponseEntity.ok().headers(headers).body(dataBufferFlux));
+        } catch (Exception e) {
+            return Mono.error(new RuntimeException("Error streaming video", e));
+        }
     }
-
-
 }

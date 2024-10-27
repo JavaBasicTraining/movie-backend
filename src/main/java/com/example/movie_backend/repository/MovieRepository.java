@@ -36,25 +36,25 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query(
         value = """
-            SELECT m.*
-            FROM movie_website.movie m
-            JOIN movie_website.evaluation e ON m.id = e.movie_id
-            ORDER BY e.star DESC
-            LIMIT 5;                  
-            """,
+                SELECT m.*
+                FROM movie_website.movie m
+                JOIN movie_website.evaluation e ON m.id = e.movie_id
+                ORDER BY e.star DESC
+                LIMIT 5;
+                """,
         nativeQuery = true
     )
     Set<Movie> nominatedFilm();
 
     @Query(
             value = """
-                   SELECT DISTINCT m.*
-                   FROM movie_website.movie m
-                   LEFT JOIN movie_website.movie_genres mc
-                       ON m.id = mc.movie_id
-                   LEFT JOIN movie_website.genre c
-                       ON mc.genres_id = c.id
-                   WHERE m.id = :movieId               
+                    SELECT DISTINCT m.*
+                    FROM movie_website.movie m
+                    LEFT JOIN movie_website.movie_genres mc
+                        ON m.id = mc.movie_id
+                    LEFT JOIN movie_website.genre c
+                        ON mc.genres_id = c.id
+                    WHERE m.id = :movieId
                     """,
             nativeQuery = true
     )
