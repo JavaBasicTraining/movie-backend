@@ -1,20 +1,25 @@
 package com.example.movie_backend.controller;
 
-import com.example.movie_backend.dto.user.UserDTO;
-import com.example.movie_backend.dto.user.UserMapper;
-import com.example.movie_backend.entity.User;
-import com.example.movie_backend.model.user.RegisterRequest;
-import com.example.movie_backend.repository.UserRepository;
-import com.example.movie_backend.services.interfaces.IUserService;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
+import com.example.movie_backend.dto.user.UserDTO;
+import com.example.movie_backend.dto.user.UserMapper;
+import com.example.movie_backend.entity.User;
+import com.example.movie_backend.model.user.RegisterRequest;
+import com.example.movie_backend.services.interfaces.IUserService;
 
 @RequestMapping("api/account")
 @RestController
@@ -22,12 +27,10 @@ public class AccountController {
 
     private final IUserService userService;
     public final UserMapper mapper;
-    private final UserRepository userRepository;
 
-    public AccountController(IUserService userService, UserMapper mapper, UserRepository userRepository) {
+    public AccountController(IUserService userService, UserMapper mapper) {
         this.userService = userService;
         this.mapper = mapper;
-        this.userRepository = userRepository;
     }
 
     @PostMapping("create")

@@ -6,6 +6,8 @@ import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,6 +50,7 @@ public class CommentDTO {
     @JsonIgnore
     private LikeCommentDTO likeComment;
 
+    @Builder.Default
     private List<CommentDTO> replies = new ArrayList<>();
 
     public CommentDTO(Comment comment, Long totalLikes) {

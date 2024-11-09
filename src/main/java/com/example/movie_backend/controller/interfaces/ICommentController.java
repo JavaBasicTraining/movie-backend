@@ -1,12 +1,18 @@
 package com.example.movie_backend.controller.interfaces;
 
-import com.example.movie_backend.dto.comment.CommentDTO;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.movie_backend.dto.comment.CommentDTO;
 
 @RequestMapping("/api/v1/comment")
 public interface ICommentController {
@@ -26,7 +32,7 @@ public interface ICommentController {
     ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long commentId);
 
     @GetMapping("getCommentByUserId")
-    ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId, @RequestParam Long movieId);
-
+    ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId,
+            @RequestParam Long movieId);
 
 }

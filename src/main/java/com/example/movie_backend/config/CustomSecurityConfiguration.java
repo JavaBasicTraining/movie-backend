@@ -1,5 +1,8 @@
 package com.example.movie_backend.config;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,12 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.springframework.web.server.ServerWebExchange;
-
-import java.util.List;
-import java.util.Objects;
 
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
