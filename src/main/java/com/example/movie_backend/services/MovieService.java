@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -88,7 +89,10 @@ public class MovieService implements IMovieService {
         if (episodeId == null) {
             return null;
         } else {
-            Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+            Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode()
+                    .stream()
+                    .map(item -> item.getContentType())
+                    .collect(Collectors.toSet());
             for (String content : contentPosterEpisode) {
                 if (isImage(content)) {
                     for (MultipartFile path : fileMovie.getFilePosterEpisode()) {
@@ -101,7 +105,10 @@ public class MovieService implements IMovieService {
                 }
             }
         }
-        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode().stream().map(item -> item.getContentType()).collect(Collectors.toSet());
+        Set<String> contentVideoEpisode = fileMovie.getFileMovieEpisode()
+                .stream()
+                .map(item -> item.getContentType())
+                .collect(Collectors.toSet());
         for (String content : contentVideoEpisode) {
             if (isVideo(content)) {
                 for (MultipartFile path : fileMovie.getFileMovieEpisode()) {
@@ -228,20 +235,21 @@ public class MovieService implements IMovieService {
     }
 
     public MovieDTO filterMovie(Long id) {
-        return repository.filterMovie(id).map(item -> {
-            MovieDTO movieDTO = mapper.toDTO(item);
-            if (item.getPosterUrl() != null && item.getVideoUrl() == null) {
-                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                movieDTO.setPosterUrl(linkPoster);
+        return repository.filterMovie(id)
+                .map(item -> {
+                    MovieDTO movieDTO = mapper.toDTO(item);
+                    if (item.getPosterUrl() != null) {
+                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                        movieDTO.setPosterUrl(linkPoster);
+                    }
 
-            } else if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
-                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                movieDTO.setPosterUrl(linkPoster);
-                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                movieDTO.setVideoUrl(linkVideo);
-            }
-            return movieDTO;
-        }).orElseThrow(() -> new BadRequestException("Movie not found"));
+                    if (item.getVideoUrl() != null) {
+                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                        movieDTO.setVideoPresignedUrl(linkVideo);
+                    }
+                    return movieDTO;
+                }).
+                orElseThrow(() -> new BadRequestException("Movie not found"));
 
 
     }

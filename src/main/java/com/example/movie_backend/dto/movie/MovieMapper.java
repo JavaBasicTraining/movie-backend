@@ -181,7 +181,7 @@ public class MovieMapper {
                 .id(entity.getId())
                 .nameMovie(entity.getNameMovie())
                 .posterUrl(entity.getPosterUrl())
-                .videoUrl(entity.getVideoUrl() == null ? null : entity.getVideoUrl())
+                .videoUrl(entity.getVideoUrl())
                 .viTitle(entity.getViTitle())
                 .enTitle(entity.getEnTitle())
                 .country(entity.getCountry())

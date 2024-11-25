@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
@@ -19,13 +20,13 @@ public class MovieController implements IMovieController {
 
     @Override
     public ResponseEntity<List<MovieDTOWithoutJoin>> query(
-        QueryMovieRequest request,
-        Pageable pageable
+            QueryMovieRequest request,
+            Pageable pageable
     ) {
         return ResponseEntity.ok(service.query(request, pageable).getContent());
     }
 
- @Override
+    @Override
     public ResponseEntity<MovieDTO> filterMovie(Long id) {
         return ResponseEntity.ok(service.filterMovie(id));
     }
