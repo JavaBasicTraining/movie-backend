@@ -110,11 +110,15 @@ public class EpisodeService implements IEpisodeService {
 
     @Override
     public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
-        return this.repository.getListEpisodeByMovieId(movieId)
-            .stream().map(this.mapper::toDTO)
-            .collect(Collectors.toSet());
-
+        Set<EpisodeDTO> episodeDTOS = repository.getListEpisodeByMovieId(movieId)
+                .stream()
+                .map(this.mapper::toDTO)
+                .collect(Collectors.toSet());
+        return episodeDTOS.stream()
+                .sorted(Comparator.comparing(EpisodeDTO::getEpisodeCount))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
+
 
     @Override
     public EpisodeDTO getEpisodeByMovieId(Long movieId, Long episodeCount) {

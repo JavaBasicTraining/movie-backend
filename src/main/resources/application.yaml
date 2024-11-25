@@ -71,6 +71,7 @@ common:
     - /api/account/info/**
     - /api/v1/evaluations/numberOfReviews/**
     - /api/v1/minio/video/**
+    - /api/v1/episode/getEpisodeByMovieId/**
 
   cors:
     origins:
