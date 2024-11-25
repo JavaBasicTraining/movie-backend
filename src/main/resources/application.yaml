@@ -22,7 +22,7 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:root}
+    password: ${DATABASE_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -50,8 +50,8 @@ spring:
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
-  accessKey: ${MINIO_ACCESS_KEY:minioadmin}
-  secretKey: ${MINIO_SECRET_KEY:minioadmin}
+  accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
+  secretKey: ${MINIO_SECRET_KEY:CHANGEME@123}
   fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
   expiredDefault: ${EXPIRED:60}
 
@@ -71,6 +71,7 @@ common:
     - /api/account/info/**
     - /api/v1/evaluations/numberOfReviews/**
     - /api/v1/minio/video/**
+    - /api/v1/episode/getEpisodeByMovieId/**
 
   cors:
     origins:
