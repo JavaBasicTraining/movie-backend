@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -86,6 +87,16 @@ public class MovieService implements IMovieService {
             throw new RuntimeException();
         }
 
+        if (isVideo(contentTypeMovie)) {
+            String trailerPath = "trailer" + "/" + fileMovie.getFileMovie().getOriginalFilename();
+            uploadByFile(fileMovie.getTrailer(), trailerPath);
+            movie.setId(movieId);
+            movie.setTrailerUrl(trailerPath);
+
+        }else {
+            throw new RuntimeException();
+        }
+
         if (episodeId == null) {
             return null;
         } else {
@@ -130,8 +141,12 @@ public class MovieService implements IMovieService {
             String object = "movies/" + movie.getId() + "/" + type + "/" + file.getOriginalFilename();
             if ("poster".equals(type)) {
                 movie.setPosterUrl(object);
-            } else {
+            } else  if ("video".equals(type))  {
                 movie.setVideoUrl(object);
+            }else
+            {
+                movie.setTrailerUrl(object);
+
             }
             repository.save(movie);
             uploadByFile(file, object);
@@ -187,6 +202,7 @@ public class MovieService implements IMovieService {
             MovieDTO movieDTO = mapper.toDTO(item);
             movieDTO.setPosterUrl(movieDTO.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getPosterUrl()));
             movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
+            movieDTO.setTrailerUrl(movieDTO.getTrailerUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getTrailerUrl()));
             List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
                 String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
                 String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl());
@@ -234,8 +250,8 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(Long id) {
-        return repository.filterMovie(id)
+    public MovieDTO filterMovie(String pathMovie ) {
+        return repository.filterMovie(pathMovie)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
                     if (item.getPosterUrl() != null) {
@@ -247,6 +263,11 @@ public class MovieService implements IMovieService {
                         String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
                         movieDTO.setVideoPresignedUrl(linkVideo);
                     }
+
+                    if (item.getTrailerUrl() != null) {
+                        String linkVideo = this.minioService.getPreSignedLink(item.getTrailerUrl());
+                        movieDTO.setTrailerUrl(linkVideo);
+                    }
                     return movieDTO;
                 }).
                 orElseThrow(() -> new BadRequestException("Movie not found"));
@@ -256,7 +277,14 @@ public class MovieService implements IMovieService {
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
         Movie movie = mapper.toUpdateMovieWithEpisodes(dto);
-        return mapper.toDTO(repository.save(movie));
+        movie.setPathMovie(
+                Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
+                        .replaceAll("\\p{M}", "")
+                        .toLowerCase()
+                        .replaceAll("\\s+", "-")
+                        .replace("đ", "d")
+                        .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+        );        return mapper.toDTO(repository.save(movie));
     }
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {

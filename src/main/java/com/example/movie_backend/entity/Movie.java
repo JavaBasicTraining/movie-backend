@@ -35,10 +35,12 @@ public class Movie implements Serializable {
         this.trailerUrl = trailerUrl;
         return trailerUrl;
     }
-
-    @Unique
     @Column(name = "name")
     private String nameMovie;
+
+    @Unique
+    @Column(name = "path")
+    private String pathMovie;
 
     @Column(name = "poster_url")
     private String posterUrl;

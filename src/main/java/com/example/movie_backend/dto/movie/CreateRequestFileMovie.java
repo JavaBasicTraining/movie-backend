@@ -17,6 +17,8 @@ public class CreateRequestFileMovie {
 
     private transient MultipartFile fileMovie;
 
+    private transient MultipartFile trailer;
+
     private transient Set<MultipartFile> filePosterEpisode;
 
     private transient Set<MultipartFile> fileMovieEpisode;
