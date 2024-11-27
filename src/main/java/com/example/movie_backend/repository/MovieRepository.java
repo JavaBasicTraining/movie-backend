@@ -54,11 +54,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                          ON m.id = mc.movie_id
                      LEFT JOIN movie_website.genre c
                          ON mc.genres_id = c.id
-                     WHERE m.path = :pathMovie
+                     WHERE m.path = :path
                     """,
             nativeQuery = true
     )
-    Optional<Movie> filterMovie(@Param("pathMovie") String pathMovie);
+    Optional<Movie> filterMovie(@Param("path") String path);
 
 
 }

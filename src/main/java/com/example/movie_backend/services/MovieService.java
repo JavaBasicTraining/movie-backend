@@ -139,15 +139,18 @@ public class MovieService implements IMovieService {
     public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
         try {
             String object = "movies/" + movie.getId() + "/" + type + "/" + file.getOriginalFilename();
-            if ("poster".equals(type)) {
-                movie.setPosterUrl(object);
-            } else  if ("video".equals(type))  {
-                movie.setVideoUrl(object);
-            }else
-            {
-                movie.setTrailerUrl(object);
-
+            switch (type) {
+                case "poster":
+                    movie.setPosterUrl(object);
+                    break;
+                case "video":
+                    movie.setVideoUrl(object);
+                    break;
+                default:
+                    movie.setTrailerUrl(object);
+                    break;
             }
+
             repository.save(movie);
             uploadByFile(file, object);
         } catch (Exception exception) {
@@ -250,8 +253,8 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(String pathMovie ) {
-        return repository.filterMovie(pathMovie)
+    public MovieDTO filterMovie(String path ) {
+        return repository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
                     if (item.getPosterUrl() != null) {
@@ -277,7 +280,7 @@ public class MovieService implements IMovieService {
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
         Movie movie = mapper.toUpdateMovieWithEpisodes(dto);
-        movie.setPathMovie(
+        movie.setPath(
                 Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
                         .replaceAll("\\p{M}", "")
                         .toLowerCase()

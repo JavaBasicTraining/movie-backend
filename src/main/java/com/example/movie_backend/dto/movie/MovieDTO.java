@@ -48,7 +48,7 @@ public class MovieDTO {
 
     private String trailerUrl;
 
-    private String pathMovie;
+    private String path;
 
     private String videoPresignedUrl;
 

@@ -30,6 +30,6 @@ public interface IMovieController {
         @ParameterObject Pageable pageable
     );
 
-    @GetMapping("{pathMovie}")
-    ResponseEntity<MovieDTO> filterMovie(@PathVariable String pathMovie);
+    @GetMapping("{path}")
+    ResponseEntity<MovieDTO> filterMovie(@PathVariable String path);
 }

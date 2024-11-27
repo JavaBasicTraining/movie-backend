@@ -40,7 +40,7 @@ public class Movie implements Serializable {
 
     @Unique
     @Column(name = "path")
-    private String pathMovie;
+    private String path;
 
     @Column(name = "poster_url")
     private String posterUrl;
