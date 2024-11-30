@@ -27,10 +27,10 @@ public interface IEpisodeController {
     @DeleteMapping("delete{id}")
     boolean delete(@RequestParam Long id);
 
-    @GetMapping("getEpisodeByMovieId/{movieId}")
+    @GetMapping("{movieId}")
     ResponseEntity<Set<EpisodeDTO>> getListEpisodeByMovieId(@PathVariable Long movieId);
 
-    @GetMapping("getEpisodeByMovieId/movieId/{movieId}/episode/{episodeCount}")
+    @GetMapping("movieId/{movieId}/episode/{episodeCount}")
     ResponseEntity<EpisodeDTO> getEpisodeByMovieId(@PathVariable Long movieId, @PathVariable Long episodeCount);
 
 }

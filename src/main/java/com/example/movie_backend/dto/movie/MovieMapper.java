@@ -106,6 +106,7 @@ public class MovieMapper {
                 .description(dto.getDescription())
                 .year(dto.getYear())
                 .country(dto.getCountry())
+                .episodes(convertEpisodes(dto.getEpisodes()))
                 .category(dto.getIdCategory() == null ? null : Category.builder()
                         .id(dto.getIdCategory())
                         .build())
@@ -203,6 +204,7 @@ public class MovieMapper {
                 .descriptions(episode.getDescriptions())
                 .videoUrl(episode.getVideoUrl())
                 .posterUrl(episode.getPosterUrl())
+                .tempId(episode.getTempId())
                 .build();
     }
 

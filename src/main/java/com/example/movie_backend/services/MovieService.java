@@ -91,7 +91,7 @@ public class MovieService implements IMovieService {
         } else {
             Set<String> contentPosterEpisode = fileMovie.getFilePosterEpisode()
                     .stream()
-                    .map(item -> item.getContentType())
+                    .map(item -> item.getContentType() )
                     .collect(Collectors.toSet());
             for (String content : contentPosterEpisode) {
                 if (isImage(content)) {
@@ -99,7 +99,11 @@ public class MovieService implements IMovieService {
                         String posterPathEpisode = "poster/" + path.getOriginalFilename();
                         uploadByFile(path, posterPathEpisode);
                         for (Long id : episodeId) {
-                            episodes.add(Episode.builder().id(id).movie(Movie.builder().id(movieId).build()).videoUrl(posterPathEpisode).build());
+                            episodes.add(Episode.builder()
+                                    .id(id)
+                                    .movie(Movie.builder()
+                                            .id(movieId).build())
+                                    .videoUrl(posterPathEpisode).build());
                         }
                     }
                 }
