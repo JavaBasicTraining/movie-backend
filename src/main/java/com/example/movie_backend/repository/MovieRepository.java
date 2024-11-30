@@ -13,6 +13,10 @@ import java.util.Set;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
+    @Query("SELECT COUNT(m) > 0 FROM Movie m WHERE m.path = :path")
+    boolean existsByPath(@Param("path") String path);
+
+
     @Query(
             value = """
                     SELECT DISTINCT m.*

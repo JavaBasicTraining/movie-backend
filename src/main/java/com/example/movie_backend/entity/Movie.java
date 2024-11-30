@@ -26,20 +26,12 @@ public class Movie implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public String setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-        return videoUrl;
-    }
 
-    public String setTrailerUrl(String trailerUrl) {
-        this.trailerUrl = trailerUrl;
-        return trailerUrl;
-    }
     @Column(name = "name")
     private String nameMovie;
 
     @Unique
-    @Column(name = "path")
+    @Column(name = "path", unique = true)
     private String path;
 
     @Column(name = "poster_url")
@@ -111,12 +103,6 @@ public class Movie implements Serializable {
         this.evaluations.add(evaluation);
     }
 
-
-    public Movie addEpisode(Episode episode) {
-        episode.setMovie(this);
-        this.episodes.add(episode);
-        return this;
-    }
 
     public Movie setEpisodes(List<Episode> episodes) {
         episodes.stream().forEach(episode -> {

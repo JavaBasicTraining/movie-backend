@@ -16,6 +16,7 @@ import io.minio.PutObjectArgs;
 import io.minio.errors.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -93,7 +94,7 @@ public class MovieService implements IMovieService {
             movie.setId(movieId);
             movie.setTrailerUrl(trailerPath);
 
-        }else {
+        } else {
             throw new RuntimeException();
         }
 
@@ -253,7 +254,7 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(String path ) {
+    public MovieDTO filterMovie(String path) {
         return repository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
@@ -280,15 +281,30 @@ public class MovieService implements IMovieService {
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
         Movie movie = mapper.toUpdateMovieWithEpisodes(dto);
-        movie.setPath(
-                Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
-                        .replaceAll("\\p{M}", "")
-                        .toLowerCase()
-                        .replaceAll("\\s+", "-")
-                        .replace("đ", "d")
-                        .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-        );        return mapper.toDTO(repository.save(movie));
+
+        if (movie.getPath() == null || movie.getPath().isEmpty()) {
+            String basePath = Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
+                    .replaceAll("\\p{M}", "")
+                    .replaceAll("[^a-zA-Z0-9\\s-]", "")
+                    .trim()
+                    .toLowerCase()
+                    .replaceAll("\\s+", "-")
+                    .replace("đ", "d");
+            String uniquePath = basePath;
+            int counter = 1;
+            while (repository.existsByPath(uniquePath)) {
+                uniquePath = basePath + "-" + counter;
+                counter++;
+            }
+            movie.setPath(uniquePath);
+        }
+        try {
+            return mapper.toDTO(repository.save(movie));
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Duplicate path detected: " + movie.getPath());
+        }
     }
+
 
     public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
         Movie movie = repository.findById(movieId)
