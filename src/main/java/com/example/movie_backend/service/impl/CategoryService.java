@@ -2,9 +2,9 @@ package com.example.movie_backend.service.impl;
 
 
 import com.example.movie_backend.controller.exception.BadRequestException;
-import com.example.movie_backend.controller.request.GetCategoriesFilter;
+import com.example.movie_backend.controller.dto.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.category.CategoryDTO;
-import com.example.movie_backend.dto.category.CategoryMapper;
+import com.example.movie_backend.mapper.CategoryMapper;
 import com.example.movie_backend.entity.Category;
 import com.example.movie_backend.repository.CategoryRepository;
 import com.example.movie_backend.service.ICategoryService;

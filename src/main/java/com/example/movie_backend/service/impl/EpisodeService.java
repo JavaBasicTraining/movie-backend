@@ -1,12 +1,11 @@
 package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
-import com.example.movie_backend.controller.request.CreateEpisodeRequest;
+import com.example.movie_backend.controller.dto.request.CreateEpisodeRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
-import com.example.movie_backend.dto.episode.EpisodeMapper;
+import com.example.movie_backend.mapper.EpisodeMapper;
 import com.example.movie_backend.entity.Episode;
-import com.example.movie_backend.minio.config.MinioProperties;
-import com.example.movie_backend.minio.service.MinioService;
+import com.example.movie_backend.config.minio.MinioProperties;
 import com.example.movie_backend.repository.EpisodeRepository;
 import com.example.movie_backend.service.IEpisodeService;
 import io.minio.MinioClient;

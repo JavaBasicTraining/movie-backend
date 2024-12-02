@@ -2,7 +2,7 @@ package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.comment.CommentDTO;
-import com.example.movie_backend.dto.comment.CommentMapper;
+import com.example.movie_backend.mapper.CommentMapper;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.service.ICommentService;

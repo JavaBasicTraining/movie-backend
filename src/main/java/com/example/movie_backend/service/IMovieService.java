@@ -1,6 +1,6 @@
 package com.example.movie_backend.service;
 
-import com.example.movie_backend.controller.request.QueryMovieRequest;
+import com.example.movie_backend.controller.dto.request.QueryMovieRequest;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
 import com.example.movie_backend.dto.movie.MovieEpisodeRequest;

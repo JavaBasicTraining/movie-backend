@@ -1,6 +1,6 @@
 package com.example.movie_backend.service;
 
-import com.example.movie_backend.controller.request.GetCategoriesFilter;
+import com.example.movie_backend.controller.dto.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.category.CategoryDTO;
 
 import java.util.List;

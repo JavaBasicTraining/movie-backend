@@ -1,6 +1,6 @@
 package com.example.movie_backend.service;
 
-import com.example.movie_backend.controller.request.CreateEpisodeRequest;
+import com.example.movie_backend.controller.dto.request.CreateEpisodeRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 import io.minio.errors.*;
 import org.springframework.web.multipart.MultipartFile;

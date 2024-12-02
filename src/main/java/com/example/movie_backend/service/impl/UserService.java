@@ -1,7 +1,7 @@
 package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.dto.user.UserDTO;
-import com.example.movie_backend.dto.user.UserMapper;
+import com.example.movie_backend.mapper.UserMapper;
 import com.example.movie_backend.entity.Authority;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.repository.UserRepository;

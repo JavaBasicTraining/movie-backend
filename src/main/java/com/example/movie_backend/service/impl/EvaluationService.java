@@ -2,7 +2,7 @@ package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
-import com.example.movie_backend.dto.evaluation.EvaluationMapper;
+import com.example.movie_backend.mapper.EvaluationMapper;
 import com.example.movie_backend.entity.Evaluation;
 import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.repository.EvaluationRepository;
