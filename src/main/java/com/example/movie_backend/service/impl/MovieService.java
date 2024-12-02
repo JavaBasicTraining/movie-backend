@@ -141,8 +141,8 @@ public class MovieService implements IMovieService {
         });
     }
 
-    public MovieDTO filterMovie(Long id) {
-        return movieRepository.filterMovie(id)
+    public MovieDTO filterMovie(String path) {
+        return movieRepository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
                     if (item.getPosterUrl() != null) {

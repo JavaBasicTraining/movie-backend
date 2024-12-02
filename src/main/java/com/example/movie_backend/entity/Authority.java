@@ -17,7 +17,6 @@ import java.io.Serializable;
 @Entity
 @SuperBuilder(toBuilder = true)
 @Table(name = "authority")
-
 public class Authority implements Serializable {
     @NotNull
     @Size(max = 50)
