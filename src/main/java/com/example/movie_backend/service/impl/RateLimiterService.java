@@ -1,4 +1,4 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

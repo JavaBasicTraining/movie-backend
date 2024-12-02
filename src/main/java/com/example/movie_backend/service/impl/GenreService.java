@@ -1,4 +1,4 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.request.GetCategoriesFilter;
@@ -8,13 +8,13 @@ import com.example.movie_backend.entity.Genre;
 import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.repository.GenreRepository;
 import com.example.movie_backend.repository.MovieRepository;
-import com.example.movie_backend.services.interfaces.IGenreService;
+import com.example.movie_backend.service.IGenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,11 +58,11 @@ public class GenreService implements IGenreService {
     public List<GenreDTO> getList(GetCategoriesFilter filter) {
         return repository.filterGenre(filter.getSearchTerm(), filter.getExcludeIds()).stream()
             .map(mapper::toDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
     public Boolean delete(Long id) {
-        return null;
+        return Boolean.FALSE;
     }
 }

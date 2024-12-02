@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.entity.User;
-import com.example.movie_backend.model.user.RegisterRequest;
-import com.example.movie_backend.services.interfaces.IUserService;
+import com.example.movie_backend.service.IUserService;
 
 @RequestMapping("api/account")
 @RestController
@@ -36,12 +35,6 @@ public class AccountController {
     @PostMapping("create")
     public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO request) {
         return ResponseEntity.ok(userService.create(request));
-    }
-
-    @PostMapping("register")
-    public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
-        userService.register(request);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("getListUser")

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.movie_backend.controller.interfaces.ILikeCommentController;
 import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
-import com.example.movie_backend.services.LikeCommentService;
+import com.example.movie_backend.service.impl.LikeCommentService;
 
 import lombok.AllArgsConstructor;
 

@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -28,5 +27,5 @@ public class GenreDTO {
     private List<MovieDTO> movies;
 
     @Builder.Default
-    private Set<Long> movieIds = new HashSet<>();
+    private List<Long> movieIds = new ArrayList<>();
 }

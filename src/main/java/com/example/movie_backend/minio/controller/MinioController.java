@@ -1,11 +1,14 @@
 package com.example.movie_backend.minio.controller;
 
+import com.example.movie_backend.controller.exception.ServerErrorException;
+import com.example.movie_backend.minio.config.MinioProperties;
 import com.example.movie_backend.minio.entity.FileInfo;
 import com.example.movie_backend.minio.entity.UploadByFile;
 import com.example.movie_backend.minio.entity.UploadByLink;
 import com.example.movie_backend.minio.service.IMinioService;
-import com.example.movie_backend.services.RateLimiterService;
-import com.example.movie_backend.services.VideoTokenService;
+import com.example.movie_backend.service.impl.RateLimiterService;
+import com.example.movie_backend.service.impl.VideoTokenService;
+import com.example.movie_backend.util.ClientIpUtil;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.StatObjectArgs;
@@ -39,9 +42,9 @@ public class MinioController implements IMinioController {
     private final MinioClient minioClient;
     private final VideoTokenService tokenService;
     private final RateLimiterService rateLimiterService;
+    private final MinioProperties minioProperties;
 
-    private static final String BUCKET_NAME = "movie";
-    private static final long CHUNK_SIZE = 1024 * 1024; // 1MB
+    private static final long CHUNK_SIZE = 1024L * 1024L; // 1MB
 
     @Override
     public ResponseEntity<List<FileInfo>> getList() {
@@ -56,23 +59,24 @@ public class MinioController implements IMinioController {
                             request.getLink(),
                             request.getType().getPath()));
         } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException
-                | NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException
-                | InternalException e) {
-            throw new RuntimeException(e);
+                 | NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException
+                 | InternalException e) {
+            log.error("Error when update by link: {}", e.getMessage());
+            throw new ServerErrorException(e.getMessage());
         }
     }
 
     @Override
     public ResponseEntity<FileInfo> uploadByFile(UploadByFile request) {
         try {
-            return ResponseEntity.ok(
-                    iMinioService.uploadByFile(
-                            request.getFile(),
-                            request.getType().getPath()));
+            String objectName = request.getType().getPath() + request.getFile().getOriginalFilename();
+            FileInfo fileInfo = iMinioService.uploadByFile(request.getFile(), objectName);
+            return ResponseEntity.ok(fileInfo);
         } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException
-                | NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException
-                | InternalException e) {
-            throw new RuntimeException(e);
+                 | NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException
+                 | InternalException e) {
+            log.error("Error when update by file: {}", e.getMessage());
+            throw new ServerErrorException(e.getMessage());
         }
     }
 
@@ -94,7 +98,7 @@ public class MinioController implements IMinioController {
 
     /**
      * Stream video content with support for range requests and security measures
-     * 
+     *
      * @param fileName    Name of the video file to stream
      * @param token       Security token for video access
      * @param rangeHeader HTTP Range header for partial content requests
@@ -114,7 +118,7 @@ public class MinioController implements IMinioController {
         }
 
         // Check rate limiting based on client IP to prevent abuse
-        String clientIp = getClientIp(request);
+        String clientIp = ClientIpUtil.getClientIp(request);
         if (!rateLimiterService.allowRequest(clientIp)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
@@ -123,7 +127,7 @@ public class MinioController implements IMinioController {
             // Get video file metadata from MinIO
             StatObjectResponse stat = minioClient.statObject(
                     StatObjectArgs.builder()
-                            .bucket(BUCKET_NAME)
+                            .bucket(minioProperties.getBucket())
                             .object(fileName)
                             .build());
 
@@ -148,7 +152,7 @@ public class MinioController implements IMinioController {
 
             // Configure MinIO object retrieval for the specified range
             GetObjectArgs getObjectArgs = GetObjectArgs.builder()
-                    .bucket(BUCKET_NAME)
+                    .bucket(minioProperties.getBucket())
                     .object(fileName)
                     .offset(rangeStart)
                     .length(contentLength)
@@ -173,8 +177,9 @@ public class MinioController implements IMinioController {
                         outputStream.flush();
                     }
                 } catch (ServerException | InsufficientDataException | ErrorResponseException | NoSuchAlgorithmException
-                        | InvalidKeyException | InvalidResponseException | XmlParserException | InternalException e) {
-                    throw new RuntimeException(e);
+                         | InvalidKeyException | InvalidResponseException | XmlParserException | InternalException e) {
+                    log.error("Error when streaming video to client: {}", e.getMessage());
+                    throw new ServerErrorException(e.getMessage());
                 }
             };
 
@@ -185,49 +190,5 @@ public class MinioController implements IMinioController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    /**
-     * Retrieves the actual client IP address by checking various HTTP headers
-     * This method handles requests that may come through proxies or load balancers
-     * 
-     * @param request The HttpServletRequest object containing request information
-     * @return The client's IP address as a String
-     */
-    public String getClientIp(HttpServletRequest request) {
-        // Check X-Forwarded-For header first (standard header for identifying
-        // originating IP)
-        // Format: client, proxy1, proxy2, ...
-        String ip = request.getHeader("X-Forwarded-For");
-
-        // If X-Forwarded-For is not available, try Proxy-Client-IP
-        // Used by some proxy servers
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-
-        // Try WebLogic proxy header if previous attempts failed
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-
-        // Check HTTP_CLIENT_IP header
-        // Less common but sometimes used
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-
-        // Try alternative forwarded header format
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-
-        // If all proxy headers failed, get the direct remote address
-        // This will be the actual connecting IP if no proxy is involved
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-
-        return ip;
     }
 }

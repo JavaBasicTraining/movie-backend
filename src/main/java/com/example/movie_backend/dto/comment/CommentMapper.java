@@ -7,7 +7,6 @@ import com.example.movie_backend.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 public class CommentMapper {

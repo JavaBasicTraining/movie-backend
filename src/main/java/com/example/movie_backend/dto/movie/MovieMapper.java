@@ -122,24 +122,6 @@ public class MovieMapper {
         return movie;
     }
 
-    public Movie toEntity(MovieDTO dto, Long id) {
-        return Movie.builder()
-                .nameMovie(dto.getNameMovie())
-                .viTitle(dto.getViTitle())
-                .enTitle(dto.getEnTitle())
-                .description(dto.getDescription())
-                .posterUrl(dto.getPosterUrl())
-                .year(dto.getYear())
-                .country(dto.getCountry())
-                .videoUrl(dto.getVideoUrl() == null ? null : dto.getVideoUrl())
-                .category(convertCategory(dto.getCategory()))
-                .genres(convertGenresIds(dto.getIdGenre()))
-                .comments(convertCommentIds(dto.getIdComment()))
-                .evaluations(convertEvaluations(dto.getIdEvaluation()))
-                .episodes(convertEpisodes(dto.getEpisodes()))
-                .build();
-    }
-
     public Movie toEntity(MovieDTO dto, String name) {
         return Movie
                 .builder()
@@ -177,6 +159,10 @@ public class MovieMapper {
 
 
     public MovieDTO toDTO(Movie entity) {
+        List<EpisodeDTO> episodes = Objects.isNull(entity.getEpisodes()) ? null : entity.getEpisodes().stream()
+                .map(this::toEpisodeDTO)
+                .toList();
+
         return MovieDTO.builder()
                 .id(entity.getId())
                 .nameMovie(entity.getNameMovie())
@@ -189,9 +175,7 @@ public class MovieMapper {
                 .description(entity.getDescription())
                 .category(convertCategoryToDTO(entity.getCategory()))
                 .genres(convertGenresToDTO(entity.getGenres()))
-                .episodes(entity.getEpisodes() == null ? null : entity.getEpisodes().stream()
-                        .map(this::toEpisodeDTO)
-                        .collect(Collectors.toList()))
+                .episodes(episodes)
                 .build();
     }
 
@@ -204,10 +188,6 @@ public class MovieMapper {
                 .videoUrl(episode.getVideoUrl())
                 .posterUrl(episode.getPosterUrl())
                 .build();
-    }
-
-    public Long convertCategoryIdToDTO(Category category) {
-        return category == null ? null : category.getId();
     }
 
     public Set<Long> convertEvaluationIdsToDTO(Set<Evaluation> evaluations) {

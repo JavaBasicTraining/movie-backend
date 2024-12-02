@@ -3,7 +3,7 @@ package com.example.movie_backend.controller;
 import com.example.movie_backend.controller.interfaces.IEpisodeController;
 import com.example.movie_backend.controller.request.CreateEpisodeRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
-import com.example.movie_backend.services.EpisodeService;
+import com.example.movie_backend.service.impl.EpisodeService;
 import io.minio.errors.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

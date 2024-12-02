@@ -1,4 +1,4 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
@@ -7,7 +7,7 @@ import com.example.movie_backend.entity.Evaluation;
 import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.repository.EvaluationRepository;
 import com.example.movie_backend.repository.MovieRepository;
-import com.example.movie_backend.services.interfaces.IEvaluationService;
+import com.example.movie_backend.service.IEvaluationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

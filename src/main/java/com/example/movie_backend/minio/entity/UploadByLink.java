@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class UploadByLink {
-
     @NotNull
     private String link;
 

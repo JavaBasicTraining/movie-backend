@@ -1,25 +1,18 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
-
-import com.example.movie_backend.controller.exception.ConflictDataException;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.dto.user.UserMapper;
 import com.example.movie_backend.entity.Authority;
 import com.example.movie_backend.entity.User;
-import com.example.movie_backend.model.user.RegisterRequest;
-import com.example.movie_backend.repository.AuthorityRepository;
 import com.example.movie_backend.repository.UserRepository;
-import com.example.movie_backend.services.interfaces.IUserService;
+import com.example.movie_backend.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,8 +21,6 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper mapper;
 
     @Override
@@ -51,13 +42,8 @@ public class UserService implements IUserService {
                 .orElse(null);
     }
 
-
     @Override
-    public Set<User> getUserAuthority() {
-        return userRepository.getUserAuthority();
-    }
-
-    @Override
+    @SuppressWarnings("unchecked")
     public UserDTO getUserFromJwt(Jwt jwt) {
         String username = jwt.getClaimAsString("preferred_username");
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
@@ -69,7 +55,7 @@ public class UserService implements IUserService {
             user.setAuthorities(
                     roles.stream().map(Authority::new).collect(Collectors.toSet())
             );
-        }else {
+        } else {
             user = new User();
             user.setUsername(username);
             user.setAuthorities(roles.stream().map(Authority::new).collect(Collectors.toSet()));
@@ -79,32 +65,5 @@ public class UserService implements IUserService {
         }
 
         return new UserDTO(user);
-    }
-
-    @Override
-    public void register(RegisterRequest request) {
-        // check if existing
-        User exitedUser = userRepository.findByUsername(request.getUsername()).orElse(null);
-        if (Objects.nonNull(exitedUser)) {
-            throw new ConflictDataException("This user is existed!");
-        }
-        User user = User.builder()
-                .username(request.getUsername())
-                .passwordHash(
-                        passwordEncoder.encode(request.getPassword())
-                )
-                .firstName(request.getFistName())
-                .lastName(request.getLastName())
-                .authorities(
-                        request.getAuthorities()
-                                .stream()
-                                .map(
-                                        authority -> authorityRepository.findById(authority)
-                                                .orElse(new Authority("User"))
-                                )
-                                .collect(Collectors.toSet())
-                )
-                .build();
-        this.userRepository.save(user);
     }
 }

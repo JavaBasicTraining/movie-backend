@@ -5,7 +5,7 @@ import com.example.movie_backend.controller.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.dto.genre.GenreMapper;
 import com.example.movie_backend.repository.GenreRepository;
-import com.example.movie_backend.services.GenreService;
+import com.example.movie_backend.service.impl.GenreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;

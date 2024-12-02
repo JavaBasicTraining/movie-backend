@@ -2,7 +2,7 @@ package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.IMoviePackageController;
 import com.example.movie_backend.dto.moviepakage.MoviePackageDTO;
-import com.example.movie_backend.services.MoviePackageService;
+import com.example.movie_backend.service.impl.MoviePackageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

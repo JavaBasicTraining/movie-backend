@@ -13,12 +13,11 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class CreateRequestFileMovie {
-    private transient MultipartFile filePoster;
+    private MultipartFile filePoster;
 
-    private transient MultipartFile fileMovie;
+    private MultipartFile fileMovie;
 
-    private transient Set<MultipartFile> filePosterEpisode;
+    private Set<MultipartFile> filePosterEpisode;
 
-    private transient Set<MultipartFile> fileMovieEpisode;
-
+    private Set<MultipartFile> fileMovieEpisode;
 }

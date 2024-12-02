@@ -1,12 +1,11 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.dto.comment.CommentMapper;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.repository.CommentRepository;
-import com.example.movie_backend.repository.MovieRepository;
-import com.example.movie_backend.services.interfaces.ICommentService;
+import com.example.movie_backend.service.ICommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class CommentService implements ICommentService {
 
     public final CommentMapper mapper;
     public final CommentRepository repository;
-    public final MovieRepository movieRepository;
 
     @Override
     @Transactional
@@ -40,10 +38,10 @@ public class CommentService implements ICommentService {
     @Override
     public CommentDTO getById(Long id) {
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
-            .orElseThrow(
-                () -> new BadRequestException("Movie not found")
-            );
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
     }
 
     @Override
@@ -59,7 +57,7 @@ public class CommentService implements ICommentService {
 
     @Override
     public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
-        return repository.getListCommentByMovieIdUserId(userId,movieId)
+        return repository.getListCommentByMovieIdUserId(userId, movieId)
                 .stream()
                 .map(mapper::toDTO)
                 .toList();

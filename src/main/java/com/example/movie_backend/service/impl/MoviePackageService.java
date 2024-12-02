@@ -1,11 +1,11 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.moviepakage.MoviePackageDTO;
 import com.example.movie_backend.dto.moviepakage.MoviePackageMapper;
 import com.example.movie_backend.entity.MoviePackage;
 import com.example.movie_backend.repository.MoviePackageRepository;
-import com.example.movie_backend.services.interfaces.IMoviePackageService;
+import com.example.movie_backend.service.IMoviePackageService;
 import org.springframework.stereotype.Service;
 
 @Service

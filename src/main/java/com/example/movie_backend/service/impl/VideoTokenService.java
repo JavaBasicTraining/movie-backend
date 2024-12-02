@@ -1,5 +1,6 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
+import com.example.movie_backend.controller.exception.ServerErrorException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,7 +29,7 @@ public class VideoTokenService {
                     .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                     .compact();
         } catch (Exception e) {
-            throw new RuntimeException("Error generating token", e);
+            throw new ServerErrorException("Error generating token", e);
         }
     }
 
@@ -39,7 +40,6 @@ public class VideoTokenService {
                     .parseClaimsJws(token)
                     .getBody();
 
-            // Kiểm tra fileName và thời hạn
             return claims.getSubject().equals(fileName) &&
                     !claims.getExpiration().before(new Date());
         } catch (Exception e) {

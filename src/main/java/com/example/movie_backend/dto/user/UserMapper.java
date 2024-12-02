@@ -30,7 +30,7 @@ public class UserMapper {
             .authorities(
                 entity.getAuthorities()
                     .stream()
-                    .map(nameAuthority -> nameAuthority.getName())
+                    .map(Authority::getName)
                     .toList())
             .build();
     }

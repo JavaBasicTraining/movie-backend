@@ -5,7 +5,7 @@ import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.evaluation.EvaluationMapper;
 import com.example.movie_backend.entity.Evaluation;
 import com.example.movie_backend.repository.EvaluationRepository;
-import com.example.movie_backend.services.EvaluationService;
+import com.example.movie_backend.service.impl.EvaluationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,9 +50,8 @@ public class EvaluationController implements IEvaluationController {
     public ResponseEntity<EvaluationDTO> getEvaluation(
         @PathVariable("userId") Long userId,
         @PathVariable("movieId") Long movieId) {
-
         Optional<Evaluation> evaluationOptional = repository.findByEvaluationByUserId(userId, movieId);
-        if (!evaluationOptional.isPresent() && evaluationOptional.isEmpty()) {
+        if (evaluationOptional.isEmpty()) {
             return null;
         }
         Evaluation evaluation = evaluationOptional.get();

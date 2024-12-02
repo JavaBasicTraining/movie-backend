@@ -22,10 +22,10 @@ public interface IEpisodeController {
     ResponseEntity<EpisodeDTO> update(@ModelAttribute @Valid CreateEpisodeRequest episode, @RequestParam Long id);
 
     @GetMapping("getById/{id}")
-    ResponseEntity<EpisodeDTO> getById(@RequestParam Long id);
+    ResponseEntity<EpisodeDTO> getById(@PathVariable Long id);
 
-    @DeleteMapping("delete{id}")
-    boolean delete(@RequestParam Long id);
+    @DeleteMapping("delete/{id}")
+    boolean delete(@PathVariable Long id);
 
     @GetMapping("{movieId}")
     ResponseEntity<Set<EpisodeDTO>> getListEpisodeByMovieId(@PathVariable Long movieId);

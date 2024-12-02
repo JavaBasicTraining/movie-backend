@@ -5,7 +5,7 @@ import com.example.movie_backend.controller.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.category.CategoryDTO;
 import com.example.movie_backend.dto.category.CategoryMapper;
 import com.example.movie_backend.repository.CategoryRepository;
-import com.example.movie_backend.services.CategoryService;
+import com.example.movie_backend.service.impl.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

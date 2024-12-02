@@ -1,4 +1,4 @@
-package com.example.movie_backend.services;
+package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
@@ -11,13 +11,12 @@ import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.repository.LikeCommentRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.repository.UserRepository;
-import com.example.movie_backend.services.interfaces.ILikeCommentService;
+import com.example.movie_backend.service.ILikeCommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -60,18 +59,11 @@ public class LikeCommentService implements ILikeCommentService {
     }
 
     @Override
-    public LikeCommentDTO findById(Long id) {
-        return repository.findById(id)
-                .map(this.mapper::toDTO)
-                .orElseThrow(() -> new BadRequestException("LikeComment not found"));
-    }
-
-    @Override
     public List<LikeCommentDTO> findLikeCommentByUserIdAndMovieId(Long movieId, Long userId) {
         return repository.findLikeCommentByUserIdAndMovieId(movieId, userId)
                 .stream()
                 .map(mapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

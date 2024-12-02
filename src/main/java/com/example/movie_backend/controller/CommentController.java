@@ -2,7 +2,7 @@ package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.interfaces.ICommentController;
 import com.example.movie_backend.dto.comment.CommentDTO;
-import com.example.movie_backend.services.CommentService;
+import com.example.movie_backend.service.impl.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
