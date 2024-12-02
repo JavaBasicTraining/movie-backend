@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "like_comment")
 @Entity
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class LikeComment {
+public class LikeComment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

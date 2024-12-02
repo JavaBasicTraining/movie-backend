@@ -24,6 +24,4 @@ public class CommonProperties {
     public static class Cors {
         private List<String> origins;
     }
-
-
 }

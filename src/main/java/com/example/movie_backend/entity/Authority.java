@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder(toBuilder = true)
 @Table(name = "authority")
 
-public class Authority {
+public class Authority implements Serializable {
     @NotNull
     @Size(max = 50)
     @Id

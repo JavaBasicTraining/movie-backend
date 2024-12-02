@@ -1,6 +1,6 @@
 package com.example.movie_backend.entity;
 
-import com.example.movie_backend.entity.enumerate.MoviePackageType;
+import com.example.movie_backend.enumerate.MoviePackageType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
