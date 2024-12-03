@@ -4,7 +4,7 @@ import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RequestMapping("/api/v1/evaluations")
 public interface IEvaluationController {

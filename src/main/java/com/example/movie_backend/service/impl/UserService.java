@@ -43,6 +43,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UserDTO getUser(Long id) {
+        return this.userRepository.findById(id)
+                .map(mapper::toDTO)
+                .orElse(null);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public UserDTO getUserFromJwt(Jwt jwt) {
         String username = jwt.getClaimAsString("preferred_username");

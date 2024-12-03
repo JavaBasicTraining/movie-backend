@@ -1,15 +1,15 @@
 package com.example.movie_backend.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter
@@ -17,7 +17,6 @@ import java.io.Serializable;
 @Entity
 @SuperBuilder(toBuilder = true)
 @Table(name = "authority")
-
 public class Authority implements Serializable {
     @NotNull
     @Size(max = 50)

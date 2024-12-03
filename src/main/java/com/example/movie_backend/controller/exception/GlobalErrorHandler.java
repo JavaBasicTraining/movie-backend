@@ -9,7 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Component
 @ControllerAdvice
-public class ErrorHandler {
+public class GlobalErrorHandler {
 
     @ExceptionHandler(ConflictDataException.class)
     public ResponseEntity<Object> handleConflictDataException(ConflictDataException exception) {
@@ -19,5 +19,11 @@ public class ErrorHandler {
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleBadRequest(HttpClientErrorException exception) {
         return ResponseEntity.status(HttpStatus.valueOf(400)).body("Bad Request: " + exception.getMessage());
+    }
+
+    @ExceptionHandler(ServerErrorException.class)
+    public ResponseEntity<Object> handleServerErrorException(ServerErrorException exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("There are something went wrong: " + exception.getMessage());
     }
 }

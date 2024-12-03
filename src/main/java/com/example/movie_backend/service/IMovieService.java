@@ -11,9 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 
-public interface
-IMovieService {
-
+public interface IMovieService {
     MovieDTO getById(Long id);
 
     MovieDTO createWithEpisode(MovieEpisodeRequest dto);

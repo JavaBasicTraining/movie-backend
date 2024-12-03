@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Movie implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Unique
@@ -87,7 +87,7 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
     private List<Episode> episodes = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;

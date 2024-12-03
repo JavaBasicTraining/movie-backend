@@ -1,6 +1,6 @@
 package com.example.movie_backend.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 public class RatingMovie {
     @Id

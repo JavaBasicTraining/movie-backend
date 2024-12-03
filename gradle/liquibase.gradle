@@ -1,0 +1,95 @@
+import org.codehaus.groovy.runtime.GStringImpl
+
+def liquibaseGroup = 'Liquibase'
+
+ext {
+    changeLogDir = 'src/main/resources/liquibase/changelog'
+    masterChangeLogFile = 'src/main/resources/liquibase/master.xml'
+    diffChangelogFile = "${changeLogDir}/" + new Date().format("yyyyMMddHHmmss") + "_changelog.mysql.sql" as GStringImpl
+}
+
+tasks.register('createChangelogDir') {
+    group = liquibaseGroup
+    description = 'Create changelog directory if it does not exist'
+
+    doLast {
+        file(changeLogDir).mkdirs()
+    }
+}
+
+tasks.register('liquibaseGenerateDiffChangelog', JavaExec) {
+    group = liquibaseGroup
+    description = 'Generate the changelog between entity and database'
+
+    dependsOn createChangelogDir
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'liquibase.integration.commandline.Main'
+
+    args "--changeLogFile=${diffChangelogFile}"
+    args "--url=$mysqlUrl"
+    args "--username=$mysqlUsername"
+    args "--password=$mysqlPassword"
+    args "--referenceUrl=hibernate:spring:com.example.movie_backend.entity*?dialect=org.hibernate.dialect.MySQL8Dialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl"
+    args "--defaultSchemaName=$defaultSchemaName"
+    args "--classpath=${"$buildDir/classes/java/main"}"
+    args "--driver=com.mysql.cj.jdbc.Driver"
+    args "diffChangeLog"
+}
+
+tasks.register('liquibaseUpdate', JavaExec) {
+    group = liquibaseGroup
+    description = 'Update database with latest changes'
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'liquibase.integration.commandline.Main'
+
+    args "--changeLogFile=${project.ext.masterChangeLogFile}"
+    args "--url=$mysqlUrl"
+    args "--username=$mysqlUsername"
+    args "--password=$mysqlPassword"
+    args "update"
+}
+
+tasks.register('liquibaseRollbackCount', JavaExec) {
+    group = liquibaseGroup
+    description = 'Rollback the last n changes'
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'liquibase.integration.commandline.Main'
+
+    args "--changeLogFile=${project.ext.masterChangeLogFile}"
+    args "--url=$mysqlUrl"
+    args "--username=$mysqlUsername"
+    args "--password=$mysqlPassword"
+    args "rollbackCount"
+    args "1"
+}
+
+tasks.register('liquibaseStatus', JavaExec) {
+    group = liquibaseGroup
+    description = 'Show status of database changes'
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'liquibase.integration.commandline.Main'
+
+    args "--changeLogFile=${project.ext.masterChangeLogFile}"
+    args "--url=$mysqlUrl"
+    args "--username=$mysqlUsername"
+    args "--password=$mysqlPassword"
+    args "status"
+}
+
+tasks.register('liquibaseValidate', JavaExec) {
+    group = liquibaseGroup
+    description = 'Validate the changelog for errors'
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'liquibase.integration.commandline.Main'
+
+    args "--changeLogFile=${project.ext.masterChangeLogFile}"
+    args "--url=$mysqlUrl"
+    args "--username=$mysqlUsername"
+    args "--password=$mysqlPassword"
+    args "validate"
+}

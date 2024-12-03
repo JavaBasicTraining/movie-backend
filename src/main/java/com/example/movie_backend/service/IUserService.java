@@ -13,5 +13,7 @@ public interface IUserService {
 
     UserDTO getUser(String userName);
 
+    UserDTO getUser(Long id);
+
     UserDTO getUserFromJwt(Jwt jwt);
 }

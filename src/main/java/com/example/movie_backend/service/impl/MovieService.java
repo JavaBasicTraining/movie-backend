@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
+import static com.example.movie_backend.constant.SpecialCharacter.SLASH;
 
 @Slf4j
 @Service

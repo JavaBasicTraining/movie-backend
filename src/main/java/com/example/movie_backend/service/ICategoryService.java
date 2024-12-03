@@ -15,5 +15,4 @@ public interface ICategoryService {
     List<CategoryDTO> getList(GetCategoriesFilter filter);
 
     Boolean delete(Long id);
-
 }

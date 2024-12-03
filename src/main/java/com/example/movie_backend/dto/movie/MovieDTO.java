@@ -67,7 +67,6 @@ public class MovieDTO {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<GenreDTO> genres;
 
-    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private CategoryDTO category;
 

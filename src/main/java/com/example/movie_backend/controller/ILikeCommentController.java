@@ -4,7 +4,7 @@ import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RequestMapping("api/v1/like-comment")
 public interface ILikeCommentController {

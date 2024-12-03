@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.5'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.springframework.boot" version "$springBootVersion"
+    id "io.spring.dependency-management" version "$dependencyManagementVersion"
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17.0.12'
+sourceCompatibility = '17.0.13'
 
 configurations {
     developmentOnly
@@ -22,6 +22,13 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Apply liquibase script
+apply from: 'gradle/liquibase.gradle'
+
 dependencies {
     /**
      * Spring
@@ -35,21 +42,34 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Keycloak
     implementation 'org.keycloak:keycloak-spring-boot-starter:22.0.5'
     implementation 'org.keycloak:keycloak-admin-client:22.0.5'
-    implementation 'io.minio:minio:8.4.6'
+
+    // Minio
+    implementation 'io.minio:minio:8.5.14'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    /**
-     * MySql
-     */
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // MySql
     runtimeOnly 'com.mysql:mysql-connector-j'
-    // jsonwebtoken
+
+    // Jsonwebtoken
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
+    // Websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-}
+    // Liquibase
+    implementation "org.liquibase:liquibase-core:4.25.1"
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    implementation("org.liquibase.ext:liquibase-hibernate6:4.25.1") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+        exclude group: "org.slf4j", module: "slf4j-simple"
+    }
 
-tasks.named('test') {
-    useJUnitPlatform()
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
