@@ -1,6 +1,6 @@
 package com.example.movie_backend.dto.moviepakage;
 
-import com.example.movie_backend.entity.enumerate.MoviePackageType;
+import com.example.movie_backend.enumerate.MoviePackageType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
