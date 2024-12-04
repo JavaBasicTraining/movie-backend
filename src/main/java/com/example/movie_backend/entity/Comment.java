@@ -1,6 +1,7 @@
 package com.example.movie_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,6 +45,7 @@ public class Comment implements Serializable {
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = "genres", allowSetters = true)
     private List<Comment> replies = new ArrayList<>();

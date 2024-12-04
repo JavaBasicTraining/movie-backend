@@ -26,7 +26,7 @@ public class Movie implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
+    @Unique
     @Column(name = "name")
     private String nameMovie;
 
@@ -46,7 +46,7 @@ public class Movie implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "video_url", nullable = true)
+    @Column(name = "video_url")
     private String videoUrl;
 
     @Column(name = "trailer_url")
@@ -61,9 +61,9 @@ public class Movie implements Serializable {
     @Builder.Default
     @ManyToMany
     @JoinTable(
-        name = "movie_genres",
-        joinColumns = @JoinColumn(name = "movie_id"),
-        inverseJoinColumns = @JoinColumn(name = "genres_id")
+            name = "movie_genres",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genres_id")
     )
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
@@ -79,13 +79,14 @@ public class Movie implements Serializable {
     @Builder.Default
     @ManyToMany
     @JoinTable(
-        name = "movie_evaluation",
-        joinColumns = @JoinColumn(name = "movie_id"),
-        inverseJoinColumns = @JoinColumn(name = "evaluation_id")
+            name = "movie_evaluation",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "evaluation_id")
     )
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Evaluation> evaluations = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
     private List<Episode> episodes = new ArrayList<>();
@@ -103,12 +104,8 @@ public class Movie implements Serializable {
         this.evaluations.add(evaluation);
     }
 
-
-    public Movie setEpisodes(List<Episode> episodes) {
-        episodes.stream().forEach(episode -> {
-            episode.setMovie(this);
-        });
+    public void setEpisodes(List<Episode> episodes) {
+        episodes.forEach(episode -> episode.setMovie(this));
         this.episodes = episodes;
-        return this;
     }
 }
