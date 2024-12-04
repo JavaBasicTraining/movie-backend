@@ -6,7 +6,6 @@ import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.entity.Movie;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -23,14 +23,11 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MovieDTO {
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+public class MovieDTO implements Serializable {
     private Long id;
 
     private String nameMovie;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String posterUrl;
 
     private String viTitle;
@@ -43,7 +40,6 @@ public class MovieDTO {
 
     private String country;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY, required = false)
     private String videoUrl;
 
     private String videoPresignedUrl;

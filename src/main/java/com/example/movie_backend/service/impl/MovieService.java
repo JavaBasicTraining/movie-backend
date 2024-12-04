@@ -152,7 +152,7 @@ public class MovieService implements IMovieService {
 
                     if (item.getVideoUrl() != null) {
                         String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                        movieDTO.setVideoPresignedUrl(linkVideo);
+                        movieDTO.setVideoUrl(linkVideo);
                     }
                     return movieDTO;
                 }).

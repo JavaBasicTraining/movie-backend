@@ -1,31 +1,29 @@
-package com.example.movie_backend.controller.socket;
+package com.example.movie_backend.socket_controller;
 
-import com.example.movie_backend.dto.ChatMessage;
+import com.example.movie_backend.dto.ChatMessageDTO;
 import com.example.movie_backend.dto.VideoState;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.service.IRoomSocketService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class RoomSocketController {
-    private static final Logger log = LoggerFactory.getLogger(RoomSocketController.class);
 
     private final IRoomSocketService roomSocketService;
 
     @MessageMapping("/room/{roomId}/chat")
     @SendTo("/topic/room/{roomId}/chat")
-    public ChatMessage handleChat(@DestinationVariable UUID roomId, ChatMessage message) {
+    public ChatMessageDTO handleChat(@DestinationVariable UUID roomId, ChatMessageDTO message) {
         log.info("Handle chat message in room: {}, message: {}", roomId, message);
         return roomSocketService.handleChatMessage(roomId, message);
     }
@@ -35,8 +33,7 @@ public class RoomSocketController {
     public VideoState handleVideoState(
             @DestinationVariable String roomId,
             VideoState state) {
-        log.info("Handle video state in room: {}", roomId);
-        state.setEventTime(LocalDateTime.now());
+        log.info("Handle video state in room: {}, state: {}, action: {}", roomId, state.getPlaying(), state.getAction());
         return state;
     }
 

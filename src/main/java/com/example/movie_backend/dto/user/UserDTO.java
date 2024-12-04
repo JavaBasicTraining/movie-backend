@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 @Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
     private Long id;
     private String userName;
     private String firstName;

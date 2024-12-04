@@ -1,5 +1,7 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.security;
 
+import com.example.movie_backend.config.CommonProperties;
+import com.example.movie_backend.config.KeycloakProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

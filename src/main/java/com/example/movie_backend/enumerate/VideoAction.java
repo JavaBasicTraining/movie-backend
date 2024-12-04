@@ -4,5 +4,7 @@ public enum VideoAction {
     PLAY,
     PAUSE,
     SEEK,
-    PROGRESS
+    SEEKED,
+    PROGRESS,
+    CHANGE
 }
