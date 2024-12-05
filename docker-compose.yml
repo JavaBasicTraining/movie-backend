@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - DATABASE_URL=jdbc:mysql://host.docker.internal:3306/movie_website
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=FormosVN@123
+      - MINIO_ENDPOINT=http://192.168.1.201:9000
+      - MINIO_ACCESS_KEY=ROOTUSER
+      - MINIO_SECRET_KEY=CHANGEME123
+      - KEYCLOAK_URI=http://192.168.1.201:8080
+      - KEYCLOAK_REALM=movie_website_realm
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    network_mode: "bridge"
+    # depends_on:
+    #   - keycloak
+    #   - minio
+
+  # mysql:
+  #   image: mysql:8.0
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=FormosVN@123
+  #     - MYSQL_DATABASE=movie_website
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     - ./src/main/resources/db:/docker-entrypoint-initdb.d
+
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:22.0.5
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - KEYCLOAK_ADMIN=admin
+  #     - KEYCLOAK_ADMIN_PASSWORD=admin
+  #     - KC_DB=mysql
+  #     - KC_DB_URL=jdbc:mysql://mysql:3306/keycloak
+  #     - KC_DB_USERNAME=root
+  #     - KC_DB_PASSWORD=FormosVN@123
+  #   command:
+  #     - start-dev
+  #   depends_on:
+  #     - mysql
+
+  # minio:
+  #   image: minio/minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   environment:
+  #     - MINIO_ROOT_USER=ROOTUSER
+  #     - MINIO_ROOT_PASSWORD=CHANGEME123
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9001"
+
+# volumes:
+#   mysql_data:
+#   minio_data: 
