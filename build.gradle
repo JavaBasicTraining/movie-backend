@@ -37,6 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.keycloak:keycloak-spring-boot-starter:22.0.5'
     implementation 'org.keycloak:keycloak-admin-client:22.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'io.minio:minio:8.4.6'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     /**
