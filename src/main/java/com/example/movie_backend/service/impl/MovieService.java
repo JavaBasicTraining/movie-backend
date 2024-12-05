@@ -33,6 +33,7 @@ import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
 @RequiredArgsConstructor
 public class MovieService implements IMovieService {
     private static final String POSTER = "poster";
+    private static final String VIDEO = "video";
 
     private final MinioService minioService;
     private final MovieMapper mapper;
@@ -42,10 +43,16 @@ public class MovieService implements IMovieService {
     public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
         try {
             String objectName = "movies/" + movie.getId() + SLASH + type + SLASH + file.getOriginalFilename();
-            if (POSTER.equals(type)) {
-                movie.setPosterUrl(objectName);
-            } else {
-                movie.setVideoUrl(objectName);
+            switch (type) {
+                case POSTER:
+                    movie.setPosterUrl(objectName);
+                    break;
+                case VIDEO:
+                    movie.setVideoUrl(objectName);
+                    break;
+                default:
+                    movie.setTrailerUrl(objectName);
+                    break;
             }
             movieRepository.save(movie);
             minioService.uploadByFile(file, objectName);
@@ -147,20 +154,33 @@ public class MovieService implements IMovieService {
         return movieRepository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
-                    if (item.getPosterUrl() != null) {
-                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                        movieDTO.setPosterUrl(linkPoster);
-                    }
-
-                    if (item.getVideoUrl() != null) {
-                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                        movieDTO.setVideoPresignedUrl(linkVideo);
+                    for (String type : new String[]{"poster", "video", "trailer"}) {
+                        switch (type) {
+                            case "poster":
+                                if (item.getPosterUrl() != null) {
+                                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                                    movieDTO.setPosterUrl(linkPoster);
+                                }
+                                break;
+                            case "video":
+                                if (item.getVideoUrl() != null) {
+                                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                                    movieDTO.setVideoPresignedUrl(linkVideo);
+                                }
+                                break;
+                            case "trailer":
+                                if (item.getTrailerUrl() != null) {
+                                    String linkTrailer = this.minioService.getPreSignedLink(item.getTrailerUrl());
+                                    movieDTO.setTrailerUrl(linkTrailer);
+                                }
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Unknown type: " + type);
+                        }
                     }
                     return movieDTO;
-                }).
-                orElseThrow(() -> new BadRequestException("Movie not found"));
-
-
+                })
+                .orElseThrow(() -> new BadRequestException("Movie not found"));
     }
 
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
