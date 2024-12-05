@@ -30,8 +30,7 @@ public class RoomSocketService implements IRoomSocketService {
     @Override
     public ChatMessageDTO handleChatMessage(UUID roomId, ChatMessageDTO chatMessageDTO) {
         validateChatMessage(chatMessageDTO);
-        chatMessageService.createAsync(chatMessageDTO);
-        return chatMessageDTO;
+        return chatMessageService.create(chatMessageDTO);
     }
 
     @Override

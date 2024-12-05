@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
     public User toEntity(UserDTO dto) {
         return User.builder()
-            .username(dto.getUserName())
+            .username(dto.getUsername())
             .authorities(
                 dto.getAuthorities().stream()
                     .map(nameAuthority -> Authority.builder().name(nameAuthority)
@@ -27,7 +27,7 @@ public class UserMapper {
     public UserDTO toDTO(User entity) {
         return UserDTO.builder()
             .id(entity.getId())
-            .userName(entity.getUsername())
+            .username(entity.getUsername())
             .authorities(
                 entity.getAuthorities()
                     .stream()
@@ -39,7 +39,7 @@ public class UserMapper {
     public UserDTO toDTO(User entity, JwtAuthenticationToken token) {
         return UserDTO.builder()
             .id(entity.getId())
-            .userName(entity.getUsername())
+            .username(entity.getUsername())
             .authoritySet(entity.getAuthorities().stream()
                 .map(nameAuthority -> Authority.builder()
                     .name(nameAuthority.getName())

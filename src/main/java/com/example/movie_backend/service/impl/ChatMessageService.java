@@ -18,6 +18,11 @@ public class ChatMessageService implements IChatMessageService {
 
     @Override
     public ChatMessageDTO createAsync(ChatMessageDTO chatMessageDTO) {
+        return create(chatMessageDTO);
+    }
+
+    @Override
+    public ChatMessageDTO create(ChatMessageDTO chatMessageDTO) {
         ChatMessage chatMessage = chatMessageMapper.toEntity(chatMessageDTO);
         chatMessage = chatMessageRepository.save(chatMessage);
         return chatMessageMapper.toDTO(chatMessage);

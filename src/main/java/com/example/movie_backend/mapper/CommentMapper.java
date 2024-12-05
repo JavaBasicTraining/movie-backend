@@ -45,7 +45,7 @@ public class CommentMapper {
                 .idMovie(entity.getMovie() != null ? entity.getMovie().getId() : null)
                 .user(entity.getUser() != null ? UserDTO.builder()
                         .id(entity.getUser().getId())
-                        .userName(entity.getUser().getUsername())
+                        .username(entity.getUser().getUsername())
                         .build() : null)
                 .currentDate(entity.getCurrentDate())
 //                .subordinates(entity.getSubordinates().stream()

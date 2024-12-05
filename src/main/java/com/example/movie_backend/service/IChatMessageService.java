@@ -7,4 +7,6 @@ public interface IChatMessageService {
 
     @Async
     ChatMessageDTO createAsync(ChatMessageDTO chatMessageDTO);
+
+    ChatMessageDTO create(ChatMessageDTO chatMessageDTO);
 }

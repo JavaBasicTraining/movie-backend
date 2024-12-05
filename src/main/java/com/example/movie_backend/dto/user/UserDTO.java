@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserDTO implements Serializable {
     private Long id;
-    private String userName;
+    private String username;
     private String firstName;
     private String lastName;
     private List<String> authorities;
@@ -27,7 +27,7 @@ public class UserDTO implements Serializable {
 
     public UserDTO(User user) {
         this.id = user.getId();
-        this.userName = user.getUsername();
+        this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).toList();

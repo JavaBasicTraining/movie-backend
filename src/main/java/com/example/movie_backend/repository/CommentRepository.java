@@ -13,12 +13,12 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
             value = """
-    SELECT new com.example.movie_backend.dto.comment.CommentDTO(c, COALESCE(SUM(lc.likeCount), 0))
-    FROM Comment c
-    LEFT JOIN LikeComment lc ON c.id = lc.comment.id
-    WHERE c.movie.id = :movieId
-    GROUP BY c.id, c.user.id, c.movie.id, c.user.username, c.content, c.currentDate
-    """
+                    SELECT new com.example.movie_backend.dto.comment.CommentDTO(c, COALESCE(SUM(lc.likeCount), 0))
+                    FROM Comment c
+                    LEFT JOIN LikeComment lc ON c.id = lc.comment.id
+                    WHERE c.movie.id = :movieId
+                    GROUP BY c.id, c.user.id, c.movie.id, c.user.username, c.content, c.currentDate
+                    """
     )
     List<CommentDTO> getCommentByMovieId(@Param("movieId") Long movieId);
 
