@@ -49,4 +49,8 @@ public class User implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<LikeComment> likeComments = new HashSet<>();
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id")
+    private RoomChat room;
 }
