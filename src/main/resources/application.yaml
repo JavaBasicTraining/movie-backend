@@ -1,14 +1,6 @@
 server:
   port: ${SERVER_PORT:8081}
-error:
-  include-binding-errors: always
 spring:
-  security:
-    oauth2:
-      resource-server:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/movie_website_realm
-          jwk-set-uri: http://localhost:8080/realms/movie_website_realm/protocol/openid-connect/certs
   main:
     allow-bean-definition-overriding: true
   servlet:
@@ -47,6 +39,12 @@ spring:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/movie_website_realm
+          jwk-set-uri: http://localhost:8080/realms/movie_website_realm/protocol/openid-connect/certs
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
@@ -54,6 +52,7 @@ minio:
   secretKey: ${MINIO_SECRET_KEY:minioadmin}
   fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
   expiredDefault: ${EXPIRED:60}
+  bucket: ${MINIO_BUCKET:movie}
 
 common:
   permit-all-path-patterns:
