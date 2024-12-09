@@ -31,4 +31,7 @@ public class ChatMessage extends AuditEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @Transient
+    private Boolean isHost;
 }

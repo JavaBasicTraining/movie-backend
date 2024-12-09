@@ -21,4 +21,6 @@ public class ChatMessageDTO {
     private RoomDTO room;
 
     private UserDTO sender;
+
+    private Boolean isHost;
 }
