@@ -13,11 +13,11 @@ import java.util.Set;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(
         value = """
-            SELECT *
-            FROM category c
-            WHERE (:searchTerm is null or c.name LIKE %:searchTerm%)
-            and (coalesce(:excludeIds, null) is null or c.id not in (:excludeIds))
-            """,
+                SELECT *
+                FROM category c
+                WHERE (:searchTerm IS NULL OR c.name LIKE %:searchTerm%)
+                and (COALESCE(:excludeIds, NULL) IS NULL OR c.id NOT IN (:excludeIds))
+                """,
         nativeQuery = true
     )
     Set<Category> filterCategory(@Param("searchTerm") String searchTerm,
