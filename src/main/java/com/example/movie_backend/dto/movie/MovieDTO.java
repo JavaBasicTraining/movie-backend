@@ -25,7 +25,6 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovieDTO {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String nameMovie;

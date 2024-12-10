@@ -9,7 +9,7 @@ import javax.validation.Valid;
 @RequestMapping("api/v1/like-comment")
 public interface ILikeCommentController {
     @PostMapping
-    ResponseEntity<LikeCommentDTO> create(@RequestBody @Valid  LikeCommentDTO likeComment);
+    ResponseEntity<LikeCommentDTO> create(@RequestBody @Valid LikeCommentDTO likeComment);
 
     @PutMapping("{id}")
     ResponseEntity<LikeCommentDTO> update(@RequestBody @Valid LikeCommentDTO likeComment, @PathVariable Long id);

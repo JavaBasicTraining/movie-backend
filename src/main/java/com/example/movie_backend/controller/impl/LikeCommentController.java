@@ -21,7 +21,7 @@ public class LikeCommentController implements ILikeCommentController {
 
     @Override
     public ResponseEntity<LikeCommentDTO> create(LikeCommentDTO likeCommentDTO) {
-        return ResponseEntity.ok(service.create(likeCommentDTO));
+        return ResponseEntity.ok(service.createOrUpdate(likeCommentDTO));
     }
 
     @Override
