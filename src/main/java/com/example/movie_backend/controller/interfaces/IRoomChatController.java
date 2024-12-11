@@ -17,4 +17,8 @@ public interface IRoomChatController {
 
     @GetMapping("{id}")
     ResponseEntity<RoomChatDTO> getById(@PathVariable Long id);
+
+    @GetMapping("/filter/{nameRoom}")
+    ResponseEntity<RoomChatDTO> filterRoomByName(@PathVariable String nameRoom);
+
 }

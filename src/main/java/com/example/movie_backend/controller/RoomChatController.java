@@ -32,4 +32,9 @@ public class RoomChatController implements IRoomChatController {
     public ResponseEntity<RoomChatDTO> getById(Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
+
+    @Override
+    public ResponseEntity<RoomChatDTO> filterRoomByName(String nameRoom) {
+        return ResponseEntity.ok(service.filterRoomByName(nameRoom));
+    }
 }

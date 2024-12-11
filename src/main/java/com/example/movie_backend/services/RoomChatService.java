@@ -44,12 +44,22 @@ public class RoomChatService implements IRoomChatService {
         if (getById(id) == null) {
             return false;
         }
+        repository.deleteById(id);
         return true;
     }
 
     @Override
     public RoomChatDTO getById(Long id) {
         return this.repository.findById(id)
+                .map(this.mapper::toDTO)
+                .orElseThrow(
+                        () -> new BadRequestException("Movie not found")
+                );
+    }
+
+    @Override
+    public RoomChatDTO filterRoomByName(String roomName) {
+        return this.repository.filterRoom(roomName)
                 .map(this.mapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
