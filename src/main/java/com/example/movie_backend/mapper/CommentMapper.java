@@ -8,7 +8,7 @@ import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Component
 public class CommentMapper {
@@ -19,7 +19,7 @@ public class CommentMapper {
                 .content(dto.getContent())
                 .user(mapToUser(dto.getUser()))
                 .movie(mapToMovie(dto.getMovie()))
-                .currentDate(new Date())
+                .createdDate(Instant.now())
                 .parentComment(mapToComment(dto.getParentComment()))
                 .build();
     }
@@ -31,7 +31,7 @@ public class CommentMapper {
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
                 .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
                 .parentComment(mapToComment(dto.getParentComment()))
-                .currentDate(new Date())
+                .createdDate(Instant.now())
                 .build();
     }
 
@@ -39,16 +39,11 @@ public class CommentMapper {
         return CommentDTO.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
-//                .idUser(entity.getUser() != null ? entity.getUser().getId() : null)
-//                .idMovie(entity.getMovie() != null ? entity.getMovie().getId() : null)
                 .user(entity.getUser() != null ? UserDTO.builder()
                         .id(entity.getUser().getId())
                         .userName(entity.getUser().getUsername())
                         .build() : null)
-                .currentDate(entity.getCurrentDate())
-//                .subordinates(entity.getSubordinates().stream()
-//                        .map(this::toDTO) //
-//                        .collect(Collectors.toList()))
+                .createdDate(entity.getCreatedDate())
                 .parentCommentId(entity.getParentComment() != null ?
                         entity.getParentComment().getId() : null)
                 .build();

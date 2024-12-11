@@ -16,16 +16,27 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         @Query(value = """
                 SELECT new com.example.movie_backend.dto.comment.CommentDTO(
                     c,
-                    CAST(COUNT(CASE WHEN lc.liked = true THEN 1 ELSE NULL END) as long)
+                    CAST(COUNT(DISTINCT c2.id) as long)
                 )
                 FROM Comment c
-                LEFT JOIN LikeComment lc ON c.id = lc.comment.id
+                LEFT JOIN Comment c2 ON c.id = c2.parentComment.id
                 WHERE c.movie.id = :movieId
                 AND c.parentComment IS NULL
-                GROUP BY c.id, c.user.id, c.movie.id, c.user.username, c.content, c.currentDate
-                ORDER BY c.currentDate DESC
+                GROUP BY c.id
                 """)
         Page<CommentDTO> getCommentByMovieId(@Param("movieId") Long movieId, Pageable pageable);
+
+        @Query(value = """
+                SELECT new com.example.movie_backend.dto.comment.CommentDTO(
+                    c,
+                    CAST(COUNT(COALESCE(c2.id, NULL)) AS long)
+                )
+                FROM Comment c
+                LEFT JOIN Comment c2 ON c.id = c2.parentComment.id
+                WHERE c.parentComment.id = :id
+                GROUP BY c.id
+                """)
+        Page<CommentDTO> getReplies(Long id, Pageable pageable);
 
         @Query(value = """
                         SELECT c.*
@@ -34,4 +45,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                         """, nativeQuery = true)
         List<Comment> getListCommentByMovieIdUserId(@Param("userId") Long userId,
                         @Param("movieId") Long movieId);
+
+        Long countByParentCommentId(Long parentCommentId);
 }

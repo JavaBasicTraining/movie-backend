@@ -1,6 +1,7 @@
 package com.example.movie_backend.service.impl;
 
-import com.example.movie_backend.controller.dto.response.LikeCountResponse;
+import com.example.movie_backend.controller.dto.response.TotalLikesResponse;
+import com.example.movie_backend.controller.dto.response.RepliesCountResponse;
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
@@ -94,7 +95,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public void likeOrUnlike(Long commentId, Boolean isLike) {
+    public TotalLikesResponse likeOrUnlike(Long commentId, Boolean isLike) {
         String username = SecurityUtils.getCurrentUserEmail().orElseThrow(
                 () -> new AuthenticationCredentialsNotFoundException("Authentication Failure")
         );
@@ -122,14 +123,30 @@ public class CommentService implements ICommentService {
                     this.likeCommentRepository.save(likeComment);
                 }
         );
+
+        return getLikeCount(commentId);
     }
 
     @Override
-    public LikeCountResponse getLikeCount(Long commentId) {
+    public TotalLikesResponse getLikeCount(Long commentId) {
         existByIdOrThrow(commentId);
         Long likeCount = likeCommentRepository.countByCommentIdAndLikedIsTrue(commentId);
-        return LikeCountResponse.builder()
-                .likeCount(likeCount)
+        return TotalLikesResponse.builder()
+                .totalLikes(likeCount)
+                .build();
+    }
+
+    @Override
+    public Page<CommentDTO> getReplies(Long id, Pageable pageable) {
+        return repository.getReplies(id, pageable);
+    }
+
+    @Override
+    public RepliesCountResponse getRepliesCount(Long commentId) {
+        existByIdOrThrow(commentId);
+        Long repliesCount = repository.countByParentCommentId(commentId);
+        return RepliesCountResponse.builder()
+                .repliesCount(repliesCount)
                 .build();
     }
 

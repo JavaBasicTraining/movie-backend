@@ -1,7 +1,8 @@
 package com.example.movie_backend.controller.impl;
 
 import com.example.movie_backend.controller.ICommentController;
-import com.example.movie_backend.controller.dto.response.LikeCountResponse;
+import com.example.movie_backend.controller.dto.response.TotalLikesResponse;
+import com.example.movie_backend.controller.dto.response.RepliesCountResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.util.HeaderUtils;
@@ -41,9 +42,10 @@ public class CommentController implements ICommentController {
     }
 
     @Override
-    public boolean delete(Long id) {
-        ResponseEntity.ok(commentService.delete(id));
-        return true;
+    public ResponseEntity<Void> delete(Long id) {
+        commentService.delete(id);
+        return ResponseEntity.noContent().build();
+
     }
 
     @Override
@@ -55,18 +57,30 @@ public class CommentController implements ICommentController {
     }
 
     @Override
+    public ResponseEntity<List<CommentDTO>> getReplies(Long id, Pageable pageable) {
+        Page<CommentDTO> commentDTOPage = commentService.getReplies(id, pageable);
+        return ResponseEntity.status(HttpStatus.OK)
+                .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
+                .body(commentDTOPage.getContent());
+    }
+
+    @Override
     public ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(Long userId, Long movieId) {
         return ResponseEntity.ok(commentService.getListCommentByMovieIdUserId(userId, movieId));
     }
 
     @Override
-    public ResponseEntity<Void> likeOrUnlike(Long commentId, Boolean isLike) {
-        commentService.likeOrUnlike(commentId, isLike);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<TotalLikesResponse> likeOrUnlike(Long commentId, Boolean isLike) {
+        return ResponseEntity.ok(commentService.likeOrUnlike(commentId, isLike));
     }
 
     @Override
-    public ResponseEntity<LikeCountResponse> getLikeCount(Long commentId) {
+    public ResponseEntity<TotalLikesResponse> getLikeCount(Long commentId) {
         return ResponseEntity.ok(commentService.getLikeCount(commentId));
+    }
+
+    @Override
+    public ResponseEntity<RepliesCountResponse> getRepliesCount(Long commentId) {
+        return ResponseEntity.ok(commentService.getRepliesCount(commentId));
     }
 }

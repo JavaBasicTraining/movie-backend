@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class LikeCountResponse {
-    private Long likeCount;
+public class RepliesCountResponse {
+    private Long repliesCount;
 }

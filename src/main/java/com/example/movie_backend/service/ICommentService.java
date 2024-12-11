@@ -1,6 +1,7 @@
 package com.example.movie_backend.service;
 
-import com.example.movie_backend.controller.dto.response.LikeCountResponse;
+import com.example.movie_backend.controller.dto.response.TotalLikesResponse;
+import com.example.movie_backend.controller.dto.response.RepliesCountResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,11 @@ public interface ICommentService {
 
     void unLike(Long id, LikeCommentDTO likeCommentDTO);
 
-    void likeOrUnlike(Long commentId, Boolean isLike);
+    TotalLikesResponse likeOrUnlike(Long commentId, Boolean isLike);
 
-    LikeCountResponse getLikeCount(Long commentId);
+    TotalLikesResponse getLikeCount(Long commentId);
+
+    Page<CommentDTO> getReplies(Long id, Pageable pageable);
+
+    RepliesCountResponse getRepliesCount(Long commentId);
 }

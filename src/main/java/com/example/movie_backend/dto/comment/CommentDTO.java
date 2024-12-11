@@ -14,8 +14,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -36,14 +36,15 @@ public class CommentDTO {
 
     private Long idMovie;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date currentDate;
+    private Instant createdDate;
 
     @JsonIgnoreProperties(value = {"comments"}, allowSetters = true)
     private MovieDTO movie;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long totalLikes;
+
+    private Long totalReplies;
 
     private Long parentCommentId;
 
@@ -53,28 +54,31 @@ public class CommentDTO {
     @Builder.Default
     private List<CommentDTO> replies = new ArrayList<>();
 
-    public CommentDTO(Comment comment, Long totalLikes) {
-        this.id = comment.getId();
-        this.content = comment.getContent();
+    public CommentDTO(Comment comment, Long totalReplies) {
+        this(comment);
         this.idUser = comment.getUser() != null ? comment.getUser().getId() : null;
         this.idMovie = comment.getMovie() != null ? comment.getMovie().getId() : null;
-        this.totalLikes = totalLikes;
-        if (comment.getUser() != null) {
-            this.user = new UserDTO(comment.getUser());
-        }
-        this.currentDate = comment.getCurrentDate();
         this.parentCommentId = comment.getParentComment() != null ? comment.getParentComment().getId() : null;
-        this.replies = comment.getReplies().stream().map(CommentDTO::new).toList();
+        this.totalReplies = totalReplies;
+    }
+
+    public CommentDTO(Comment comment, Long totalReplies, Long totalLikes) {
+        this(comment, totalReplies);
+        this.totalLikes = totalLikes;
     }
 
     public CommentDTO(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
+        this.createdDate = comment.getCreatedDate();
         if (comment.getUser() != null) {
             this.user = new UserDTO(comment.getUser());
         }
         if (comment.getMovie() != null) {
             this.movie = new MovieDTO(comment.getMovie());
+        }
+        if(comment.getParentComment() != null) {
+            this.parentComment = new CommentDTO(comment.getParentComment());
         }
     }
 }
