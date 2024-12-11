@@ -58,7 +58,7 @@ public class CommentMapper {
         if (dto == null) {
             return null;
         }
-        return User.builder().id(dto.getId()).build();
+        return User.builder().id(dto.getId()).username(dto.getUserName()).build();
     }
 
     private Movie mapToMovie(MovieDTO movie) {
