@@ -16,6 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import static com.example.movie_backend.util.HeaderUtils.X_TOTAL_PAGES;
+
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 @Configuration
@@ -69,6 +71,7 @@ public class CustomSecurityConfiguration {
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(X_TOTAL_PAGES));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -4,7 +4,11 @@ import com.example.movie_backend.controller.ICommentController;
 import com.example.movie_backend.controller.dto.response.LikeCountResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.service.ICommentService;
+import com.example.movie_backend.util.HeaderUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,8 +47,11 @@ public class CommentController implements ICommentController {
     }
 
     @Override
-    public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId) {
-        return ResponseEntity.ok(commentService.getCommentByMovieId(movieId));
+    public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId, Pageable pageable) {
+        Page<CommentDTO> commentDTOPage = commentService.getCommentByMovieId(movieId, pageable);
+        return ResponseEntity.status(HttpStatus.OK)
+                .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
+                .body(commentDTOPage.getContent());
     }
 
     @Override

@@ -15,6 +15,8 @@ import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.service.ILikeCommentService;
 import com.example.movie_backend.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,8 +71,8 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<CommentDTO> getCommentByMovieId(Long movieId) {
-        return repository.getCommentByMovieId(movieId);
+    public Page<CommentDTO> getCommentByMovieId(Long movieId, Pageable pageable) {
+        return repository.getCommentByMovieId(movieId, pageable);
     }
 
     @Override

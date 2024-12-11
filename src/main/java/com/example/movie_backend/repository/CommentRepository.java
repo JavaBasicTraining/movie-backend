@@ -2,6 +2,8 @@ package com.example.movie_backend.repository;
 
 import com.example.movie_backend.dto.comment.CommentDTO;
 import com.example.movie_backend.entity.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 GROUP BY c.id, c.user.id, c.movie.id, c.user.username, c.content, c.currentDate
                 ORDER BY c.currentDate DESC
                 """)
-        List<CommentDTO> getCommentByMovieId(@Param("movieId") Long movieId);
+        Page<CommentDTO> getCommentByMovieId(@Param("movieId") Long movieId, Pageable pageable);
 
         @Query(value = """
                         SELECT c.*

@@ -2,6 +2,8 @@ package com.example.movie_backend.controller;
 
 import com.example.movie_backend.controller.dto.response.LikeCountResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public interface ICommentController {
     boolean delete(@PathVariable Long id);
 
     @GetMapping
-    ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long commentId);
+    ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long commentId, @ParameterObject Pageable pageable);
 
     @GetMapping("getCommentByUserId")
     ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId,
