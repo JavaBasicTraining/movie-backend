@@ -2,6 +2,7 @@ package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.comment.CommentDTO;
+import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.mapper.CommentMapper;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.repository.CommentRepository;
@@ -61,6 +62,12 @@ public class CommentService implements ICommentService {
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public List<CommentDTO> getListReplies(Long movieId, Long parentComment) {
+        return repository.getRepliesByMovieId(movieId, parentComment);
+
     }
 }
 

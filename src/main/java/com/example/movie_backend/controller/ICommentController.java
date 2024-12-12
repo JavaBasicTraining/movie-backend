@@ -16,23 +16,28 @@ import com.example.movie_backend.dto.comment.CommentDTO;
 
 @RequestMapping("/api/v1/comment")
 public interface ICommentController {
-    @PostMapping("create")
+    @PostMapping()
     ResponseEntity<CommentDTO> create(@RequestBody CommentDTO comment);
 
-    @PutMapping("update")
+    @PutMapping()
     ResponseEntity<CommentDTO> update(@RequestBody CommentDTO comment, @RequestParam Long movieId);
 
     @GetMapping("{id}")
     ResponseEntity<CommentDTO> getById(@PathVariable Long id);
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(value = "{id}")
     boolean delete(@PathVariable Long id);
 
     @GetMapping
     ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long commentId);
 
+    @GetMapping("get-replies")
+    public ResponseEntity<List<CommentDTO>> getRepliesByMovieId(
+            @RequestParam Long movieId,
+            @RequestParam Long parentComment);
+
     @GetMapping("getCommentByUserId")
-    ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId,
-            @RequestParam Long movieId);
+    ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(@RequestParam Long userId, @RequestParam Long movieId);
+
 
 }

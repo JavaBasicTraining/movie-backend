@@ -45,6 +45,11 @@ public class CommentController implements ICommentController {
     }
 
     @Override
+    public ResponseEntity<List<CommentDTO>> getRepliesByMovieId(Long movieId, Long parentComment) {
+        return ResponseEntity.ok(service.getListReplies(movieId,parentComment));
+    }
+
+    @Override
     public ResponseEntity<List<CommentDTO>> getListCommentByMovieIdUserId(Long userId, Long movieId) {
         return ResponseEntity.ok(service.getListCommentByMovieIdUserId(userId, movieId));
     }

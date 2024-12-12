@@ -22,6 +22,18 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     List<CommentDTO> getCommentByMovieId(@Param("movieId") Long movieId);
 
+
+    @Query(
+            value = """
+    SELECT new com.example.movie_backend.dto.comment.CommentDTO(c, COALESCE(SUM(lc.likeCount), 0))
+    FROM Comment c
+    LEFT JOIN LikeComment lc ON c.id = lc.comment.id
+    WHERE c.movie.id = :movieId and c.parentComment.id = :parentComment
+    GROUP BY c.id, c.user.id, c.movie.id, c.user.username, c.content, c.currentDate
+    """
+    )
+    List<CommentDTO> getRepliesByMovieId(@Param("movieId") Long movieId,
+                                         @Param("parentComment") Long parentComment);
     @Query(
             value = """
                     SELECT c.*

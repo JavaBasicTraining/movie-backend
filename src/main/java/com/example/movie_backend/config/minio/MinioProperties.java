@@ -13,5 +13,5 @@ public class MinioProperties {
     private String secretKey;
     private String fileHost;
     private int expiredDefault;
-    private String bucket;
+    private String bucket="movie";
 }

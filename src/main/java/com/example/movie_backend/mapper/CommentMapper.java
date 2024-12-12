@@ -48,9 +48,6 @@ public class CommentMapper {
                         .userName(entity.getUser().getUsername())
                         .build() : null)
                 .currentDate(entity.getCurrentDate())
-//                .subordinates(entity.getSubordinates().stream()
-//                        .map(this::toDTO) //
-//                        .collect(Collectors.toList()))
                 .parentCommentId(entity.getParentComment() != null ?
                         entity.getParentComment().getId() : null)
                 .build();

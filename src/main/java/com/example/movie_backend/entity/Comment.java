@@ -46,7 +46,7 @@ public class Comment implements Serializable {
     private Comment parentComment;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "genres", allowSetters = true)
     private List<Comment> replies = new ArrayList<>();
 }

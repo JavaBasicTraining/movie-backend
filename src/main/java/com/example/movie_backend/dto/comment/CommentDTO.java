@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -59,11 +60,18 @@ public class CommentDTO {
         this.idUser = comment.getUser() != null ? comment.getUser().getId() : null;
         this.idMovie = comment.getMovie() != null ? comment.getMovie().getId() : null;
         this.totalLikes = totalLikes;
-        if (comment.getUser() != null) {this.user = new UserDTO(comment.getUser());}
+        if (comment.getUser() != null) {
+            this.user = new UserDTO(comment.getUser());
+        }
         this.currentDate = comment.getCurrentDate();
         this.parentCommentId = comment.getParentComment() != null ? comment.getParentComment().getId() : null;
-        for (Comment sub : comment.getReplies()) {
-            this.replies.add(new CommentDTO(sub, 0L));
+
+        this.replies = new ArrayList<>();
+        if (comment.getReplies() != null) {
+            this.replies = comment.getReplies().stream()
+                    .map(sub -> new CommentDTO(sub, 0L))
+                    .collect(Collectors.toList());
         }
+
     }
 }

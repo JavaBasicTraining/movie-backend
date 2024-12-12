@@ -16,5 +16,6 @@ public interface ICommentService {
     List<CommentDTO> getCommentByMovieId(Long movieId);
 
     List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId);
+    List<CommentDTO> getListReplies(Long movieId, Long parentComment);
 
 }
