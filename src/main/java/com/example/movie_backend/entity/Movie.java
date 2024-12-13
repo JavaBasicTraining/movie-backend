@@ -30,6 +30,10 @@ public class Movie implements Serializable {
     @Column(name = "name")
     private String nameMovie;
 
+    @Unique
+    @Column(name = "path", unique = true)
+    private String path;
+
     @Column(name = "poster_url")
     private String posterUrl;
 

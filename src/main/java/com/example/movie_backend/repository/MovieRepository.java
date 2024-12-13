@@ -13,52 +13,56 @@ import java.util.Set;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
+    @Query("SELECT COUNT(m) > 0 FROM Movie m WHERE m.path = :path")
+    boolean existsByPath(@Param("path") String path);
+
+
     @Query(
-        value = """
-            SELECT DISTINCT m.*
-            FROM movie m
-            LEFT JOIN movie_genres mc ON mc.movie_id = m.id
-            LEFT JOIN genre c ON mc.genres_id = c.id
-            WHERE (:keyword IS NULL
-                   OR m.name IS NULL
-                   OR m.name LIKE CONCAT('%', :keyword, '%'))
-              OR (:genre IS NULL OR c.name = :genre)
-              OR (:country IS NULL OR m.country = :country)
-            """,
-        nativeQuery = true
+            value = """
+                    SELECT DISTINCT m.*
+                    FROM movie m
+                    LEFT JOIN movie_genres mc ON mc.movie_id = m.id
+                    LEFT JOIN genre c ON mc.genres_id = c.id
+                    WHERE (:keyword IS NULL
+                           OR m.name IS NULL
+                           OR m.name LIKE CONCAT('%', :keyword, '%'))
+                      OR (:genre IS NULL OR c.name = :genre)
+                      OR (:country IS NULL OR m.country = :country)
+                    """,
+            nativeQuery = true
     )
     Page<Movie> query(
-        @Param("keyword") String keyword,
-        @Param("genre") String genre,
-        @Param("country") String country,
-        Pageable pageable
+            @Param("keyword") String keyword,
+            @Param("genre") String genre,
+            @Param("country") String country,
+            Pageable pageable
     );
 
     @Query(
-        value = """
-                SELECT m.*
-                FROM movie_website.movie m
-                JOIN movie_website.evaluation e ON m.id = e.movie_id
-                ORDER BY e.star DESC
-                LIMIT 5;
-                """,
-        nativeQuery = true
+            value = """
+                    SELECT m.*
+                    FROM movie_website.movie m
+                    JOIN movie_website.evaluation e ON m.id = e.movie_id
+                    ORDER BY e.star DESC
+                    LIMIT 5;
+                    """,
+            nativeQuery = true
     )
     Set<Movie> nominatedFilm();
 
     @Query(
             value = """
                     SELECT DISTINCT m.*
-                    FROM movie_website.movie m
-                    LEFT JOIN movie_website.movie_genres mc
-                        ON m.id = mc.movie_id
-                    LEFT JOIN movie_website.genre c
-                        ON mc.genres_id = c.id
-                    WHERE m.id = :movieId
+                     FROM movie_website.movie m
+                     LEFT JOIN movie_website.movie_genres mc
+                         ON m.id = mc.movie_id
+                     LEFT JOIN movie_website.genre c
+                         ON mc.genres_id = c.id
+                     WHERE m.path = :path
                     """,
             nativeQuery = true
     )
-    Optional<Movie> filterMovie(@Param("movieId") Long movieId);
+    Optional<Movie> filterMovie(@Param("path") String path);
 
 
 }
