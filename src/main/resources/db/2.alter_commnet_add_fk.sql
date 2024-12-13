@@ -3,5 +3,5 @@ ALTER TABLE `comment`
     ADD COLUMN `movie_id` bigint DEFAULT NULL,
     ADD CONSTRAINT `FK_comment_movie` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`);
 
-ALTER TABLE movie_website.comment
+ALTER TABLE comment
 ADD COLUMN time_comment DATETIME;
