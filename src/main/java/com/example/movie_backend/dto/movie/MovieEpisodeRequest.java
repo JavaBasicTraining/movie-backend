@@ -31,6 +31,8 @@ public class MovieEpisodeRequest {
 
     private Long year;
 
+    private String path;
+
     private String country;
 
 

@@ -17,7 +17,10 @@ public class CreateRequestFileMovie {
 
     private MultipartFile fileMovie;
 
+    private MultipartFile trailer;
+
     private Set<MultipartFile> filePosterEpisode;
 
     private Set<MultipartFile> fileMovieEpisode;
+
 }

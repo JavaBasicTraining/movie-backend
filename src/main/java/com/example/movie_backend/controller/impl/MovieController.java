@@ -27,7 +27,7 @@ public class MovieController implements IMovieController {
     }
 
     @Override
-    public ResponseEntity<MovieDTO> filterMovie(Long id) {
-        return ResponseEntity.ok(service.filterMovie(id));
+    public ResponseEntity<MovieDTO> filterMovie(String path) {
+        return ResponseEntity.ok(service.filterMovie(path));
     }
 }
