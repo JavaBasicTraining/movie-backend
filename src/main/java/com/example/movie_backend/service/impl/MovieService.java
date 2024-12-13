@@ -154,52 +154,48 @@ public class MovieService implements IMovieService {
         return movieRepository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = mapper.toDTO(item);
-                    for (String type : new String[]{"poster", "video", "trailer"}) {
-                        switch (type) {
-                            case "poster":
-                                if (item.getPosterUrl() != null) {
-                                    String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                                    movieDTO.setPosterUrl(linkPoster);
-                                }
-                                break;
-                            case "video":
-                                if (item.getVideoUrl() != null) {
-                                    String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                                    movieDTO.setVideoPresignedUrl(linkVideo);
-                                }
-                                break;
-                            case "trailer":
-                                if (item.getTrailerUrl() != null) {
-                                    String linkTrailer = this.minioService.getPreSignedLink(item.getTrailerUrl());
-                                    movieDTO.setTrailerUrl(linkTrailer);
-                                }
-                                break;
-                            default:
-                                throw new IllegalArgumentException("Unknown type: " + type);
-                        }
+                    if (item.getPosterUrl() != null) {
+                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                        movieDTO.setPosterUrl(linkPoster);
+                    }
+                    if (item.getVideoUrl() != null) {
+                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                        movieDTO.setVideoPresignedUrl(linkVideo);
+                    }
+                    if (item.getTrailerUrl() != null) {
+                        String linkTrailer = this.minioService.getPreSignedLink(item.getTrailerUrl());
+                        movieDTO.setTrailerUrl(linkTrailer);
                     }
                     return movieDTO;
                 })
                 .orElseThrow(() -> new BadRequestException("Movie not found"));
     }
 
+
+    private String generateUniquePath(String movieName) {
+        String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replaceAll("[^a-zA-Z0-9\\s-]", "")
+                .trim()
+                .toLowerCase()
+                .replaceAll("\\s+", "-")
+                .replace("đ", "d");
+
+        String uniquePath = basePath;
+        int counter = 1;
+        while (movieRepository.existsByPath(uniquePath)) {
+            uniquePath = basePath + "-" + counter;
+            counter++;
+        }
+
+        return uniquePath;
+    }
+
+
     public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
         Movie movie = mapper.toUpdateMovieWithEpisodes(dto);
         if (movie.getPath() == null || movie.getPath().isEmpty()) {
-            String basePath = Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
-                    .replaceAll("\\p{M}", "")
-                    .replaceAll("[^a-zA-Z0-9\\s-]", "")
-                    .trim()
-                    .toLowerCase()
-                    .replaceAll("\\s+", "-")
-                    .replace("đ", "d");
-            String uniquePath = basePath;
-            int counter = 1;
-            while (movieRepository.existsByPath(uniquePath)) {
-                uniquePath = basePath + "-" + counter;
-                counter++;
-            }
-            movie.setPath(uniquePath);
+            movie.setPath(generateUniquePath(movie.getNameMovie()));
         }
 
         return mapper.toDTO(movieRepository.save(movie));
@@ -211,22 +207,9 @@ public class MovieService implements IMovieService {
         movie = mapper.toUpdateMovieWithEpisodes(request, movie);
         MovieDTO movieDTO = mapper.toDTO(movie);
         if (movie.getPath().equals(request.getPath())) {
-            String basePath = Normalizer.normalize(movie.getNameMovie(), Normalizer.Form.NFD)
-                    .replaceAll("\\p{M}", "")
-                    .replaceAll("[^a-zA-Z0-9\\s-]", "")
-                    .trim()
-                    .toLowerCase()
-                    .replaceAll("\\s+", "-")
-                    .replace("đ", "d");
-            String uniquePath = basePath;
-            int counter = 1;
-            while (movieRepository.existsByPath(uniquePath)) {
-                if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
-                    return null;
-                } else {
-                    uniquePath = basePath + "-" + counter;
-                    counter++;
-                }
+            String uniquePath = generateUniquePath(movie.getNameMovie());
+            if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
+                return null;
             }
             movie.setPath(uniquePath);
         }
@@ -241,4 +224,5 @@ public class MovieService implements IMovieService {
         }
         return movieDTO.toBuilder().episodes(movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList()).build();
     }
+
 }

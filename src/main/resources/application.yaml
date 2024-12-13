@@ -54,6 +54,7 @@ minio:
   secretKey: ${MINIO_SECRET_KEY:minioadmin}
   fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
   expiredDefault: ${EXPIRED:60}
+  bucket: movie
 
 common:
   permit-all-path-patterns:
