@@ -32,9 +32,7 @@ public class LikeCommentService implements ILikeCommentService {
     @Transactional
     public LikeCommentDTO create(LikeCommentDTO dto) {
         LikeComment likeComment = mapper.toEntity(dto);
-        Movie movie = movieRepository
-                .findById(dto.getIdMovie())
-                .orElseThrow(() -> new BadRequestException("Movie not found"));
+
         User user = userRepository
                 .findById(dto.getIdUser())
                 .orElseThrow(() -> new BadRequestException("User not found"));
@@ -43,7 +41,6 @@ public class LikeCommentService implements ILikeCommentService {
                 .orElseThrow(() -> new BadRequestException("Comment not found"));
         if (likeComment.getId() == null) {
             likeComment = new LikeComment();
-            likeComment.setMovie(movie);
             likeComment.setUser(user);
             likeComment.setComment(comment);
             likeComment.setLikeCount(1L);

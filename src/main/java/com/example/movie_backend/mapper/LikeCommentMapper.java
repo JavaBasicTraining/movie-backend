@@ -17,7 +17,6 @@ public class LikeCommentMapper {
                         .id(dto.getIdUser())
                         .build())
                 .comment(dto.getIdComment()== null ? null: Comment.builder().id(dto.getIdComment()).build())
-                .movie(dto.getIdMovie()== null ? null: Movie.builder().id(dto.getIdMovie()).build())
                 .build();
     }
 
@@ -28,7 +27,6 @@ public class LikeCommentMapper {
                         .id(dto.getIdUser())
                         .build())
                 .comment(dto.getIdComment()== null ? null: Comment.builder().id(dto.getIdComment()).build())
-                .movie(dto.getIdMovie()== null ? null: Movie.builder().id(dto.getIdMovie()).build())
                 .build();
     }
 
@@ -40,7 +38,6 @@ public class LikeCommentMapper {
                 .id(entity.getId() == null ? null : entity.getId())
                 .likeCount(entity.getLikeCount())
                 .idUser(entity.getUser() == null ? null : entity.getUser().getId())
-                .idMovie(entity.getMovie() == null ? null : entity.getMovie().getId())
                 .idComment(entity.getComment() == null ? null : entity.getComment().getId())
                 .build();
     }
