@@ -25,6 +25,7 @@ import java.text.Normalizer;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
 
@@ -213,16 +214,31 @@ public class MovieService implements IMovieService {
             }
             movie.setPath(uniquePath);
         }
-        movie = movieRepository.save(movie);
-
-        if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty() && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
+        if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty()
+                && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
             for (int i = 0; i < movie.getEpisodes().size(); i++) {
-                EpisodeDTO episodeDTO = movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList().get(i);
-                Episode episode = movie.getEpisodes().stream().sorted(Comparator.comparingLong(Episode::getEpisodeCount)).toList().get(i);
+                EpisodeDTO episodeDTO = movieDTO.getEpisodes().stream()
+                        .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
+                        .toList().get(i);
+                Episode episode = movie.getEpisodes().stream()
+                        .sorted(Comparator.comparingLong(Episode::getEpisodeCount))
+                        .toList().get(i);
                 episodeDTO.setId(episode.getId());
+                Episode existingEpisode =  episodeRepository.findById(episode.getId()).orElse(null);
+                String linkPoster = episode.getPosterUrl() == null ? (existingEpisode != null ? existingEpisode.getPosterUrl() : null)
+                        : episode.getPosterUrl();
+                String linkVideo = episode.getVideoUrl() == null ? (existingEpisode != null ? existingEpisode.getVideoUrl() : null)
+                        : episode.getVideoUrl();
+                episode.setPosterUrl(linkPoster);
+                episode.setVideoUrl(linkVideo);
             }
         }
-        return movieDTO.toBuilder().episodes(movieDTO.getEpisodes().stream().sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList()).build();
+        movieRepository.save(movie);
+        return movieDTO.toBuilder()
+                .episodes(movieDTO.getEpisodes().stream()
+                        .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
+                        .toList())
+                .build();
     }
 
 }
