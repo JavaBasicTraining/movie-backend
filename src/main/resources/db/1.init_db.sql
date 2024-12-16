@@ -36,20 +36,6 @@ CREATE TABLE `app_user_authority`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `app_user_authority`
---
-
-LOCK TABLES `app_user_authority` WRITE;
-/*!40000 ALTER TABLE `app_user_authority`
-    DISABLE KEYS */;
-INSERT INTO `app_user_authority`
-VALUES (2, 'admin'),
-       (1, 'user');
-/*!40000 ALTER TABLE `app_user_authority`
-    ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `authority`
 --
 
@@ -134,19 +120,6 @@ CREATE TABLE `comment`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comment`
---
-
-LOCK TABLES `comment` WRITE;
-/*!40000 ALTER TABLE `comment`
-    DISABLE KEYS */;
-INSERT INTO `comment`
-VALUES (1, 'dsf', 2);
-/*!40000 ALTER TABLE `comment`
-    ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `episode`
 --
 
@@ -171,21 +144,6 @@ CREATE TABLE `episode`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `episode`
---
-
-LOCK TABLES `episode` WRITE;
-/*!40000 ALTER TABLE `episode`
-    DISABLE KEYS */;
-INSERT INTO `episode`
-VALUES (214, 'ádf', 2, NULL, NULL, 116),
-       (215, 'Hay', 1, NULL, NULL, 116),
-       (217, 'sadf', 3, NULL, NULL, 116);
-/*!40000 ALTER TABLE `episode`
-    ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `evaluation`
 --
 
@@ -206,20 +164,6 @@ CREATE TABLE `evaluation`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `evaluation`
---
-
-LOCK TABLES `evaluation` WRITE;
-/*!40000 ALTER TABLE `evaluation`
-    DISABLE KEYS */;
-INSERT INTO `evaluation`
-VALUES (12, 101, 3, 2),
-       (13, 112, 4, 2);
-/*!40000 ALTER TABLE `evaluation`
-    ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `genre`
@@ -282,24 +226,6 @@ CREATE TABLE `movie`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `movie`
---
-
-LOCK TABLES `movie` WRITE;
-/*!40000 ALTER TABLE `movie`
-    DISABLE KEYS */;
-INSERT INTO `movie`
-VALUES (112, 'Mỹ', 'Walk Alone', 'Walk Alone', 'Walk Alone', 'movies/112/poster/alone.jpg', 'Walk Alone',
-        'movies/112/video/Let Us In - Official Trailer.mp4', 1992, 3, NULL),
-       (113, 'Mỹ', 'Joker', 'Joker', 'Joker', NULL, 'Joker', NULL, 1998, NULL, NULL),
-       (116, 'Hồng Kông', 'Đội  Bóng Thiếu Lâm', 'Đội  Bóng Thiếu Lâm', 'Đội  Bóng Thiếu Lâm',
-        'movies/116/poster/tải xuống (5).jpg', 'Đội  Bóng Thiếu Lâm', 'movies/116/video/tải xuống (5).jpg', 1998, 1,
-        NULL);
-/*!40000 ALTER TABLE `movie`
-    ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `movie_comment`
@@ -384,23 +310,6 @@ CREATE TABLE `movie_genres`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `movie_genres`
---
-
-LOCK TABLES `movie_genres` WRITE;
-/*!40000 ALTER TABLE `movie_genres`
-    DISABLE KEYS */;
-INSERT INTO `movie_genres`
-VALUES (113, 1),
-       (116, 1),
-       (113, 2),
-       (112, 3),
-       (113, 3);
-/*!40000 ALTER TABLE `movie_genres`
-    ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `movie_package`
 --
 
@@ -449,24 +358,6 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user`
-    DISABLE KEYS */;
-INSERT INTO `user`
-VALUES (1, 'string', 'string', '$2a$10$Q53wEDhdcejQAzeKsUbJf../6TFyXvNVEB/DXdGK2F3BwYDmkSsgC', 'user'),
-       (2, 'string', 'string', '$2a$10$MBX.VU61fURB7eQvEVMNFOt22MgKGuw/4YwNOQfKyUWS8PvEMoNja', 'admin');
-/*!40000 ALTER TABLE `user`
-    ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping events for database 'movie_website'
---
 
 --
 -- Dumping routines for database 'movie_website'
