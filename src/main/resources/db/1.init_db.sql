@@ -217,7 +217,6 @@ CREATE TABLE `movie`
     `video_url`   varchar(255) DEFAULT NULL,
     `year`        bigint       DEFAULT NULL,
     `category_id` bigint       DEFAULT NULL,
-    `trailer_url` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FK5e3qbgdbp67ml7el1odwu65gi` (`category_id`),
     CONSTRAINT `FK5e3qbgdbp67ml7el1odwu65gi` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
