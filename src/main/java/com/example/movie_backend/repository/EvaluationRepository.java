@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     @Query(value = """
             SELECT *
-            FROM movie_website.evaluation
+            FROM evaluation
             where user_id = :userId and movie_id = :movieId
         """, nativeQuery = true)
     Optional<Evaluation> findByEvaluationByUserId(@Param("userId") Long userId,
