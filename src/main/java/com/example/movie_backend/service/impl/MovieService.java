@@ -71,13 +71,12 @@ public class MovieService implements IMovieService {
 
 
     @Override
-    public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile poster, MultipartFile video) {
-        if (!movieRepository.existsById(movieId) && poster == null && video == null) {
+    public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile file , String type ) {
+        if (!movieRepository.existsById(movieId) && type == null) {
             throw new EntityNotFoundException();
         }
         Episode episode = episodeRepository.findById(episodeId).orElseThrow(EntityNotFoundException::new);
-        uploadEpisodeFile(episode, movieId, poster, POSTER);
-        uploadEpisodeFile(episode, movieId, video, "video");
+        uploadEpisodeFile(episode, movieId, file, type);
     }
 
     public void uploadEpisodeFile(Episode episode, Long movieId, MultipartFile file, String type) {
