@@ -28,5 +28,5 @@ IMovieService {
 
     void uploadMovieFile(Long id, MultipartFile file, String type);
 
-    void uploadEpisodeFile(Long id, Long episodeId, MultipartFile poster, MultipartFile video);
+    void uploadEpisodeFile(Long id, Long episodeId, MultipartFile file, String type);
 }
