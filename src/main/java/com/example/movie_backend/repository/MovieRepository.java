@@ -1,6 +1,7 @@
 package com.example.movie_backend.repository;
 
 import com.example.movie_backend.entity.Movie;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,7 +36,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             @Param("keyword") String keyword,
             @Param("genre") String genre,
             @Param("country") String country,
-            Pageable pageable
+            @ParameterObject Pageable pageable
     );
 
     @Query(

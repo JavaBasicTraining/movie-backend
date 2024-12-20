@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-backend
+  labels:
+    app: movie-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-backend
+  template:
+    metadata:
+      labels:
+        app: movie-backend
+    spec:
+      containers:
+      - name: movie-backend
+        image: huyha25062000/movie-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+        env:
+        - name: DATABASE_URL
+          value: "jdbc:mysql://192.168.1.200:3306/movie_website_2"
+        - name: DATABASE_USER
+          value: "root"
+        - name: DATABASE_PASSWORD
+          value: "FormosVN@123"
+        - name: SERVER_PORT
+          value: "8081"
+        - name: ENV
+          value: "dev"
+        - name: MINIO_ENDPOINT
+          value: "http://192.168.1.200:9000"
+        - name: MINIO_ACCESS_KEY
+          value: "ROOTUSER"
+        - name: MINIO_SECRET_KEY
+          value: "CHANGEME123"
