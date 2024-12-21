@@ -13,7 +13,7 @@ import java.util.Set;
 public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query(value = """
         SELECT * 
-        FROM movie_website.episode
+        FROM episode
         WHERE movie_id = :movieId
         ORDER BY episode_count asc;
                                                                                              """, nativeQuery = true)
@@ -21,7 +21,7 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
 
     @Query(value = """
         SELECT * 
-        FROM movie_website.episode 
+        FROM episode 
         WHERE movie_id = :movieId  
         and episode_count = :episodeCount  
                                                                                                        """, nativeQuery = true)

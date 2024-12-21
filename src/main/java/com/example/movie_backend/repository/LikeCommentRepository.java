@@ -12,7 +12,7 @@ import java.util.List;
 public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> {
     @Query(value = """
                SELECT *
-                FROM movie_website.like_comment lc
+                FROM like_comment lc
                 WHERE  lc.movie_id = :movieId
                 and lc.user_id = :userId
             """, nativeQuery = true)

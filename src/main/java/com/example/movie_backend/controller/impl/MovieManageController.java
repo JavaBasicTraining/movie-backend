@@ -64,9 +64,10 @@ public class MovieManageController {
     @PatchMapping(value = "{id}/episodes/{episodeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadEpisodeFile(@PathVariable("id") Long id,
                                                   @PathVariable("episodeId") Long episodeId,
-                                                  @RequestPart("poster") MultipartFile poster,
-                                                  @RequestPart(value = "video", required = false) MultipartFile video) {
-        movieService.uploadEpisodeFile(id, episodeId, poster, video);
+                                                  @RequestPart("file") MultipartFile file,
+                                                  @RequestParam("type") String type
+                                                  ) {
+        movieService.uploadEpisodeFile(id, episodeId, file, type);
         return ResponseEntity.noContent().build();
     }
 

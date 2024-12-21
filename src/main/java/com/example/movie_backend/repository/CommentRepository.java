@@ -25,7 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
             value = """
                     SELECT c.*
-                    FROM movie_website.comment c
+                    FROM comment c
                     WHERE c.user_id = :userId AND c.movie_id = :movieId
                     """, nativeQuery = true
     )

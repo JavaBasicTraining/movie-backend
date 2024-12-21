@@ -72,9 +72,7 @@ public class Movie implements Serializable {
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    @Builder.Default
-    private Set<LikeComment> likeComments = new HashSet<>();
+
 
     @Builder.Default
     @ManyToMany

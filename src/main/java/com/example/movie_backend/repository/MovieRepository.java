@@ -41,8 +41,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
                     SELECT m.*
-                    FROM movie_website.movie m
-                    JOIN movie_website.evaluation e ON m.id = e.movie_id
+                    FROM movie m
+                    JOIN evaluation e ON m.id = e.movie_id
                     ORDER BY e.star DESC
                     LIMIT 5;
                     """,
@@ -53,10 +53,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
             value = """
                     SELECT DISTINCT m.*
-                     FROM movie_website.movie m
-                     LEFT JOIN movie_website.movie_genres mc
+                     FROM movie m
+                     LEFT JOIN movie_genres mc
                          ON m.id = mc.movie_id
-                     LEFT JOIN movie_website.genre c
+                     LEFT JOIN genre c
                          ON mc.genres_id = c.id
                      WHERE m.path = :path
                     """,

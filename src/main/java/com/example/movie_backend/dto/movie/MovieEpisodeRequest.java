@@ -35,6 +35,7 @@ public class MovieEpisodeRequest {
 
     private String country;
 
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Long> idGenre;
 
