@@ -68,11 +68,10 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Genre> genres = new HashSet<>();
 
+    @JsonIgnoreProperties(value = "movie", allowSetters = true)
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Comment> comments = new HashSet<>();
-
-
 
     @Builder.Default
     @ManyToMany

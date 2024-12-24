@@ -39,14 +39,14 @@ public class MovieManageController {
     }
 
     @PostMapping()
-    public ResponseEntity<MovieDTO> createWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest) {
+    public ResponseEntity<MovieDTO> createWithEpisode(@RequestBody MovieDTO movieEpisodeRequest) {
         return ResponseEntity.ok(
                 movieService.createWithEpisode(movieEpisodeRequest)
         );
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieEpisodeRequest request) {
+    public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieDTO request) {
         return ResponseEntity.ok(
                 movieService.updateWithEpisode(id, request)
         );

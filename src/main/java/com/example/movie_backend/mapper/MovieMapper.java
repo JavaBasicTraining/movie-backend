@@ -1,226 +1,78 @@
 package com.example.movie_backend.mapper;
 
 import com.example.movie_backend.dto.category.CategoryDTO;
-import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
 import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
-import com.example.movie_backend.entity.*;
-import org.springframework.stereotype.Component;
+import com.example.movie_backend.entity.Category;
+import com.example.movie_backend.entity.Genre;
+import com.example.movie_backend.entity.Movie;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
-@Component
-public class MovieMapper {
-    public Category convertCategory(CategoryDTO categoryDTO) {
-        if (categoryDTO.getId() != null) {
-            return Category.builder()
-                    .id(categoryDTO.getId())
-                    .build();
+@Mapper(componentModel = "spring")
+public interface MovieMapper {
+    MovieMapper INSTANCE = Mappers.getMapper(MovieMapper.class);
 
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "episodes", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "genres", source = "genres", qualifiedByName = "genresWithoutMovies")
+    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
+    MovieDTO toDTO(Movie entity);
+
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    Movie toEntity(MovieDTO dto);
+
+    Movie toEntity(MovieEpisodeRequest movie);
+
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "episodes", ignore = true)
+    @Mapping(target = "genres", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    Movie toEntity(MovieDTO request, @MappingTarget Movie movie);
+
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "episodes", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "genres", source = "genres", qualifiedByName = "genresWithoutMovies")
+    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
+    MovieDTOWithoutJoin toDTOWithoutJoin(Movie item);
+
+    @Named("genresWithoutMovies")
+    default List<GenreDTO> mapGenresWithoutMovies(Set<Genre> genres) {
+        if (genres == null) {
+            return Collections.emptyList();
         }
-        return null;
-    }
-
-    public Set<Genre> convertGenresIds(Set<Long> idGenres) {
-        return idGenres == null ? null : idGenres.stream()
-                .map(id -> Genre.builder().id(id).build())
-                .collect(Collectors.toSet());
-    }
-
-    public Set<Comment> convertCommentIds(Set<Long> idComments) {
-        return idComments == null ? null : idComments.stream()
-                .map(id -> Comment.builder().id(id).build())
-                .collect(Collectors.toSet());
-    }
-
-    public Set<Evaluation> convertEvaluations(Set<Long> idEvaluations) {
-        return idEvaluations == null ? null : idEvaluations.stream()
-                .map(id -> Evaluation.builder().id(id).build())
-                .collect(Collectors.toSet());
-    }
-
-    public List<Episode> convertEpisodes(List<EpisodeDTO> episodeDTOs) {
-        return episodeDTOs == null ? null : episodeDTOs.stream()
-                .map(dto -> Episode.builder()
-                        .id(dto.getId())
-                        .episodeCount(dto.getEpisodeCount())
-                        .descriptions(dto.getDescriptions())
-                        .videoUrl(dto.getVideoUrl())
-                        .posterUrl(dto.getPosterUrl())
-                        .tempId(dto.getTempId())
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-
-    public Movie toEntity(MovieDTO dto) {
-        return Movie.builder()
-                .nameMovie(dto.getNameMovie())
-                .viTitle(dto.getViTitle())
-                .path(dto.getPath())
-                .enTitle(dto.getEnTitle())
-                .description(dto.getDescription())
-                .posterUrl(dto.getPosterUrl())
-                .year(dto.getYear())
-                .country(dto.getCountry())
-                .videoUrl(dto.getVideoUrl() == null ? null : dto.getVideoUrl())
-                .trailerUrl(dto.getTrailerUrl() == null ? null : dto.getTrailerUrl())
-                .category(convertCategory(dto.getCategory()))
-                .genres(convertGenresIds(dto.getIdGenre()))
-                .comments(convertCommentIds(dto.getIdComment()))
-                .evaluations(convertEvaluations(dto.getIdEvaluation()))
-                .episodes(convertEpisodes(dto.getEpisodes()))
+        Function<Genre, GenreDTO> mapFunc = genre -> GenreDTO.builder()
+                .id(genre.getId())
+                .name(genre.getName())
                 .build();
+        return genres.stream()
+                .map(mapFunc)
+                .toList();
     }
 
-
-    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto) {
-        Movie movie = Movie.builder()
-                .id(dto.getId())
-                .nameMovie(dto.getNameMovie())
-                .enTitle(dto.getViTitle())
-                .viTitle(dto.getEnTitle())
-                .path(dto.getPath())
-                .description(dto.getDescription())
-                .year(dto.getYear())
-                .country(dto.getCountry())
-                .category(dto.getIdCategory() == null ? null : Category.builder()
-                        .id(dto.getIdCategory())
-                        .build())
-                .genres(dto.getIdGenre() == null ? null : dto.getIdGenre()
-                        .stream()
-                        .map(ids -> Genre.builder()
-                                .id(ids)
-                                .build())
-                        .collect(Collectors.toSet()))
-                .episodes(convertEpisodes(dto.getEpisodes()))
-                .build();
-
-        movie.setEpisodes(movie.getEpisodes());
-        return movie;
-    }
-
-    public Movie toUpdateMovieWithEpisodes(MovieEpisodeRequest dto, Movie currentMovie) {
-        Movie movie = currentMovie.toBuilder()
-                .id(currentMovie.getId())
-                .nameMovie(dto.getNameMovie())
-                .enTitle(dto.getViTitle())
-                .viTitle(dto.getEnTitle())
-                .description(dto.getDescription())
-                .year(dto.getYear())
-                .path(dto.getPath())
-                .country(dto.getCountry())
-                .episodes(convertEpisodes(dto.getEpisodes()))
-                .category(dto.getIdCategory() == null ? null : Category.builder()
-                        .id(dto.getIdCategory())
-                        .build())
-                .genres(dto.getIdGenre() == null ? null : dto.getIdGenre()
-                        .stream()
-                        .map(ids -> Genre.builder()
-                                .id(ids)
-                                .build())
-                        .collect(Collectors.toSet()))
-                .episodes(convertEpisodes(dto.getEpisodes()))
-                .build();
-
-        movie.setEpisodes(movie.getEpisodes());
-        return movie;
-    }
-
-    public Movie toEntity(MovieDTO dto, String name) {
-        return Movie
-                .builder()
-                .nameMovie(name)
-                .viTitle(dto.getViTitle())
-                .path(dto.getPath())
-                .enTitle(dto.getEnTitle())
-                .description(dto.getDescription())
-                .posterUrl(dto.getPosterUrl())
-                .year(dto.getYear())
-                .country(dto.getCountry())
-                .videoUrl(dto.getVideoUrl() == null ? null : dto.getVideoUrl())
-                .trailerUrl(dto.getTrailerUrl() == null ? null : dto.getTrailerUrl())
-                .category(convertCategory(dto.getCategory()))
-                .genres(convertGenresIds(dto.getIdGenre()))
-                .comments(convertCommentIds(dto.getIdComment()))
-                .evaluations(convertEvaluations(dto.getIdEvaluation()))
-                .episodes(convertEpisodes(dto.getEpisodes()))
-                .build();
-    }
-
-    public CategoryDTO convertCategoryToDTO(Category category) {
-        return category == null ? null : CategoryDTO.builder()
+    @Named("categoryWithoutMovies")
+    default CategoryDTO mapCategoryWithoutMovies(Category category) {
+        if (category == null) {
+            return null;
+        }
+        return CategoryDTO.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .build();
-    }
-
-    public Set<GenreDTO> convertGenresToDTO(Set<Genre> genres) {
-        return genres == null ? null : genres.stream()
-                .map(genre -> GenreDTO.builder()
-                        .id(genre.getId())
-                        .name(genre.getName())
-                        .build())
-                .collect(Collectors.toSet());
-    }
-
-
-    public MovieDTO toDTO(Movie entity) {
-        List<EpisodeDTO> episodes = Objects.isNull(entity.getEpisodes()) ? null : entity.getEpisodes().stream()
-                .map(this::toEpisodeDTO)
-                .toList();
-
-        return MovieDTO.builder()
-                .id(entity.getId())
-                .nameMovie(entity.getNameMovie())
-                .path(entity.getPath())
-                .posterUrl(entity.getPosterUrl())
-                .videoUrl(entity.getVideoUrl())
-                .trailerUrl(entity.getTrailerUrl() == null ? null : entity.getTrailerUrl())
-                .viTitle(entity.getViTitle())
-                .enTitle(entity.getEnTitle())
-                .country(entity.getCountry())
-                .year(entity.getYear())
-                .description(entity.getDescription())
-                .category(convertCategoryToDTO(entity.getCategory()))
-                .genres(convertGenresToDTO(entity.getGenres()))
-                .episodes(episodes)
-                .build();
-    }
-
-
-    public EpisodeDTO toEpisodeDTO(Episode episode) {
-        return EpisodeDTO.builder()
-                .id(episode.getId())
-                .episodeCount(episode.getEpisodeCount())
-                .descriptions(episode.getDescriptions())
-                .videoUrl(episode.getVideoUrl())
-                .posterUrl(episode.getPosterUrl())
-                .tempId(episode.getTempId())
-                .build();
-    }
-
-    public Set<Long> convertEvaluationIdsToDTO(Set<Evaluation> evaluations) {
-        return evaluations == null ? null : evaluations.stream()
-                .map(Evaluation::getId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-    }
-
-    public MovieDTOWithoutJoin toDTOWithoutJoin(Movie entity) {
-        return MovieDTOWithoutJoin.builder()
-                .id(entity.getId())
-                .nameMovie(entity.getNameMovie())
-                .path(entity.getPath())
-                .posterUrl(entity.getPosterUrl())
-                .viTitle(entity.getViTitle()).enTitle(entity.getEnTitle()).country(entity.getCountry()).idCategory(entity.getCategory() == null ? null : entity.getCategory().getId()).description(entity.getDescription()).idGenre(entity.getGenres() == null ? null : entity.getGenres().stream().map(Genre::getId).filter(Objects::nonNull).collect(Collectors.toSet())).idComment(entity.getComments() == null ? null : entity.getComments().stream().map(Comment::getId).filter(Objects::nonNull).collect(Collectors.toSet()))
-                .genres(convertGenresToDTO(entity.getGenres()))
-                .idEvaluation(convertEvaluationIdsToDTO(entity.getEvaluations()))
                 .build();
     }
 }
