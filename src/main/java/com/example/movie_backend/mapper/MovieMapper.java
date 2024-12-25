@@ -1,78 +1,90 @@
 package com.example.movie_backend.mapper;
 
+import com.example.movie_backend.controller.dto.request.CreateMovieRequest;
 import com.example.movie_backend.dto.category.CategoryDTO;
+import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
-import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
 import com.example.movie_backend.entity.Category;
+import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Genre;
 import com.example.movie_backend.entity.Movie;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 @Mapper(componentModel = "spring")
 public interface MovieMapper {
     MovieMapper INSTANCE = Mappers.getMapper(MovieMapper.class);
 
     @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "episodes", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "episodes", source = "episodes", qualifiedByName = "episodesWithoutJoin")
     @Mapping(target = "genres", source = "genres", qualifiedByName = "genresWithoutMovies")
-    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
+    @Mapping(target = "category", source = "category", qualifiedByName = "categoryDTOWithoutMovies")
     MovieDTO toDTO(Movie entity);
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
     Movie toEntity(MovieDTO dto);
 
-    Movie toEntity(MovieEpisodeRequest movie);
-
     @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "episodes", ignore = true)
-    @Mapping(target = "genres", ignore = true)
-    @Mapping(target = "category", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "posterUrl", ignore = true)
+    @Mapping(target = "trailerUrl", ignore = true)
+    @Mapping(target = "videoUrl", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Movie toEntity(MovieDTO request, @MappingTarget Movie movie);
+    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
+    Movie toEntityForUpdate(MovieDTO request, @MappingTarget Movie movie);
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "episodes", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
     @Mapping(target = "genres", source = "genres", qualifiedByName = "genresWithoutMovies")
-    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
+    @Mapping(target = "category", source = "category", qualifiedByName = "categoryDTOWithoutMovies")
     MovieDTOWithoutJoin toDTOWithoutJoin(Movie item);
 
     @Named("genresWithoutMovies")
-    default List<GenreDTO> mapGenresWithoutMovies(Set<Genre> genres) {
-        if (genres == null) {
-            return Collections.emptyList();
-        }
-        Function<Genre, GenreDTO> mapFunc = genre -> GenreDTO.builder()
-                .id(genre.getId())
-                .name(genre.getName())
-                .build();
-        return genres.stream()
-                .map(mapFunc)
-                .toList();
-    }
+    List<GenreDTO> mapGenresWithoutMovies(Set<Genre> genres);
+
+    @Named("categoryDTOWithoutMovies")
+    @Mapping(target = "movies", ignore = true)
+    CategoryDTO mapCategoryDTOWithoutMovies(Category category);
 
     @Named("categoryWithoutMovies")
-    default CategoryDTO mapCategoryWithoutMovies(Category category) {
-        if (category == null) {
-            return null;
-        }
-        return CategoryDTO.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
+    @Mapping(target = "movies", ignore = true)
+    Category mapCategoryWithoutMovies(CategoryDTO category);
+
+    @Named("episodesWithoutJoin")
+    @IterableMapping(qualifiedByName = "episodeDTOWithoutJoin")
+    List<EpisodeDTO> mapEpisodesWithoutJoin(Set<Episode> episodes);
+
+    @Named("episodeDTOWithoutJoin")
+    @Mapping(target = "movie", ignore = true)
+    EpisodeDTO mapEpisodeDTOWithoutJoin(Episode episode);
+
+    @Mapping(target = "category", source = "categoryId", qualifiedByName = "categoryFromId")
+    @Mapping(target = "genres", source = "genreIds", qualifiedByName = "genresFromIds")
+    MovieDTO toDTO(CreateMovieRequest request);
+
+    @Named("categoryFromId")
+    default CategoryDTO mapCategoryFromId(Long categoryId) {
+        CategoryDTO category = new CategoryDTO();
+        category.setId(categoryId);
+        return category;
+    }
+
+    @Named("genresFromIds")
+    @IterableMapping(qualifiedByName = "genreFromId")
+    List<GenreDTO> mapGenresFromIds(List<Long> genresIds);
+
+    @Named("genreFromId")
+    default GenreDTO mapGenreFromId(Long genreId) {
+        GenreDTO genre = new GenreDTO();
+        genre.setId(genreId);
+        return genre;
     }
 }

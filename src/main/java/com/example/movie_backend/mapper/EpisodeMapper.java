@@ -2,48 +2,24 @@ package com.example.movie_backend.mapper;
 
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.entity.Episode;
-import com.example.movie_backend.entity.Movie;
-import org.springframework.stereotype.Component;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Component
-public class EpisodeMapper {
-    public Episode toEntity(EpisodeDTO dto) {
-        return Episode.builder()
-            .id(dto.getId())
-            .episodeCount(dto.getEpisodeCount())
-            .descriptions(dto.getDescriptions())
-            .videoUrl(dto.getVideoUrl())
-            .posterUrl(dto.getPosterUrl())
-            .movie(dto.getMovie().getId() == null ? null :
-                Movie.builder().id(
-                    dto.getMovieId()
-                ).build()
-            )
-            .build();
-    }
-    public Episode toEntity(EpisodeDTO dto, Long id) {
-        return Episode.builder()
-            .id(id)
-            .episodeCount(dto.getEpisodeCount())
-            .descriptions(dto.getDescriptions())
-            .videoUrl(dto.getVideoUrl())
-            .posterUrl(dto.getPosterUrl())
-            .movie(dto.getMovie().getId() == null ? null :
-                Movie.builder().id(
-                    dto.getMovieId()
-                ).build()
-            )
-            .build();
-    }
+import java.util.List;
+import java.util.Set;
 
-    public EpisodeDTO toDTO(Episode entity) {
-        return EpisodeDTO.builder()
-            .id(entity.getId())
-            .episodeCount(entity.getEpisodeCount())
-            .descriptions(entity.getDescriptions())
-            .posterUrl(entity.getPosterUrl())
-            .videoUrl(entity.getVideoUrl())
-            .movieId(entity.getMovie().getId() == null ? null : entity.getMovie().getId())
-            .build();
-    }
+@Mapper(componentModel = "spring")
+public interface EpisodeMapper {
+
+    @Mapping(target = "movie.comments", ignore = true)
+    EpisodeDTO toDTO(Episode episode);
+
+    @Named("dtoWithoutMovie")
+    @Mapping(target = "movie", ignore = true)
+    EpisodeDTO toDTOWithoutMovie(Episode episode);
+
+    @IterableMapping(qualifiedByName = "dtoWithoutMovie")
+    List<EpisodeDTO> mapEpisodes(Set<Episode> episodes);
 }

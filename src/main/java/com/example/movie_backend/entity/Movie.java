@@ -10,9 +10,7 @@ import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Table(name = "movie")
@@ -86,22 +84,18 @@ public class Movie implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
-    private List<Episode> episodes = new ArrayList<>();
+    private Set<Episode> episodes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Category category;
 
-    public void addCategory(Genre genre) {
-        this.genres.add(genre);
-    }
-
     public void addEvaluation(Evaluation evaluation) {
         this.evaluations.add(evaluation);
     }
 
-    public void setEpisodes(List<Episode> episodes) {
+    public void setEpisodes(Set<Episode> episodes) {
         episodes.forEach(episode -> episode.setMovie(this));
         this.episodes = episodes;
     }

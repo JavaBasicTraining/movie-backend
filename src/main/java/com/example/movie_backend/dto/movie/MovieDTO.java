@@ -7,11 +7,13 @@ import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,8 +46,9 @@ public class MovieDTO {
 
     private String videoPresignedUrl;
 
+    @Builder.Default
     @JsonIgnoreProperties(value = "movie", allowSetters = true)
-    private List<EpisodeDTO> episodes;
+    private List<EpisodeDTO> episodes = new ArrayList<>();
 
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private List<GenreDTO> genres;

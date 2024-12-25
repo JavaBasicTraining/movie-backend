@@ -29,10 +29,6 @@ public class CategoryMapper {
         return CategoryDTO.builder()
             .id(entity.getId())
             .name(entity.getName())
-            .movieIds(entity.getMovies().stream()
-                .map(
-                    Movie::getId
-                ).collect(Collectors.toSet()))
             .build();
     }
 }

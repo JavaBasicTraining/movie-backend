@@ -13,9 +13,9 @@ import java.util.List;
 public interface IMovieService {
     MovieDTO getById(Long id);
 
-    MovieDTO createWithEpisode(MovieDTO dto);
+    MovieDTO create(MovieDTO dto);
 
-    MovieDTO updateWithEpisode(Long movieId, MovieDTO request);
+    MovieDTO update(Long movieId, MovieDTO request);
 
     Boolean delete(Long id);
 

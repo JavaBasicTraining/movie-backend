@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.text.Normalizer;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +31,7 @@ import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MovieService implements IMovieService {
     private static final String POSTER = "poster";
@@ -114,7 +116,6 @@ public class MovieService implements IMovieService {
                 return episodeDTO;
             }).sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList();
             movieDTO.setEpisodes(episodeDTOs);
-
             return movieDTO;
         }).orElse(null);
     }
@@ -190,7 +191,7 @@ public class MovieService implements IMovieService {
         return uniquePath;
     }
 
-    public MovieDTO createWithEpisode(MovieDTO dto) {
+    public MovieDTO create(MovieDTO dto) {
         Movie movie = movieMapper.toEntity(dto);
 
         if (movie.getPath() == null || movie.getPath().isEmpty()) {
@@ -200,11 +201,11 @@ public class MovieService implements IMovieService {
         return movieMapper.toDTO(movieRepository.save(movie));
     }
 
-    public MovieDTO updateWithEpisode(Long movieId, MovieDTO request) {
+    public MovieDTO update(Long movieId, MovieDTO movieDTO) {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        if (!movie.getNameMovie().equals(request.getNameMovie())) {
+        if (!movie.getNameMovie().equals(movieDTO.getNameMovie())) {
             String uniquePath = generateUniquePath(movie.getNameMovie());
             if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
                 return null;
@@ -212,9 +213,9 @@ public class MovieService implements IMovieService {
             movie.setPath(uniquePath);
         }
 
-        movie = movieMapper.toEntity(request, movie);
-        MovieDTO movieDTO = movieMapper.toDTO(movie);
-
+        movie = movieMapper.toEntityForUpdate(movieDTO, movie);
+        movie = movieRepository.save(movie);
+        movieDTO = movieMapper.toDTO(movie);
         if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty()
                 && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
             for (int i = 0; i < movie.getEpisodes().size(); i++) {
@@ -227,8 +228,7 @@ public class MovieService implements IMovieService {
                 episodeDTO.setId(episode.getId());
             }
         }
-        movieRepository.save(movie);
-        return movieMapper.toDTO(movie);
+        return movieDTO;
     }
 
 }
