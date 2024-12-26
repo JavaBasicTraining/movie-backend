@@ -13,7 +13,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface EpisodeMapper {
 
-    @Mapping(target = "movie.comments", ignore = true)
+    @Mapping(target = "movie", ignore = true)
     EpisodeDTO toDTO(Episode episode);
 
     @Named("dtoWithoutMovie")

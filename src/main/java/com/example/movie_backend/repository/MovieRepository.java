@@ -29,6 +29,17 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                       AND (:genre IS NULL OR g.name = :genre)
                       AND (:country IS NULL OR m.country = :country)
                     """,
+            countQuery = """
+                    SELECT COUNT(DISTINCT m.id)
+                    FROM movie m
+                    LEFT JOIN movie_genres mc ON mc.movie_id = m.id
+                    LEFT JOIN genre g ON mc.genres_id = g.id
+                    WHERE (:keyword IS NULL
+                           OR m.name IS NULL
+                           OR m.name LIKE CONCAT('%', :keyword, '%'))
+                      AND (:genre IS NULL OR g.name = :genre)
+                      AND (:country IS NULL OR m.country = :country)
+                    """,
             nativeQuery = true
     )
     Page<Movie> query(
