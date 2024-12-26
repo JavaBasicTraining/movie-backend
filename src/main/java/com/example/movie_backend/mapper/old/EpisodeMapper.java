@@ -15,9 +15,7 @@ public class EpisodeMapper {
             .videoUrl(dto.getVideoUrl())
             .posterUrl(dto.getPosterUrl())
             .movie(dto.getMovie().getId() == null ? null :
-                Movie.builder().id(
-                    dto.getMovieId()
-                ).build()
+                    new Movie().setId(dto.getMovieId())
             )
             .build();
     }
@@ -30,9 +28,7 @@ public class EpisodeMapper {
             .videoUrl(dto.getVideoUrl())
             .posterUrl(dto.getPosterUrl())
             .movie(dto.getMovie().getId() == null ? null :
-                Movie.builder().id(
-                    dto.getMovieId()
-                ).build()
+                    new Movie().setId(dto.getMovieId())
             )
             .build();
     }

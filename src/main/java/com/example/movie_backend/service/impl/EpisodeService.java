@@ -1,11 +1,11 @@
 package com.example.movie_backend.service.impl;
 
-import com.example.movie_backend.controller.exception.BadRequestException;
-import com.example.movie_backend.controller.dto.request.CreateEpisodeRequest;
-import com.example.movie_backend.dto.episode.EpisodeDTO;
-import com.example.movie_backend.mapper.old.EpisodeMapper;
-import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.config.minio.MinioProperties;
+import com.example.movie_backend.controller.dto.request.CreateEpisodeRequest;
+import com.example.movie_backend.controller.exception.BadRequestException;
+import com.example.movie_backend.dto.episode.EpisodeDTO;
+import com.example.movie_backend.entity.Episode;
+import com.example.movie_backend.mapper.old.EpisodeMapper;
 import com.example.movie_backend.repository.EpisodeRepository;
 import com.example.movie_backend.service.IEpisodeService;
 import io.minio.MinioClient;
@@ -103,9 +103,9 @@ public class EpisodeService implements IEpisodeService {
                         EpisodeDTO episodeDTO = mapper.toDTO(item);
                         if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
                             String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                            episodeDTO.setPosterUrl(linkPoster);
+                            episodeDTO.setPosterPresignedUrl(linkPoster);
                             String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                            episodeDTO.setVideoUrl(linkVideo);
+                            episodeDTO.setVideoPresignedUrl(linkVideo);
                         }
                         return episodeDTO;
                     })

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 
@@ -17,8 +18,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@Accessors(chain = true)
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,7 +57,6 @@ public class Movie implements Serializable {
     @Column(name = "year")
     private Long year;
 
-    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "movie_genres",
@@ -68,10 +68,8 @@ public class Movie implements Serializable {
 
     @JsonIgnoreProperties(value = "movie", allowSetters = true)
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
-    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "movie_evaluation",
@@ -81,7 +79,6 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = "movies", allowSetters = true)
     private Set<Evaluation> evaluations = new HashSet<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = {"movie"}, allowSetters = true)
     private Set<Episode> episodes = new HashSet<>();
@@ -96,7 +93,8 @@ public class Movie implements Serializable {
     }
 
     public void setEpisodes(Set<Episode> episodes) {
+        this.episodes.clear();
         episodes.forEach(episode -> episode.setMovie(this));
-        this.episodes = episodes;
+        this.episodes.addAll(episodes);
     }
 }

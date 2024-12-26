@@ -27,18 +27,9 @@ public interface MovieMapper {
     @Mapping(target = "category", source = "category", qualifiedByName = "categoryDTOWithoutMovies")
     MovieDTO toDTO(Movie entity);
 
-    @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "evaluations", ignore = true)
-    Movie toEntity(MovieDTO dto);
-
-    @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "evaluations", ignore = true)
-    @Mapping(target = "posterUrl", ignore = true)
-    @Mapping(target = "trailerUrl", ignore = true)
-    @Mapping(target = "videoUrl", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", source = "category", qualifiedByName = "categoryWithoutMovies")
-    Movie toEntityForUpdate(MovieDTO request, @MappingTarget Movie movie);
+    @Mapping(target = "category", source = "categoryId", qualifiedByName = "categoryFromId")
+    @Mapping(target = "genres", source = "genreIds", qualifiedByName = "genresFromIds")
+    MovieDTO toDTO(CreateMovieRequest request);
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "episodes", ignore = true)
@@ -66,10 +57,6 @@ public interface MovieMapper {
     @Mapping(target = "movie", ignore = true)
     EpisodeDTO mapEpisodeDTOWithoutJoin(Episode episode);
 
-    @Mapping(target = "category", source = "categoryId", qualifiedByName = "categoryFromId")
-    @Mapping(target = "genres", source = "genreIds", qualifiedByName = "genresFromIds")
-    MovieDTO toDTO(CreateMovieRequest request);
-
     @Named("categoryFromId")
     default CategoryDTO mapCategoryFromId(Long categoryId) {
         CategoryDTO category = new CategoryDTO();
@@ -87,4 +74,31 @@ public interface MovieMapper {
         genre.setId(genreId);
         return genre;
     }
+
+    // Entity Mapping
+
+    @Mapping(target = "posterUrl", ignore = true)
+    @Mapping(target = "videoUrl", ignore = true)
+    @Mapping(target = "trailerUrl", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "episodes", expression = "java(episodeDTOListToEpisodeSet(request.getEpisodes()))")
+    Movie toEntity(MovieDTO request);
+
+    @Mapping(target = "posterUrl", ignore = true)
+    @Mapping(target = "videoUrl", ignore = true)
+    @Mapping(target = "trailerUrl", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "episodes", expression = "java(episodeDTOListToEpisodeSet(request.getEpisodes()))")
+    void toEntityForUpdate(MovieDTO request, @MappingTarget Movie movie);
+
+    Set<Episode> episodeDTOListToEpisodeSet(List<EpisodeDTO> episodeDTOs);
+
+    @Mapping(target = "movie", ignore = true)
+    Episode episodeDTOToEntity(EpisodeDTO episodeDTO);
+
+    @Mapping(target = "movies", ignore = true)
+    Category mapCategoryDTOToEntity(CategoryDTO categoryDTO);
 }

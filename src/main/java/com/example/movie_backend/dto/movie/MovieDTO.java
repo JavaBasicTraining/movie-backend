@@ -45,6 +45,8 @@ public class MovieDTO {
     private String path;
 
     private String videoPresignedUrl;
+    private String posterPresignedUrl;
+    private String trailerPresignedUrl;
 
     @Builder.Default
     @JsonIgnoreProperties(value = "movie", allowSetters = true)
