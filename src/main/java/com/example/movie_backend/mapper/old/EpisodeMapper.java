@@ -6,6 +6,7 @@ import com.example.movie_backend.entity.Movie;
 import org.springframework.stereotype.Component;
 
 @Component
+@Deprecated(since = "12-2024", forRemoval = true)
 public class EpisodeMapper {
     public Episode toEntity(EpisodeDTO dto) {
         return Episode.builder()
