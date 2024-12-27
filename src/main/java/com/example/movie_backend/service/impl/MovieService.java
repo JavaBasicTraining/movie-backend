@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
+import static com.example.movie_backend.constant.SpecialCharacter.SLASH;
 
 @Slf4j
 @Service
