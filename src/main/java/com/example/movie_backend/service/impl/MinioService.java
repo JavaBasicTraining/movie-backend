@@ -4,6 +4,7 @@ import com.example.movie_backend.config.minio.MinioProperties;
 import com.example.movie_backend.controller.exception.ServerErrorException;
 import com.example.movie_backend.dto.file.FileInfo;
 import com.example.movie_backend.service.IMinioService;
+import com.example.movie_backend.service.IPresignedUrlCacheService;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
@@ -25,7 +26,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -34,18 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class MinioService implements IMinioService {
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
-    private final ConcurrentHashMap<String, CachedUrl> urlCache = new ConcurrentHashMap<>();
-
-    private static class CachedUrl {
-        String url;
-        long expiryTime;
-
-        CachedUrl(String url, long expiryTime) {
-            this.url = url;
-            this.expiryTime = expiryTime;
-        }
-    }
-
+    private final IPresignedUrlCacheService presignedUrlCacheService;
 
     @Override
     public FileInfo uploadByFile(MultipartFile file, String objectName) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -129,11 +119,9 @@ public class MinioService implements IMinioService {
 
     @Override
     public String getPreSignedLink(String object) {
-        long currentTime = System.currentTimeMillis();
-
-        CachedUrl cachedUrl = urlCache.get(object);
-        if (cachedUrl != null && currentTime < cachedUrl.expiryTime) {
-            return cachedUrl.url;
+        String cachedUrl = presignedUrlCacheService.getUrl(object);
+        if (Objects.nonNull(cachedUrl)) {
+            return cachedUrl;
         }
 
         try {
@@ -144,8 +132,7 @@ public class MinioService implements IMinioService {
                             .object(object)
                             .expiry(2, TimeUnit.HOURS)
                             .build());
-            long expiryTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2);
-            urlCache.put(object, new CachedUrl(url, expiryTime));
+            presignedUrlCacheService.setUrl(object, url);
             return url;
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
             log.error("Error when get pre-signed url: {}", e.getMessage());
