@@ -18,10 +18,6 @@ public class CategoryMapper {
     public Category toEntity(CategoryDTO dto, Long id) {
         return Category.builder()
             .name(dto.getName())
-            .movies(dto.getMovies().stream()
-                .map(movie -> Movie.builder()
-                    .id(id)
-                    .build()).collect(Collectors.toSet()))
             .build();
     }
 
@@ -29,10 +25,6 @@ public class CategoryMapper {
         return CategoryDTO.builder()
             .id(entity.getId())
             .name(entity.getName())
-            .movieIds(entity.getMovies().stream()
-                .map(
-                    Movie::getId
-                ).collect(Collectors.toSet()))
             .build();
     }
 }

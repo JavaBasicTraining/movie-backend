@@ -1,18 +1,18 @@
 package com.example.movie_backend.service.impl;
 
+import com.example.movie_backend.controller.dto.request.QueryMovieRequest;
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.EntityNotFoundException;
 import com.example.movie_backend.controller.exception.ServerErrorException;
-import com.example.movie_backend.controller.dto.request.QueryMovieRequest;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
-import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
-import com.example.movie_backend.mapper.MovieMapper;
 import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Movie;
+import com.example.movie_backend.mapper.MovieMapper;
 import com.example.movie_backend.repository.EpisodeRepository;
 import com.example.movie_backend.repository.MovieRepository;
+import com.example.movie_backend.service.IMinioService;
 import com.example.movie_backend.service.IMovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,25 +21,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.text.Normalizer;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MovieService implements IMovieService {
     private static final String POSTER = "poster";
     private static final String VIDEO = "video";
 
-    private final MinioService minioService;
-    private final MovieMapper mapper;
+    private final IMinioService minioService;
     private final MovieRepository movieRepository;
     private final EpisodeRepository episodeRepository;
+    private final MovieMapper movieMapper;
 
     public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
         try {
@@ -69,9 +71,8 @@ public class MovieService implements IMovieService {
         uploadMovieFile(movie, file, type);
     }
 
-
     @Override
-    public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile file , String type ) {
+    public void uploadEpisodeFile(Long movieId, Long episodeId, MultipartFile file, String type) {
         if (!movieRepository.existsById(movieId) && type == null) {
             throw new EntityNotFoundException();
         }
@@ -81,7 +82,8 @@ public class MovieService implements IMovieService {
 
     public void uploadEpisodeFile(Episode episode, Long movieId, MultipartFile file, String type) {
         try {
-            String object = String.format("movies/%s/episodes/%s/%s/%s", movieId, episode.getId(), type, file.getOriginalFilename());
+            String object = String.format("movies/%s/episodes/%s/%s/%s", movieId, episode.getId(), type,
+                    file.getOriginalFilename());
             if (POSTER.equals(type)) {
                 episode.setPosterUrl(object);
             } else {
@@ -98,26 +100,32 @@ public class MovieService implements IMovieService {
     @Override
     public MovieDTO getById(Long id) {
         return movieRepository.findById(id).map(item -> {
-            MovieDTO movieDTO = mapper.toDTO(item);
-            movieDTO.setPosterUrl(movieDTO.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getPosterUrl()));
-            movieDTO.setVideoUrl(movieDTO.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getVideoUrl()));
-            movieDTO.setTrailerUrl(movieDTO.getTrailerUrl() == null ? null : this.minioService.getPreSignedLink(movieDTO.getTrailerUrl()));
-            List<EpisodeDTO> episodeDTOs = item.getEpisodes().stream().map(episode -> {
-                String linkPoster = episode.getPosterUrl() == null ? null : this.minioService.getPreSignedLink(episode.getPosterUrl());
-                String linkVideo = episode.getVideoUrl() == null ? null : this.minioService.getPreSignedLink(episode.getVideoUrl());
-                EpisodeDTO episodeDTO = new EpisodeDTO();
-                episodeDTO.setId(episode.getId());
-                episodeDTO.setEpisodeCount(episode.getEpisodeCount());
-                episodeDTO.setDescriptions(episode.getDescriptions());
-                episodeDTO.setMovieId(episode.getMovie().getId());
-                episodeDTO.setPosterUrl(linkPoster);
-                episodeDTO.setVideoUrl(linkVideo);
-                return episodeDTO;
-            }).sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount)).toList();
-            movieDTO.setEpisodes(episodeDTOs);
+            MovieDTO movieDTO = movieMapper.toDTO(item);
+            movieDTO.setPosterPresignedUrl(getPresignedLink(item.getPosterUrl()));
+            movieDTO.setVideoPresignedUrl(getPresignedLink(item.getVideoUrl()));
+            movieDTO.setTrailerPresignedUrl(getPresignedLink(item.getTrailerUrl()));
 
+            List<EpisodeDTO> episodeDTOS = movieDTO.getEpisodes()
+                    .stream()
+                    .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
+                    .toList();
+
+            episodeDTOS.forEach(episodeDTO -> {
+                episodeDTO.setPosterPresignedUrl(getPresignedLink(episodeDTO.getPosterUrl()));
+                episodeDTO.setVideoPresignedUrl(getPresignedLink(episodeDTO.getVideoUrl()));
+            });
+
+            movieDTO.setEpisodes(episodeDTOS);
             return movieDTO;
         }).orElse(null);
+    }
+
+    private String getPresignedLink(String link) {
+        if (Objects.isNull(link)) {
+            return null;
+        }
+
+        return minioService.getPreSignedLink(link);
     }
 
     @Override
@@ -128,32 +136,34 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieDTOWithoutJoin> query(String name, String genre, String country) {
-        return movieRepository.query(name, genre, country, Pageable.ofSize(20)).stream().map(mapper::toDTOWithoutJoin).toList();
+        return movieRepository.query(name, genre, country, Pageable.ofSize(20)).stream()
+                .map(movieMapper::toDTOWithoutJoin).toList();
     }
 
     @Override
     public Page<MovieDTOWithoutJoin> query(QueryMovieRequest request, Pageable pageable) {
-        return movieRepository.query(request.getKeyword(), request.getGenre(), request.getCountry(), pageable).map(item -> {
-            MovieDTOWithoutJoin movieDTO = mapper.toDTOWithoutJoin(item);
+        return movieRepository.query(request.getKeyword(), request.getGenre(), request.getCountry(), pageable)
+                .map(item -> {
+                    MovieDTOWithoutJoin movieDTO = movieMapper.toDTOWithoutJoin(item);
 
-            if (Objects.nonNull(item.getPosterUrl())) {
-                String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                movieDTO.setPosterUrl(linkPoster);
-            }
+                    if (Objects.nonNull(item.getPosterUrl())) {
+                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
+                        movieDTO.setPosterUrl(linkPoster);
+                    }
 
-            if (Objects.nonNull(item.getVideoUrl())) {
-                String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                movieDTO.setVideoUrl(linkVideo);
-            }
+                    if (Objects.nonNull(item.getVideoUrl())) {
+                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
+                        movieDTO.setVideoUrl(linkVideo);
+                    }
 
-            return movieDTO;
-        });
+                    return movieDTO;
+                });
     }
 
     public MovieDTO filterMovie(String path) {
         return movieRepository.filterMovie(path)
                 .map(item -> {
-                    MovieDTO movieDTO = mapper.toDTO(item);
+                    MovieDTO movieDTO = movieMapper.toDTO(item);
                     if (item.getPosterUrl() != null) {
                         String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
                         movieDTO.setPosterUrl(linkPoster);
@@ -170,7 +180,6 @@ public class MovieService implements IMovieService {
                 })
                 .orElseThrow(() -> new BadRequestException("Movie not found"));
     }
-
 
     private String generateUniquePath(String movieName) {
         String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
@@ -191,53 +200,56 @@ public class MovieService implements IMovieService {
         return uniquePath;
     }
 
-
-    public MovieDTO createWithEpisode(MovieEpisodeRequest dto) {
-        Movie movie = mapper.toUpdateMovieWithEpisodes(dto);
-        if (movie.getPath() == null || movie.getPath().isEmpty()) {
-            movie.setPath(generateUniquePath(movie.getNameMovie()));
-        }
-
-        return mapper.toDTO(movieRepository.save(movie));
+    public MovieDTO create(MovieDTO dto) {
+        Movie movie = movieMapper.toEntity(dto);
+        String pathGenerated = generateUniquePath(movie.getNameMovie());
+        movie.setPath(pathGenerated);
+        return movieMapper.toDTO(movieRepository.save(movie));
     }
 
-    public MovieDTO updateWithEpisode(Long movieId, MovieEpisodeRequest request) {
+    public MovieDTO update(Long movieId, MovieDTO movieDTO) {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(EntityNotFoundException::new);
-        movie = mapper.toUpdateMovieWithEpisodes(request, movie);
-        MovieDTO movieDTO = mapper.toDTO(movie);
-        if (movie.getPath().equals(request.getPath())) {
+
+        if (!movie.getNameMovie().equals(movieDTO.getNameMovie())) {
             String uniquePath = generateUniquePath(movie.getNameMovie());
             if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
                 return null;
             }
             movie.setPath(uniquePath);
         }
-        if (Objects.nonNull(movieDTO.getEpisodes()) && !movieDTO.getEpisodes().isEmpty()
-                && Objects.nonNull(movie.getEpisodes()) && !movie.getEpisodes().isEmpty()) {
-            for (int i = 0; i < movie.getEpisodes().size(); i++) {
-                EpisodeDTO episodeDTO = movieDTO.getEpisodes().stream()
-                        .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
-                        .toList().get(i);
-                Episode episode = movie.getEpisodes().stream()
-                        .sorted(Comparator.comparingLong(Episode::getEpisodeCount))
-                        .toList().get(i);
-                episodeDTO.setId(episode.getId());
-                Episode existingEpisode =  episodeRepository.findById(episode.getId()).orElse(null);
-                String linkPoster = episode.getPosterUrl() == null ? (existingEpisode != null ? existingEpisode.getPosterUrl() : null)
-                        : episode.getPosterUrl();
-                String linkVideo = episode.getVideoUrl() == null ? (existingEpisode != null ? existingEpisode.getVideoUrl() : null)
-                        : episode.getVideoUrl();
-                episode.setPosterUrl(linkPoster);
-                episode.setVideoUrl(linkVideo);
-            }
+
+        movieMapper.toEntityForUpdate(movieDTO, movie);
+
+        movie = movieRepository.save(movie);
+
+        mapEpisodes(movie.getEpisodes(), movieDTO.getEpisodes());
+
+        return movieMapper.toDTO(movie);
+    }
+
+    private void mapEpisodes(Set<Episode> episodes, List<EpisodeDTO> episodeDTOS) {
+        boolean isEpisodesEmpty = Objects.isNull(episodes) || episodes.isEmpty();
+        boolean isEpisodeDTOSEmpty = Objects.isNull(episodeDTOS) || episodeDTOS.isEmpty();
+
+        if (isEpisodesEmpty || isEpisodeDTOSEmpty) {
+            return;
         }
-        movieRepository.save(movie);
-        return movieDTO.toBuilder()
-                .episodes(movieDTO.getEpisodes().stream()
-                        .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
-                        .toList())
-                .build();
+
+        List<EpisodeDTO> sortedEpisodeDTOS = episodeDTOS.stream()
+                .sorted(Comparator.comparingLong(EpisodeDTO::getEpisodeCount))
+                .toList();
+
+        List<Episode> sortedEpisodes = episodes.stream()
+                .sorted(Comparator.comparingLong(Episode::getEpisodeCount))
+                .toList();
+
+        for (int i = 0; i < sortedEpisodes.size(); i++) {
+            EpisodeDTO episodeDTO = sortedEpisodeDTOS.get(i);
+            Episode episode = sortedEpisodes.get(i);
+            episodeDTO.setId(episode.getId());
+            episode.setTempId(episodeDTO.getTempId());
+        }
     }
 
 }

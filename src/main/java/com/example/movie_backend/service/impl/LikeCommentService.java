@@ -5,7 +5,6 @@ import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import com.example.movie_backend.mapper.LikeCommentMapper;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.entity.LikeComment;
-import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.entity.User;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.repository.LikeCommentRepository;

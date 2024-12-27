@@ -1,9 +1,11 @@
 package com.example.movie_backend.controller.impl;
 
+import com.example.movie_backend.controller.dto.request.CreateMovieRequest;
 import com.example.movie_backend.controller.dto.request.QueryMovieRequest;
+import com.example.movie_backend.controller.dto.request.UpdateMovieRequest;
 import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.movie.MovieDTOWithoutJoin;
-import com.example.movie_backend.dto.movie.MovieEpisodeRequest;
+import com.example.movie_backend.mapper.MovieMapper;
 import com.example.movie_backend.service.IMovieService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -24,6 +26,7 @@ import java.util.List;
 public class MovieManageController {
 
     private final IMovieService movieService;
+    private final MovieMapper movieMapper;
 
     @GetMapping
     public ResponseEntity<List<MovieDTOWithoutJoin>> query(@ParameterObject Pageable pageable,
@@ -34,21 +37,22 @@ public class MovieManageController {
 
     @GetMapping("{id}")
     public ResponseEntity<MovieDTO> getById(@PathVariable("id") Long id) {
-
         return ResponseEntity.ok(movieService.getById(id));
     }
 
-    @PostMapping()
-    public ResponseEntity<MovieDTO> createWithEpisode(@RequestBody MovieEpisodeRequest movieEpisodeRequest) {
+    @PostMapping
+    public ResponseEntity<MovieDTO> create(@RequestBody CreateMovieRequest request) {
+        MovieDTO movieDTO = movieMapper.toDTO(request);
         return ResponseEntity.ok(
-                movieService.createWithEpisode(movieEpisodeRequest)
+                movieService.create(movieDTO)
         );
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<MovieDTO> updateWithEpisode(@PathVariable Long id, @RequestBody MovieEpisodeRequest request) {
+    public ResponseEntity<MovieDTO> update(@PathVariable Long id, @RequestBody UpdateMovieRequest request) {
+        MovieDTO movieDTO = movieMapper.toDTO(request);
         return ResponseEntity.ok(
-                movieService.updateWithEpisode(id, request)
+                movieService.update(id, movieDTO)
         );
     }
 
@@ -66,7 +70,7 @@ public class MovieManageController {
                                                   @PathVariable("episodeId") Long episodeId,
                                                   @RequestPart("file") MultipartFile file,
                                                   @RequestParam("type") String type
-                                                  ) {
+    ) {
         movieService.uploadEpisodeFile(id, episodeId, file, type);
         return ResponseEntity.noContent().build();
     }

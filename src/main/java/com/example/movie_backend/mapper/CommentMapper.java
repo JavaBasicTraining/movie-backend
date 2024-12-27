@@ -17,7 +17,7 @@ public class CommentMapper {
                 .id(dto.getId())
                 .content(dto.getContent())
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
-                .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
+                .movie(dto.getIdMovie() != null ? new Movie().setId(dto.getIdMovie()): null)
                 .currentDate(new Date())
                 .parentComment(dto.getParentCommentId() != null ?
                         Comment.builder().id(dto.getParentCommentId()).build() : null)
@@ -30,7 +30,7 @@ public class CommentMapper {
                 .id(id)
                 .content(dto.getContent())
                 .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
-                .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
+                .movie(dto.getIdMovie() != null ? new Movie().setId(dto.getIdMovie()) : null)
                 .parentComment(dto.getParentCommentId() != null ?
                         Comment.builder().id(dto.getParentCommentId()).build() : null)
                 .currentDate(new Date())
