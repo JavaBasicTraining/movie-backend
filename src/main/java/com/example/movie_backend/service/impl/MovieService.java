@@ -120,14 +120,6 @@ public class MovieService implements IMovieService {
         }).orElse(null);
     }
 
-    private String getPresignedLink(String link) {
-        if (Objects.isNull(link)) {
-            return null;
-        }
-
-        return minioService.getPreSignedLink(link);
-    }
-
     @Override
     public Boolean delete(Long id) {
         movieRepository.deleteById(id);
@@ -145,59 +137,27 @@ public class MovieService implements IMovieService {
         return movieRepository.query(request.getKeyword(), request.getGenre(), request.getCountry(), pageable)
                 .map(item -> {
                     MovieDTOWithoutJoin movieDTO = movieMapper.toDTOWithoutJoin(item);
-
-                    if (Objects.nonNull(item.getPosterUrl())) {
-                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                        movieDTO.setPosterUrl(linkPoster);
-                    }
-
-                    if (Objects.nonNull(item.getVideoUrl())) {
-                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                        movieDTO.setVideoUrl(linkVideo);
-                    }
-
+                    movieDTO.setPosterPresignedUrl(getPresignedLink(item.getPosterUrl()));
+                    movieDTO.setVideoPresignedUrl(getPresignedLink(item.getVideoUrl()));
                     return movieDTO;
                 });
     }
 
-    public MovieDTO filterMovie(String path) {
+    public MovieDTO getByPath(String path) {
         return movieRepository.filterMovie(path)
                 .map(item -> {
                     MovieDTO movieDTO = movieMapper.toDTO(item);
-                    if (item.getPosterUrl() != null) {
-                        String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
-                        movieDTO.setPosterUrl(linkPoster);
-                    }
-                    if (item.getVideoUrl() != null) {
-                        String linkVideo = this.minioService.getPreSignedLink(item.getVideoUrl());
-                        movieDTO.setVideoPresignedUrl(linkVideo);
-                    }
-                    if (item.getTrailerUrl() != null) {
-                        String linkTrailer = this.minioService.getPreSignedLink(item.getTrailerUrl());
-                        movieDTO.setTrailerUrl(linkTrailer);
-                    }
+                    movieDTO.setPosterPresignedUrl(getPresignedLink(item.getPosterUrl()));
+                    movieDTO.setVideoPresignedUrl(getPresignedLink(item.getVideoUrl()));
+                    movieDTO.setTrailerPresignedUrl(getPresignedLink(item.getTrailerUrl()));
                     return movieDTO;
                 })
                 .orElseThrow(() -> new BadRequestException("Movie not found"));
     }
 
-    private String generateUniquePath(String movieName) {
-        String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .replaceAll("[^a-zA-Z0-9\\s-]", "")
-                .trim()
-                .toLowerCase()
-                .replaceAll("\\s+", "-")
-                .replace("đ", "d");
-
-        String uniquePath = basePath;
-        int counter = 1;
-        while (movieRepository.existsByPath(uniquePath)) {
-            uniquePath = basePath + "-" + counter;
-            counter++;
-        }
-
-        return uniquePath;
+    @Override
+    public Page<MovieDTO> getTrendingMovies(QueryMovieRequest request, Pageable pageable) {
+        return null;
     }
 
     public MovieDTO create(MovieDTO dto) {
@@ -252,4 +212,29 @@ public class MovieService implements IMovieService {
         }
     }
 
+    private String getPresignedLink(String link) {
+        if (Objects.isNull(link)) {
+            return null;
+        }
+        return minioService.getPreSignedLink(link);
+    }
+
+    private String generateUniquePath(String movieName) {
+        String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replaceAll("[^a-zA-Z0-9\\s-]", "")
+                .trim()
+                .toLowerCase()
+                .replaceAll("\\s+", "-")
+                .replace("đ", "d");
+
+        String uniquePath = basePath;
+        int counter = 1;
+        while (movieRepository.existsByPath(uniquePath)) {
+            uniquePath = basePath + "-" + counter;
+            counter++;
+        }
+
+        return uniquePath;
+    }
 }

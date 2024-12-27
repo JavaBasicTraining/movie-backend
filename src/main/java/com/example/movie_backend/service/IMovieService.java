@@ -26,4 +26,8 @@ public interface IMovieService {
     void uploadMovieFile(Long id, MultipartFile file, String type);
 
     void uploadEpisodeFile(Long id, Long episodeId, MultipartFile file, String type);
+
+    MovieDTO getByPath(String path);
+
+    Page<MovieDTO> getTrendingMovies(QueryMovieRequest request, Pageable pageable);
 }

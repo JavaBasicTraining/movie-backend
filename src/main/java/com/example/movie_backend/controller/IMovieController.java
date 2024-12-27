@@ -31,5 +31,5 @@ public interface IMovieController {
     );
 
     @GetMapping("{path}")
-    ResponseEntity<MovieDTO> filterMovie(@PathVariable String path);
+    ResponseEntity<MovieDTO> getByPath(@PathVariable String path);
 }
