@@ -1,8 +1,5 @@
 package com.example.movie_backend.config;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -15,6 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.example.movie_backend.constant.CustomHeader.X_TOTAL_COUNT;
 
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -69,6 +71,7 @@ public class CustomSecurityConfiguration {
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(X_TOTAL_COUNT));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

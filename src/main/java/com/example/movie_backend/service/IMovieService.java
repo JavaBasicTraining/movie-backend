@@ -29,5 +29,5 @@ public interface IMovieService {
 
     MovieDTO getByPath(String path);
 
-    Page<MovieDTO> getTrendingMovies(QueryMovieRequest request, Pageable pageable);
+    Page<MovieDTOWithoutJoin> getTrendingMovies(QueryMovieRequest request, Pageable pageable);
 }

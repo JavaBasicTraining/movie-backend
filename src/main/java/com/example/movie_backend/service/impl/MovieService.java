@@ -156,7 +156,7 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public Page<MovieDTO> getTrendingMovies(QueryMovieRequest request, Pageable pageable) {
+    public Page<MovieDTOWithoutJoin> getTrendingMovies(QueryMovieRequest request, Pageable pageable) {
         return null;
     }
 
@@ -171,11 +171,8 @@ public class MovieService implements IMovieService {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        if (!movie.getNameMovie().equals(movieDTO.getNameMovie())) {
+        if (Objects.isNull(movie.getPath()) || !movie.getNameMovie().equals(movieDTO.getNameMovie())) {
             String uniquePath = generateUniquePath(movie.getNameMovie());
-            if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
-                return null;
-            }
             movie.setPath(uniquePath);
         }
 
