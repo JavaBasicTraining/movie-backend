@@ -5,8 +5,8 @@ import com.example.movie_backend.dto.movie.MovieDTO;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -23,7 +23,6 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class CommentDTO {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank(message = "Content cannot be empty")
@@ -31,19 +30,20 @@ public class CommentDTO {
 
     private Long idUser;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UserDTO user;
+
+    private CommentDTO parentComment;
 
     private Long idMovie;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date currentDate;
+    private Instant createdDate;
 
-    @JsonIgnore
     private MovieDTO movie;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long totalLikes;
+
+    private Long totalReplies;
 
     private Long parentCommentId;
 
@@ -53,17 +53,31 @@ public class CommentDTO {
     @Builder.Default
     private List<CommentDTO> replies = new ArrayList<>();
 
-    public CommentDTO(Comment comment, Long totalLikes) {
-        this.id = comment.getId();
-        this.content = comment.getContent();
+    public CommentDTO(Comment comment, Long totalReplies) {
+        this(comment);
         this.idUser = comment.getUser() != null ? comment.getUser().getId() : null;
         this.idMovie = comment.getMovie() != null ? comment.getMovie().getId() : null;
-        this.totalLikes = totalLikes;
-        if (comment.getUser() != null) {this.user = new UserDTO(comment.getUser());}
-        this.currentDate = comment.getCurrentDate();
         this.parentCommentId = comment.getParentComment() != null ? comment.getParentComment().getId() : null;
-        for (Comment sub : comment.getReplies()) {
-            this.replies.add(new CommentDTO(sub, 0L));
+        this.totalReplies = totalReplies;
+    }
+
+    public CommentDTO(Comment comment, Long totalReplies, Long totalLikes) {
+        this(comment, totalReplies);
+        this.totalLikes = totalLikes;
+    }
+
+    public CommentDTO(Comment comment) {
+        this.id = comment.getId();
+        this.content = comment.getContent();
+        this.createdDate = comment.getCreatedDate();
+        if (comment.getUser() != null) {
+            this.user = new UserDTO(comment.getUser());
+        }
+        if (comment.getMovie() != null) {
+            this.movie = new MovieDTO(comment.getMovie());
+        }
+        if(comment.getParentComment() != null) {
+            this.parentComment = new CommentDTO(comment.getParentComment());
         }
     }
 }

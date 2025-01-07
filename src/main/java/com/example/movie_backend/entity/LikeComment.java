@@ -19,8 +19,8 @@ public class LikeComment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "like_count")
-    private Long likeCount;
+    @Column(name = "liked")
+    private Boolean liked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -29,5 +29,4 @@ public class LikeComment implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
-
 }

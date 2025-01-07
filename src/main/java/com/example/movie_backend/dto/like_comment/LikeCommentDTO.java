@@ -1,25 +1,27 @@
+
 package com.example.movie_backend.dto.like_comment;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.movie_backend.dto.comment.CommentDTO;
+import com.example.movie_backend.dto.user.UserDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class LikeCommentDTO {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long likeCount;
+    private Boolean liked;
 
-    private Long idUser;
+    @NotNull
+    private UserDTO user;
 
-    private Long idMovie;
-
-    private Long idComment;
+    @NotNull
+    private CommentDTO comment;
 }
