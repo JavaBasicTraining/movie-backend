@@ -11,6 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,7 +25,26 @@ import java.util.List;
 public class CommentController implements ICommentController {
 
     public final ICommentService commentService;
+    private final SimpMessagingTemplate messagingTemplate;
+    @MessageMapping("/sendComment")
+    @SendTo("/topic/comments")
+    public CommentDTO sendComment(@Payload CommentDTO comment, SimpMessageHeaderAccessor headerAccessor) {
+        if (headerAccessor.getSessionAttributes() == null) {
+            throw new IllegalArgumentException("Session attributes are missing");
+        }
+        String userName = (String) headerAccessor.getSessionAttributes().get("user");
+        List<String> roles = (List<String>) headerAccessor.getSessionAttributes().get("roles");
+        if (userName == null || roles == null || roles.isEmpty()) {
+            throw new IllegalArgumentException("User not authenticated");
+        }
+        if (!roles.contains("user") && !roles.contains("admin")) {
+            throw new IllegalArgumentException("Permission denied: Only 'user' or 'admin' can send messages.");
+        }
+        CommentDTO savedComment = commentService.create(comment);
 
+//        messagingTemplate.convertAndSend("/topic/commentUpdates", "update");
+        return savedComment;
+    }
     @Override
     public ResponseEntity<CommentDTO> create(CommentDTO comment) {
         return ResponseEntity.ok(commentService.create(comment));

@@ -1,4 +1,4 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.common;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;

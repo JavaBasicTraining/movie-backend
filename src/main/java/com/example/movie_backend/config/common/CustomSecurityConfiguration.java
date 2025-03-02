@@ -1,4 +1,4 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.common;
 
 import java.util.List;
 import java.util.Objects;
@@ -65,11 +65,9 @@ public class CustomSecurityConfiguration {
         if (!Objects.isNull(commonProperties.getCors().getOrigins())) {
             configuration.setAllowedOrigins(commonProperties.getCors().getOrigins());
         }
-
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         http.cors(cors -> cors.configurationSource(source));

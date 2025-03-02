@@ -63,6 +63,7 @@ public class GenreService implements IGenreService {
 
     @Override
     public Boolean delete(Long id) {
-        return Boolean.FALSE;
+        repository.deleteById(id);
+        return true;
     }
 }
