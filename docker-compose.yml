@@ -1,0 +1,102 @@
+version: "3.8"
+
+networks:
+  custom_network:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name:
+      mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: movie_website
+      DATABASE_USER: root
+      DATABASE_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - D:\mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "172.28.30.157"]
+      interval: 10s
+      retries: 3
+    networks:
+      custom_network:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak_container
+    restart: always
+    command: start-dev
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_HOSTNAME=172.28.30.157
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      custom_network:
+
+  minio:
+    image: minio/minio
+    container_name: minio_container
+    restart: always
+    command: server --console-address ":9001" /data
+    environment:
+      MINIO_ACCESS_KEY: ROOTUSER
+      MINIO_SECRET_KEY: CHANGEME@123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      custom_network:
+
+  webapp:
+    build: .
+    container_name: springboot_app
+    restart: always
+    environment:
+      SERVER_PORT: 8081
+      DATABASE_URL: jdbc:mysql://172.28.30.157:3307/movie_website
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root # có cần đổi lại thằng này ko a
+      MYSQL_DATABASE: movie_website
+      MINIO_FILE_HOST: http://172.28.30.157:9001
+      MINIO_ENDPOINT: http://172.28.30.157:9000
+      MINIO_ACCESS_KEY: ROOTUSER
+      MINIO_SECRET_KEY: CHANGEME@123
+      KEYCLOAK_URI: http://172.28.30.157:8080
+      KC_HOSTNAME: 172.28.30.157
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      PROFILE_REALM: movie_website_realm
+      MOVIE_CLIENT_ID: movie_website_client
+      MOVIE_CLIENT_SECRET: ryBcX7pKONjVb57gVK6UYOmlU9qQ1edA
+      VIDEO_TOKEN_SECRET: jwtR2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNd
+      VIDEO_TOKEN_VALIDITY: 7200000
+      RATE_LIMIT_MAX_REQUESTS: 100
+      RATE_LIMIT_TIME_WINDOW: 3600000
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      minio:
+        condition: service_started
+    networks:
+      custom_network:
+
+volumes:
+  mysql_data:
+  minio_data:
+  keycloak_data:
