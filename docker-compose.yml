@@ -6,7 +6,7 @@ networks:
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:9.2.0
     container_name: mysql_container
     restart: always
     environment:
@@ -17,26 +17,30 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - "D:/docker/mysql/volume:/var/lib/mysql"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       retries: 5
     networks:
       custom_network:
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak_container
     restart: always
-    command: start-dev
+    command:
+      start-dev
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME=192.168.1.120
+      - KC_HOSTNAME=192.168.1.68
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_COOKIE_SECURE=true
     ports:
       - "8080:8080"
     volumes:
-      - "D:/keycloak-data:/opt/keycloak/data"
+      - "D:/docker/keycloak/volume:/opt/keycloak/data"
     depends_on:
       mysql:
         condition: service_healthy
@@ -55,7 +59,7 @@ services:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - minio_data:/data
+      - "D:/docker/minio/volume:/data"
     networks:
       custom_network:
 
@@ -64,21 +68,24 @@ services:
     container_name: springboot_app
     restart: always
     environment:
-      ISSUER_URI: http://keycloak:8080/realms/movie_website_realm
-      JWK_SET_URI: http://keycloak:8080/realms/movie_website_realm/protocol/openid-connect/certs
       SERVER_PORT: 8081
       DATABASE_URL: jdbc:mysql://mysql:3306/movie_website
       DATABASE_USER: keycloak_user
       DATABASE_PASSWORD: keycloak_pass
       MYSQL_DATABASE: movie_website
+      # KEYCLOAK
+#      KEYCLOAK_URI: http://keycloak:8080
+#      PROFILE_REALM: movie_website_realm
+#      MOVIE_CLIENT_ID: movie_website_client
+      ISSUER_URI: http://192.168.1.68:8080/realms/movie_website_realm
+      JWK_SET_URI: http://192.168.1.68:8080/realms/movie_website_realm/protocol/openid-connect/certs
+      # MINIO
       MINIO_FILE_HOST: http://minio:9001
       MINIO_ENDPOINT: http://minio:9000
       MINIO_ACCESS_KEY: ROOTUSER
       MINIO_SECRET_KEY: CHANGEME@123
-      KEYCLOAK_URI: http://keycloak:8080
-      PROFILE_REALM: movie_website_realm
-      MOVIE_CLIENT_ID: movie_website_client
       MOVIE_CLIENT_SECRET: ryBcX7pKONjVb57gVK6UYOmlU9qQ1edA
+      # APP
       VIDEO_TOKEN_SECRET: jwtR2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNd
       VIDEO_TOKEN_VALIDITY: 7200000
       RATE_LIMIT_MAX_REQUESTS: 100

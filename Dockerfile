@@ -1,14 +1,12 @@
-# Sử dụng OpenJDK 17
-FROM openjdk:17-jdk-slim
+FROM gradle:7.5.1-jdk17-focal AS build
+WORKDIR /workspace/app
+COPY . /workspace/app
+RUN chmod +x ./gradlew # if error in this, open git bash for window and run dos2unix gradlew to change format to unix
+RUN ./gradlew clean build
 
-# Đặt thư mục làm việc trong container
-WORKDIR /app
+FROM openjdk:17-jdk
+WORKDIR /workspace/app
+COPY --from=build /workspace/app/build/libs/*.jar /workspace/app/app.jar
+EXPOSE 8081
 
-# Sao chép đúng tên file JAR vào container
-COPY build/libs/movie_backend-0.0.1-SNAPSHOT.jar app.jar
-
-# Mở cổng 8080
-EXPOSE 8080
-
-# Chạy ứng dụng khi container khởi động
-CMD ["java", "-jar", "app.jar"]
+CMD ["java","-jar", "app.jar"]
