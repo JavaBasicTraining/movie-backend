@@ -1,4 +1,4 @@
-package com.example.web_socket.config;
+package com.example.movie_backend.config.websocket;
 
 import com.example.movie_backend.config.common.KeycloakProperties;
 import org.springframework.http.HttpStatus;
