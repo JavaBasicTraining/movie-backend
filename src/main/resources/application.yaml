@@ -46,10 +46,10 @@ spring:
           issuer-uri: ${ISSUER_URI:http://192.168.1.68:8080/realms/movie_website_realm}
           jwk-set-uri: ${JWK_SET_URI:http://192.168.1.68:8080/realms/movie_website_realm/protocol/openid-connect/certs}
 minio:
-  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+  endpoint: ${MINIO_ENDPOINT:http://192.168.1.120:9000}
   accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
-  secretKey: ${MINIO_SECRET_KEY:CHANGEME123}
-  fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
+  secretKey: ${MINIO_SECRET_KEY:CHANGEME@123}
+  fileHost: ${MINIO_FILE_HOST:http://192.168.1.120:9001}
   expiredDefault: ${EXPIRED:60}
   bucket: ${MINIO_BUCKET:movie}
 
@@ -75,10 +75,10 @@ common:
     origins:
       - http://localhost:8081
       - http://localhost:3000
-      - http://192.168.1.68:8080
+      - http://192.168.1.120:8080
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_URI:http://192.168.1.68:8080}
+  auth-server-url: ${KEYCLOAK_URI:http://192.168.1.120:8080}
   realm: ${PROFILE_REALM:movie_website_realm}
   resource: ${MOVIE_CLIENT_ID:movie_website_client}
   credentials:
