@@ -70,8 +70,8 @@ services:
     environment:
       SERVER_PORT: 8081
       DATABASE_URL: jdbc:mysql://mysql:3306/movie_website
-      DATABASE_USER: keycloak_user
-      DATABASE_PASSWORD: keycloak_pass
+      DATABASE_USER: root
+      DATABASE_PASSWORD: 1234
       MYSQL_DATABASE: movie_website
       # KEYCLOAK
 #      KEYCLOAK_URI: http://keycloak:8080

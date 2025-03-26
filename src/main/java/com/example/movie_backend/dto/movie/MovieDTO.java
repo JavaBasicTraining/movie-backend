@@ -42,7 +42,6 @@ public class MovieDTO {
 
     private String country;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY, required = false)
     private String videoUrl;
 
     private String trailerUrl;
@@ -74,8 +73,7 @@ public class MovieDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private CategoryDTO category;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Set<EvaluationDTO> evaluations;
+    private List<EvaluationDTO> evaluations;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<CommentDTO> comments;

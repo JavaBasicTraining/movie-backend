@@ -40,10 +40,6 @@ public class UserMapper {
         return UserDTO.builder()
             .id(entity.getId())
             .userName(entity.getUsername())
-            .authoritySet(entity.getAuthorities().stream()
-                .map(nameAuthority -> Authority.builder()
-                    .name(nameAuthority.getName())
-                    .build()).collect(Collectors.toSet()))
             .authorities(
                 token.getAuthorities()
                     .stream()

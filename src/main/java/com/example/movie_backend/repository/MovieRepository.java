@@ -22,12 +22,23 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                     SELECT DISTINCT m.*
                     FROM movie m
                     LEFT JOIN movie_genres mc ON mc.movie_id = m.id
-                    LEFT JOIN genre c ON mc.genres_id = c.id
+                    LEFT JOIN genre g ON mc.genres_id = g.id
                     WHERE (:keyword IS NULL
                            OR m.name IS NULL
                            OR m.name LIKE CONCAT('%', :keyword, '%'))
-                      OR (:genre IS NULL OR c.name = :genre)
-                      OR (:country IS NULL OR m.country = :country)
+                      AND (:genre IS NULL OR g.name = :genre)
+                      AND (:country IS NULL OR m.country = :country)
+                    """,
+            countQuery = """
+                    SELECT COUNT(DISTINCT m.id)
+                    FROM movie m
+                    LEFT JOIN movie_genres mc ON mc.movie_id = m.id
+                    LEFT JOIN genre g ON mc.genres_id = g.id
+                    WHERE (:keyword IS NULL
+                           OR m.name IS NULL
+                           OR m.name LIKE CONCAT('%', :keyword, '%'))
+                      AND (:genre IS NULL OR g.name = :genre)
+                      AND (:country IS NULL OR m.country = :country)
                     """,
             nativeQuery = true
     )

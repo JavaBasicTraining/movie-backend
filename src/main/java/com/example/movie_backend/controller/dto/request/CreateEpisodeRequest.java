@@ -15,5 +15,4 @@ public class CreateEpisodeRequest extends EpisodeDTO {
     private MultipartFile filePoster;
 
     private MultipartFile fileMovie;
-
 }
