@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+
 public class MovieMapper {
     public Category convertCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getId() != null) {

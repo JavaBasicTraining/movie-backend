@@ -32,6 +32,5 @@ public interface IEpisodeController {
 
     @GetMapping("movieId/{movieId}/episode/{episodeCount}")
     ResponseEntity<EpisodeDTO> getEpisodeByMovieId(@PathVariable Long movieId, @PathVariable Long episodeCount);
-
 }
 

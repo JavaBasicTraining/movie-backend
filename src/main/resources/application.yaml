@@ -12,9 +12,9 @@ spring:
   profiles:
     active: ${ENV:dev}
   datasource:
-    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3307/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:root}
+    password: ${DATABASE_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -28,7 +28,7 @@ spring:
       maximum-pool-size: 20
     type: com.zaxxer.hikari.HikariDataSource
   jpa:
-    show-sql: true
+    show-sql: false
     database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate.format_sql: false
@@ -46,10 +46,10 @@ spring:
           issuer-uri: ${ISSUER_URI:http://192.168.1.120:8080/realms/movie_website_realm}
           jwk-set-uri: ${JWK_SET_URI:http://192.168.1.120:8080/realms/movie_website_realm/protocol/openid-connect/certs}
 minio:
-  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
-  accessKey: ${MINIO_ACCESS_KEY:minioadmin}
-  secretKey: ${MINIO_SECRET_KEY:minioadmin}
-  fileHost: ${MINIO_FILE_HOST:http://127.0.0.1:9001}
+  endpoint: ${MINIO_ENDPOINT:http://192.168.1.120:9000}
+  accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
+  secretKey: ${MINIO_SECRET_KEY:CHANGEME@123}
+  fileHost: ${MINIO_FILE_HOST:http://192.168.1.120:9001}
   expiredDefault: ${EXPIRED:60}
   bucket: ${MINIO_BUCKET:movie}
 
@@ -70,11 +70,13 @@ common:
     - /api/v1/evaluations/numberOfReviews/**
     - /api/v1/minio/video/**
     - /api/v1/episode/**
+    - /ws/**
 
   cors:
     origins:
       - http://localhost:8081
       - http://localhost:3000
+      - http://192.168.1.120:8080
 
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://192.168.1.120:8080}

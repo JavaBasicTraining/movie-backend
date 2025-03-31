@@ -21,7 +21,11 @@ public class EpisodeDTO {
 
     private String posterUrl;
 
+    private String posterPresignedUrl;
+
     private String videoUrl;
+
+    private String videoPresignedUrl;
 
     private String descriptions;
 

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
+//import static com.example.movie_backend.constant.SpecialCharactor.SLASH;
 
 @Slf4j
 @Service
@@ -44,7 +44,7 @@ public class MovieService implements IMovieService {
 
     public void uploadMovieFile(Movie movie, MultipartFile file, String type) {
         try {
-            String objectName = "movies/" + movie.getId() + SLASH + type + SLASH + file.getOriginalFilename();
+            String objectName = "movies/" + movie.getId()  + type  + file.getOriginalFilename();
             switch (type) {
                 case POSTER:
                     movie.setPosterUrl(objectName);

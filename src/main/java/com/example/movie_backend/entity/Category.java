@@ -27,4 +27,8 @@ public class Category implements Serializable {
     @JsonIgnoreProperties("category")
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Movie> movies;
+
+    public Category(Long id) {
+        this.id = id;
+    }
 }

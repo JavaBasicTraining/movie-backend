@@ -1,6 +1,7 @@
-package com.example.web_socket.config;
+package com.example.movie_backend.config.websocket;
 
 import com.example.movie_backend.config.common.KeycloakProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -11,14 +12,9 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class WebSocketAuthInterceptor implements HandshakeInterceptor {
     private final JwtDecoder jwtDecoder;
-    private final KeycloakProperties keycloakProperties;
-    public WebSocketAuthInterceptor(JwtDecoder jwtDecoder, KeycloakProperties keycloakProperties) {
-        this.jwtDecoder = jwtDecoder;
-        this.keycloakProperties = keycloakProperties;
-
-    }
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,

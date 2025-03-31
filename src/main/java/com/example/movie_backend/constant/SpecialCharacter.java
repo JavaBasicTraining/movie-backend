@@ -1,7 +1,7 @@
 package com.example.movie_backend.constant;
 
-public class SpecialCharactor {
-    SpecialCharactor() {
+public class SpecialCharacter {
+    SpecialCharacter() {
     }
 
     public static final String SLASH = "/";
