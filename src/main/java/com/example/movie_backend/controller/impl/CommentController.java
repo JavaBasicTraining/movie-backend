@@ -41,8 +41,7 @@ public class CommentController implements ICommentController {
             throw new IllegalArgumentException("Permission denied: Only 'user' or 'admin' can send messages.");
         }
         CommentDTO savedComment = commentService.create(comment);
-
-//        messagingTemplate.convertAndSend("/topic/commentUpdates", "update");
+        messagingTemplate.convertAndSend("/topic/replies", savedComment);
         return savedComment;
     }
     @Override
@@ -59,6 +58,7 @@ public class CommentController implements ICommentController {
     public ResponseEntity<CommentDTO> update(CommentDTO comment, Long commentId) {
         return ResponseEntity.ok(commentService.update(comment, commentId));
     }
+
 
     @Override
     public ResponseEntity<CommentDTO> getById(Long id) {
