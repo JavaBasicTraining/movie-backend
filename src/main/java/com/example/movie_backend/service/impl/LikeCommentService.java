@@ -47,10 +47,8 @@ public class LikeCommentService implements ILikeCommentService {
             likeComment = new LikeComment();
             likeComment.setUser(user);
             likeComment.setComment(comment);
-//            likeComment.setLikeCount(1L);
         } else {
-//            Long count = likeComment.getLikeCount() >= 1L ? 0L : 1L;
-//            likeComment.setLikeCount(count);
+
         }
         likeComment = repository.save(likeComment);
         return mapper.toDTO(likeComment);
@@ -59,10 +57,6 @@ public class LikeCommentService implements ILikeCommentService {
     @Override
     @Transactional(readOnly = true)
     public List<LikeCommentDTO> findLikeCommentByUserIdAndMovieId(Long movieId, Long userId) {
-//        return repository.findLikeCommentByUserIdAndMovieId(movieId, userId)
-//                .stream()
-//                .map(mapper::toDTO)
-//                .toList();
         return new ArrayList<>();
     }
 
