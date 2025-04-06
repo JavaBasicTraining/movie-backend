@@ -62,19 +62,22 @@ public class CommentDTO {
         this(comment, totalReplies);
         this.totalLikes = totalLikes;
     }
-
     public CommentDTO(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.createdDate = comment.getCreatedDate();
+
         if (comment.getUser() != null) {
             this.user = new UserDTO(comment.getUser());
         }
+
         if (comment.getMovie() != null) {
-            this.movie = new MovieDTO(comment.getMovie());
+            this.movie = new MovieDTO();
         }
+
         if(comment.getParentComment() != null) {
             this.parentComment = new CommentDTO(comment.getParentComment());
         }
     }
+
 }
