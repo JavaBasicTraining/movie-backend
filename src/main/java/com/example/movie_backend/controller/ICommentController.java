@@ -25,7 +25,7 @@ public interface ICommentController {
     ResponseEntity<CommentDTO> getById(@PathVariable Long id);
 
     @DeleteMapping("{id}")
-    ResponseEntity<Void> delete(@PathVariable Long id);
+    ResponseEntity<Void> delete(@PathVariable Long id,@ParameterObject Pageable pageable);
 
     @GetMapping
     ResponseEntity<List<CommentDTO>> getCommentByMovieId(@RequestParam Long movieId, @ParameterObject Pageable pageable);

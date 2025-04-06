@@ -4,6 +4,8 @@ import com.example.movie_backend.controller.ICommentController;
 import com.example.movie_backend.controller.dto.request.RepliesCountResponse;
 import com.example.movie_backend.controller.dto.request.TotalLikesResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
+import com.example.movie_backend.mapper.CommentMapper;
+import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.util.HeaderUtils;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,26 +22,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController implements ICommentController {
 
+    public  final CommentMapper mapper;
+    public final CommentRepository repository;
     public final ICommentService commentService;
     private final SimpMessagingTemplate messagingTemplate;
-    @MessageMapping("/sendComment")
-    @SendTo("/topic/comments")
-    public CommentDTO sendComment(@Payload CommentDTO comment, SimpMessageHeaderAccessor headerAccessor) {
-        if (headerAccessor.getSessionAttributes() == null) {
-            throw new IllegalArgumentException("Session attributes are missing");
-        }
-        String userName = (String) headerAccessor.getSessionAttributes().get("user");
-        List<String> roles = (List<String>) headerAccessor.getSessionAttributes().get("roles");
-        if (userName == null || roles == null || roles.isEmpty()) {
-            throw new IllegalArgumentException("User not authenticated");
-        }
-        if (!roles.contains("user") && !roles.contains("admin")) {
-            throw new IllegalArgumentException("Permission denied: Only 'user' or 'admin' can send messages.");
-        }
-        CommentDTO savedComment = commentService.create(comment);
-        messagingTemplate.convertAndSend("/topic/replies", savedComment);
-        return savedComment;
-    }
+
     @Override
     public ResponseEntity<CommentDTO> create(CommentDTO comment) {
         return ResponseEntity.ok(commentService.create(comment));
@@ -66,10 +49,13 @@ public class CommentController implements ICommentController {
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(Long id, Pageable pageable) {
         commentService.delete(id);
+        Page<CommentDTO> updatedComments = repository.getReplies(id, pageable);
+        messagingTemplate.convertAndSend("/topic/comment",updatedComments);
         return ResponseEntity.noContent().build();
     }
+
 
     @Override
     public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId, Pageable pageable) {

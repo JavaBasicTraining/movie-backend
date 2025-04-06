@@ -18,6 +18,7 @@ import com.example.movie_backend.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +35,15 @@ public class CommentService implements ICommentService {
     public final UserRepository userRepository;
     public final LikeCommentRepository likeCommentRepository;
     private final ILikeCommentService likeCommentService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public CommentDTO create(CommentDTO dto) {
         Comment comment = mapper.toEntity(dto);
         comment = repository.save(comment);
-        return mapper.toDTO(comment);
+        dto= mapper.toDTO(comment);
+        messagingTemplate.convertAndSend("/topic/comment/" + comment.getMovie().getId(), dto);
+        return dto;
     }
 
     @Override
