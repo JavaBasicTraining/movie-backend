@@ -12,8 +12,6 @@ import java.util.List;
 public interface ICommentService {
     CommentDTO create(CommentDTO dto);
 
-    CommentDTO update(CommentDTO dto, Long id);
-
     CommentDTO update(Long commentId, CommentDTO dto);
 
     CommentDTO getById(Long id);

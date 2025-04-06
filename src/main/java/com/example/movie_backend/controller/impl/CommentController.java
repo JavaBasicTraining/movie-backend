@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,10 +37,6 @@ public class CommentController implements ICommentController {
         return ResponseEntity.ok(commentService.update(id, commentDTO));
     }
 
-    @Override
-    public ResponseEntity<CommentDTO> update(CommentDTO comment, Long commentId) {
-        return ResponseEntity.ok(commentService.update(comment, commentId));
-    }
 
 
     @Override

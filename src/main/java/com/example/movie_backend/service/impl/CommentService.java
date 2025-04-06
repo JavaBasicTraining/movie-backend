@@ -47,12 +47,6 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public CommentDTO update(CommentDTO dto, Long id) {
-        Comment comment = mapper.toEntity(dto, id);
-        return mapper.toDTO(repository.save(comment));
-    }
-
-    @Override
     public CommentDTO update(Long commentId, CommentDTO dto) {
         Comment comment = findByIdOrThrow(commentId);
         comment.setContent(dto.getContent());
