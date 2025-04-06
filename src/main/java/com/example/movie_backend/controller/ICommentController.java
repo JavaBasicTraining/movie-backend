@@ -8,12 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/api/v1/comment")
 public interface ICommentController {
     @PostMapping
-    ResponseEntity<CommentDTO> create(@RequestBody CommentDTO comment);
+    ResponseEntity<CommentDTO> create(@RequestBody @Valid CommentDTO comment);
 
     @PutMapping("{id}")
     ResponseEntity<CommentDTO> update(@PathVariable("id") Long id, @RequestBody CommentDTO commentDTO);

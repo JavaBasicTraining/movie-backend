@@ -1,6 +1,5 @@
 package com.example.movie_backend.config.websocket;
 
-import com.example.movie_backend.config.common.KeycloakProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

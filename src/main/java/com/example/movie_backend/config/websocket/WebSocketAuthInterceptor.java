@@ -1,6 +1,5 @@
 package com.example.movie_backend.config.websocket;
 
-import com.example.movie_backend.config.common.KeycloakProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
@@ -9,6 +8,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+
 import java.util.List;
 import java.util.Map;
 
