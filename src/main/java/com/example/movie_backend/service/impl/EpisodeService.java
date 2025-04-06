@@ -1,6 +1,7 @@
 package com.example.movie_backend.service.impl;
 
 import com.example.movie_backend.config.minio.MinioProperties;
+import com.example.movie_backend.constant.SpecialCharacter;
 import com.example.movie_backend.controller.dto.request.CreateEpisodeRequest;
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.dto.episode.EpisodeDTO;
@@ -41,7 +42,7 @@ public class EpisodeService implements IEpisodeService {
 
         String contentTypePoster = filePoster.getContentType();
         if (Objects.nonNull(contentTypePoster) && isImage(contentTypePoster)) {
-            String posterPath = "poster" + SLASH + filePoster.getOriginalFilename();
+            String posterPath = "poster" + SpecialCharacter.SLASH + filePoster.getOriginalFilename();
             uploadByFile(dto.getFilePoster(), posterPath);
             episode.setPosterUrl(posterPath);
         } else {

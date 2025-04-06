@@ -1,6 +1,5 @@
 package com.example.movie_backend.service.impl;
 
-import com.example.movie_backend.config.minio.MinioConfig;
 import com.example.movie_backend.controller.dto.request.QueryMovieRequest;
 import com.example.movie_backend.controller.exception.BadRequestException;
 import com.example.movie_backend.controller.exception.EntityNotFoundException;

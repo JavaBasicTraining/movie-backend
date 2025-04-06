@@ -10,18 +10,16 @@ import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Table(name = "movie")
 @Getter
 @Setter
 @Entity
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @Accessors(chain = true)
-@SuperBuilder(toBuilder = true)
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -70,7 +68,7 @@ public class Movie implements Serializable {
 
     @JsonIgnoreProperties(value = "movie", allowSetters = true)
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
