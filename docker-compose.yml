@@ -74,20 +74,13 @@ services:
       DATABASE_PASSWORD: 1234
       MYSQL_DATABASE: movie_website
       # KEYCLOAK
-#      KEYCLOAK_URI: http://keycloak:8080
-#      PROFILE_REALM: movie_website_realm
-#      MOVIE_CLIENT_ID: movie_website_client
-#      MOVIE_CLIENT_SECRET: ryBcX7pKONjVb57gVK6UYOmlU9qQ1edA
+      ISSUER_URI: http://192.168.1.120:8080/realms/movie_website_realm
+      JWK_SET_URI: http://192.168.1.120:8080/realms/movie_website_realm/protocol/openid-connect/certs
       # MINIO
       MINIO_FILE_HOST: http://192.168.1.120:9001
       MINIO_ENDPOINT: http://192.168.1.120:9000
       MINIO_ACCESS_KEY: ROOTUSER
       MINIO_SECRET_KEY: CHANGEME@123
-      # APP
-      VIDEO_TOKEN_SECRET: jwtR2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNd
-      VIDEO_TOKEN_VALIDITY: 7200000
-      RATE_LIMIT_MAX_REQUESTS: 100
-      RATE_LIMIT_TIME_WINDOW: 3600000
     ports:
       - "8081:8081"
     depends_on:
