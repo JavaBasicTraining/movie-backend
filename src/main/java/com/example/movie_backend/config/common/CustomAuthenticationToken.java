@@ -1,4 +1,4 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.common;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

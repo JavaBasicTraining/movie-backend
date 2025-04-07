@@ -1,4 +1,4 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.common;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

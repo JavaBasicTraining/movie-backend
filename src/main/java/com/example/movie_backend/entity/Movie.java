@@ -1,7 +1,6 @@
 package com.example.movie_backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @Accessors(chain = true)
 public class Movie implements Serializable {

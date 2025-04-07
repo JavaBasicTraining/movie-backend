@@ -7,7 +7,7 @@ import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.dto.genre.GenreDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
+import lombok.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovieDTO {
+
     private Long id;
 
     private String nameMovie;

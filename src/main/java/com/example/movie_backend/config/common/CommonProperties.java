@@ -1,4 +1,4 @@
-package com.example.movie_backend.config;
+package com.example.movie_backend.config.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

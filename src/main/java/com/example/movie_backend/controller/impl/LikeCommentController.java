@@ -21,7 +21,7 @@ public class LikeCommentController implements ILikeCommentController {
 
     @Override
     public ResponseEntity<LikeCommentDTO> create(LikeCommentDTO likeCommentDTO) {
-        return ResponseEntity.ok(service.create(likeCommentDTO));
+        return ResponseEntity.ok(service.createOrUpdate(likeCommentDTO));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class LikeCommentController implements ILikeCommentController {
 
     @GetMapping("/user/{userId}/movie/{movieId}")
     public ResponseEntity<List<LikeCommentDTO>> findLikeCommentByUserIdAndMovieId(@PathVariable("userId") Long userId,
-            @PathVariable("movieId") Long movieId) {
+                                                                                  @PathVariable("movieId") Long movieId) {
         return ResponseEntity.ok(service.findLikeCommentByUserIdAndMovieId(movieId, userId));
     }
 }

@@ -16,6 +16,12 @@ public interface EpisodeMapper {
     @Mapping(target = "movie", ignore = true)
     EpisodeDTO toDTO(Episode episode);
 
+    @Mapping(target = "movie", ignore = true)
+    Episode toEntity(EpisodeDTO episodeDTO);
+
+    @Mapping(target = "movie", ignore = true)
+    Episode toEntity(EpisodeDTO episodeDTO, Long id);
+
     @Named("dtoWithoutMovie")
     @Mapping(target = "movie", ignore = true)
     EpisodeDTO toDTOWithoutMovie(Episode episode);
