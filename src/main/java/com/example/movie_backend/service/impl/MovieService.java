@@ -120,14 +120,6 @@ public class MovieService implements IMovieService {
         }).orElse(null);
     }
 
-    private String getPresignedLink(String link) {
-        if (Objects.isNull(link)) {
-            return null;
-        }
-
-        return minioService.getPreSignedLink(link);
-    }
-
     @Override
     public Boolean delete(Long id) {
         movieRepository.deleteById(id);
@@ -181,25 +173,6 @@ public class MovieService implements IMovieService {
                 .orElseThrow(() -> new BadRequestException("Movie not found"));
     }
 
-    private String generateUniquePath(String movieName) {
-        String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "")
-                .replaceAll("[^a-zA-Z0-9\\s-]", "")
-                .trim()
-                .toLowerCase()
-                .replaceAll("\\s+", "-")
-                .replace("đ", "d");
-
-        String uniquePath = basePath;
-        int counter = 1;
-        while (movieRepository.existsByPath(uniquePath)) {
-            uniquePath = basePath + "-" + counter;
-            counter++;
-        }
-
-        return uniquePath;
-    }
-
     public MovieDTO create(MovieDTO dto) {
         Movie movie = movieMapper.toEntity(dto);
         String pathGenerated = generateUniquePath(movie.getNameMovie());
@@ -213,7 +186,7 @@ public class MovieService implements IMovieService {
 
         if (!movie.getNameMovie().equals(movieDTO.getNameMovie())) {
             String uniquePath = generateUniquePath(movie.getNameMovie());
-            if (movie.getId().equals(movieId) && uniquePath.equals(movie.getPath())) {
+            if (uniquePath.equals(movie.getPath())) {
                 return null;
             }
             movie.setPath(uniquePath);
@@ -226,6 +199,33 @@ public class MovieService implements IMovieService {
         mapEpisodes(movie.getEpisodes(), movieDTO.getEpisodes());
 
         return movieMapper.toDTO(movie);
+    }
+
+    private String generateUniquePath(String movieName) {
+        String basePath = Normalizer.normalize(movieName, Normalizer.Form.NFD)
+            .replaceAll("\\p{M}", "")
+            .replaceAll("[^a-zA-Z0-9\\s-]", "")
+            .trim()
+            .toLowerCase()
+            .replaceAll("\\s+", "-")
+            .replace("đ", "d");
+
+        String uniquePath = basePath;
+        int counter = 1;
+        while (movieRepository.existsByPath(uniquePath)) {
+            uniquePath = basePath + "-" + counter;
+            counter++;
+        }
+
+        return uniquePath;
+    }
+
+    private String getPresignedLink(String link) {
+        if (Objects.isNull(link)) {
+            return null;
+        }
+
+        return minioService.getPreSignedLink(link);
     }
 
     private void mapEpisodes(Set<Episode> episodes, List<EpisodeDTO> episodeDTOS) {
