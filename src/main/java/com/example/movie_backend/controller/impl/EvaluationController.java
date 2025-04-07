@@ -25,7 +25,6 @@ public class EvaluationController implements IEvaluationController {
     @Override
     public ResponseEntity<EvaluationDTO> create(EvaluationDTO evaluation) {
         return ResponseEntity.ok(service.create(evaluation));
-
     }
 
     @Override
@@ -42,7 +41,6 @@ public class EvaluationController implements IEvaluationController {
     @Override
     public boolean delete(Long id) {
         ResponseEntity.ok(service.getById(id));
-
         return true;
     }
 

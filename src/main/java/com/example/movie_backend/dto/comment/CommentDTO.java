@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -62,6 +61,7 @@ public class CommentDTO {
         this(comment, totalReplies);
         this.totalLikes = totalLikes;
     }
+
     public CommentDTO(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();

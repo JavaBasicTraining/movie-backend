@@ -15,14 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class CommentController implements ICommentController {
 
-    public  final CommentMapper mapper;
+    public final CommentMapper mapper;
     public final CommentRepository repository;
     public final ICommentService commentService;
     private final SimpMessagingTemplate messagingTemplate;
@@ -37,8 +35,6 @@ public class CommentController implements ICommentController {
         return ResponseEntity.ok(commentService.update(id, commentDTO));
     }
 
-
-
     @Override
     public ResponseEntity<CommentDTO> getById(Long id) {
         return ResponseEntity.ok(commentService.getById(id));
@@ -48,10 +44,9 @@ public class CommentController implements ICommentController {
     public ResponseEntity<Void> delete(Long id, Pageable pageable) {
         commentService.delete(id);
         Page<CommentDTO> updatedComments = repository.getReplies(id, pageable);
-        messagingTemplate.convertAndSend("/topic/comment",updatedComments);
+        messagingTemplate.convertAndSend("/topic/comment", updatedComments);
         return ResponseEntity.noContent().build();
     }
-
 
     @Override
     public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId, Pageable pageable) {

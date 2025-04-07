@@ -19,7 +19,6 @@ public class CategoryController implements ICategoryController {
     public final CategoryRepository repository;
     public final CategoryMapper mapper;
 
-
     @Override
     public ResponseEntity<CategoryDTO> create(CategoryDTO category) {
         return ResponseEntity.ok(categoryService.create(category));
