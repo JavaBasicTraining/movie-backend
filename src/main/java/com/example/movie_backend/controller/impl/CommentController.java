@@ -8,6 +8,7 @@ import com.example.movie_backend.mapper.CommentMapper;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.util.HeaderUtils;
+import com.example.movie_backend.wrapper.CommentMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +44,6 @@ public class CommentController implements ICommentController {
     @Override
     public ResponseEntity<Void> delete(Long id, Pageable pageable) {
         commentService.delete(id);
-        Page<CommentDTO> updatedComments = repository.getReplies(id, pageable);
-        messagingTemplate.convertAndSend("/topic/comment", updatedComments);
         return ResponseEntity.noContent().build();
     }
 

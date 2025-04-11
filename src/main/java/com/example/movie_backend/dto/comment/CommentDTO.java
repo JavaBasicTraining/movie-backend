@@ -34,6 +34,7 @@ public class CommentDTO {
     private Long idMovie;
 
     private Instant createdDate;
+
     private Date currentDate;
 
     private MovieDTO movie;

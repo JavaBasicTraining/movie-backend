@@ -34,7 +34,7 @@ services:
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME=192.168.1.120
+#      - KC_HOSTNAME=192.168.1.120
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_COOKIE_SECURE=true
     ports:
@@ -77,7 +77,9 @@ services:
 #      KEYCLOAK_URI: http://keycloak:8080
 #      PROFILE_REALM: movie_website_realm
 #      MOVIE_CLIENT_ID: movie_website_client
-#      MOVIE_CLIENT_SECRET: ryBcX7pKONjVb57gVK6UYOmlU9qQ1edA
+#      ISSUER_URI: http:///192.168.1.120/realms/movie_website_realm
+#      JWK_SET_URI: http:///192.168.1.120/realms/movie_website_realm/protocol/openid-connect/certs
+
       # MINIO
       MINIO_FILE_HOST: http://192.168.1.120:9001
       MINIO_ENDPOINT: http://192.168.1.120:9000
