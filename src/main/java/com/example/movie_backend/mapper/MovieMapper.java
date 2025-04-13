@@ -91,6 +91,7 @@ public interface MovieMapper {
     @Mapping(target = "trailerUrl", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "path", ignore = true)
     @Mapping(target = "episodes", expression = "java(episodeDTOListToEpisodeSet(request.getEpisodes()))")
     void toEntityForUpdate(MovieDTO request, @MappingTarget Movie movie);
 

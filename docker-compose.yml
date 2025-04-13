@@ -74,12 +74,8 @@ services:
       DATABASE_PASSWORD: 1234
       MYSQL_DATABASE: movie_website
       # KEYCLOAK
-#      KEYCLOAK_URI: http://keycloak:8080
-#      PROFILE_REALM: movie_website_realm
-#      MOVIE_CLIENT_ID: movie_website_client
-#      ISSUER_URI: http:///192.168.1.120/realms/movie_website_realm
-#      JWK_SET_URI: http:///192.168.1.120/realms/movie_website_realm/protocol/openid-connect/certs
-
+      ISSUER_URI: http://192.168.1.120:8080/realms/movie_website_realm
+      JWK_SET_URI: http://192.168.1.120:8080/realms/movie_website_realm/protocol/openid-connect/certs
       # MINIO
       MINIO_FILE_HOST: http://192.168.1.120:9001
       MINIO_ENDPOINT: http://192.168.1.120:9000
