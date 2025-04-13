@@ -6,63 +6,57 @@ import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.entity.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-import java.time.Instant;
+//import java.time.Instant;
 
-@Component
-public class CommentMapper {
+@Mapper(componentModel = "spring")
+public interface CommentMapper {
 
-    public Comment toEntity(CommentDTO dto) {
-        return Comment.builder()
-                .id(dto.getId())
-                .content(dto.getContent())
-                .user(mapToUser(dto.getUser()))
-                .movie(mapToMovie(dto.getMovie()))
-                .createdDate(Instant.now())
-                .parentComment(mapToComment(dto.getParentComment()))
-                .build();
+    @Mapping(target = "parentCommentId", source = "parentComment.id")
+    @Mapping(target = "movie", ignore = true)
+    @Mapping(target = "parentComment", ignore = true)
+
+
+    CommentDTO toDTO(Comment comment);
+
+    @Mapping(target = "parentComment", expression = "java(mapOnlyIdToComment(commentDTO.getParentComment()))")
+    @Mapping(target = "user", expression = "java(mapToUser(commentDTO.getUser()))")
+    @Mapping(target = "movie", expression = "java(mapToMovie(commentDTO.getMovie()))")
+    @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
+    Comment toEntity(CommentDTO commentDTO);
+
+    @Mapping(target = "parentComment", expression = "java(mapOnlyIdToComment(commentDTO.getParentComment()))")
+    @Mapping(target = "user", expression = "java(commentDTO.getIdUser() != null ? com.example.movie_backend.entity.User.builder().id(commentDTO.getIdUser()).build() : null)")
+    @Mapping(target = "movie", expression = "java(commentDTO.getIdMovie() != null ? com.example.movie_backend.entity.Movie.builder().id(commentDTO.getIdMovie()).build() : null)")
+    @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
+    Comment toEntity(CommentDTO commentDTO, Long id);
+
+    @Named("mapOnlyIdToComment")
+    default Comment mapOnlyIdToComment(CommentDTO dto) {
+        if (dto == null || dto.getId() == null) return null;
+        Comment comment = new Comment();
+        comment.setId(dto.getId());
+        return comment;
     }
 
-    public Comment toEntity(CommentDTO dto, Long id) {
-        return Comment.builder()
-                .id(id)
-                .content(dto.getContent())
-                .user(dto.getIdUser() != null ? User.builder().id(dto.getIdUser()).build() : null)
-                .movie(dto.getIdMovie() != null ? Movie.builder().id(dto.getIdMovie()).build() : null)
-                .parentComment(mapToComment(dto.getParentComment()))
-                .createdDate(Instant.now())
-                .build();
+    default User mapToUser(UserDTO dto) {
+        if (dto == null || dto.getId() == null) return null;
+        User user = new User();
+        user.setId(dto.getId());
+        user.setUsername(dto.getUserName());
+        return user;
     }
 
-    public CommentDTO toDTO(Comment entity) {
-        return CommentDTO.builder()
-                .id(entity.getId())
-                .content(entity.getContent())
-                .user(entity.getUser() != null ? UserDTO.builder()
-                        .id(entity.getUser().getId())
-                        .userName(entity.getUser().getUsername())
-                        .build() : null)
-                .createdDate(entity.getCreatedDate())
-                .parentCommentId(entity.getParentComment() != null ?
-                        entity.getParentComment().getId() : null)
-                .build();
+    default Movie mapToMovie(MovieDTO dto) {
+        if (dto == null || dto.getId() == null) return null;
+        Movie movie = new Movie();
+        movie.setId(dto.getId());
+        return movie;
     }
 
-    private Comment mapToComment(CommentDTO dto) {
-        if (dto == null) return null;
-        return Comment.builder().id(dto.getId()).build();
-    }
 
-    private User mapToUser(UserDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        return User.builder().id(dto.getId()).username(dto.getUserName()).build();
-    }
 
-    private Movie mapToMovie(MovieDTO movie) {
-        if (movie == null) return null;
-        return Movie.builder().id(movie.getId()).build();
-    }
 }

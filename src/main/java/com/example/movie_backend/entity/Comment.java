@@ -50,7 +50,7 @@ public class Comment implements Serializable {
     @Builder.Default
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties(value = "genres", allowSetters = true)
-    private List<Comment> replies = new ArrayList<>();
+    private Set<Comment> replies = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LikeComment> likeComments = new HashSet<>();
