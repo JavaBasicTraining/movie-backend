@@ -3,25 +3,20 @@ package com.example.movie_backend.controller.impl;
 import com.example.movie_backend.controller.IGenreController;
 import com.example.movie_backend.controller.dto.request.GetCategoriesFilter;
 import com.example.movie_backend.dto.genre.GenreDTO;
-import com.example.movie_backend.mapper.GenreMapper;
 import com.example.movie_backend.repository.GenreRepository;
 import com.example.movie_backend.service.impl.GenreService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class GenreController implements IGenreController {
 
     public final GenreService categoryService;
     public final GenreRepository repository;
-    public final GenreMapper mapper;
-
-    public GenreController(GenreService categoryService, GenreRepository repository, GenreMapper mapper) {
-        this.categoryService = categoryService;
-        this.repository = repository;
-        this.mapper = mapper;
-    }
 
     @Override
     public ResponseEntity<GenreDTO> create(GenreDTO category) {

@@ -76,7 +76,7 @@ common:
     origins:
       - http://localhost:8081
       - http://localhost:3000
-      - http://localhost:8080
+      - http://192.168.1.120:8080
 
 keycloak:
   auth-server-url: ${KEYCLOAK_URI:http://localhost:8080}

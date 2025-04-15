@@ -1,52 +1,45 @@
 package com.example.movie_backend.mapper;
 
+import com.example.movie_backend.dto.AuthorityDTO;
 import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Authority;
 import com.example.movie_backend.entity.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
-public class UserMapper {
-    public User toEntity(UserDTO dto) {
-        return User.builder()
-            .username(dto.getUserName())
-            .authorities(
-                dto.getAuthorities().stream()
-                    .map(nameAuthority -> Authority.builder().name(nameAuthority)
-                        .build()
-                    )
-                    .collect(Collectors.toSet())
-            )
-            .build();
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+
+    @Mapping(target = "passwordHash", ignore = true)
+    @Mapping(target = "likeComments", ignore = true)
+    @Mapping(target = "evaluations", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(source = "userName", target = "username")
+    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "toAuthoritySet")
+    User toEntity(UserDTO dto);
+
+    @Mapping(source = "username", target = "userName")
+    @Mapping(source = "authorities", target = "authorities", qualifiedByName = "toAuthorityDTOList")
+    UserDTO toDTO(User entity);
+
+    @Named("toAuthoritySet")
+    static Set<Authority> mapToAuthoritySet(List<AuthorityDTO> list) {
+        if (list == null) return null;
+        return list.stream()
+            .map(dto -> Authority.builder().name(dto.getName()).build())
+            .collect(Collectors.toSet());
     }
 
-    public UserDTO toDTO(User entity) {
-        return UserDTO.builder()
-            .id(entity.getId())
-            .userName(entity.getUsername())
-            .authorities(
-                entity.getAuthorities()
-                    .stream()
-                    .map(Authority::getName)
-                    .toList())
-            .build();
-    }
-
-    public UserDTO toDTO(User entity, JwtAuthenticationToken token) {
-        return UserDTO.builder()
-            .id(entity.getId())
-            .userName(entity.getUsername())
-            .authorities(
-                token.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList()
-            )
-
-            .build();
+    @Named("toAuthorityDTOList")
+    static List<AuthorityDTO> mapToAuthorityDTOList(Set<Authority> set) {
+        if (set == null) return null;
+        return set.stream()
+            .map(entity -> AuthorityDTO.builder().name(entity.getName()).build())
+            .collect(Collectors.toList());
     }
 }

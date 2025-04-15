@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserDTO create(UserDTO userDTO) {
-        User user = mapper.toEntity(userDTO);
+        User user = userMapper.toEntity(userDTO);
         User savedUser = userRepository.save(user);
-        return mapper.toDTO(savedUser);
+        return userMapper.toDTO(savedUser);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserService implements IUserService {
     @Override
     public UserDTO getUser(String username) {
         return this.userRepository.findByUsername(username)
-                .map(this.mapper::toDTO)
+                .map(this.userMapper::toDTO)
                 .orElse(null);
     }
 

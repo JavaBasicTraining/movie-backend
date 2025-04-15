@@ -6,64 +6,56 @@ import com.example.movie_backend.dto.user.UserDTO;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.entity.LikeComment;
 import com.example.movie_backend.entity.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
 
-@Component
-public class LikeCommentMapper {
+@Mapper(componentModel = "spring")
+public interface LikeCommentMapper {
 
-    public LikeComment toEntity(LikeCommentDTO dto) {
-        return LikeComment.builder()
-                .id(dto.getId())
-                .user(mapToUserEntity(dto.getUser()))
-                .comment(mapToCommentEntity(dto.getComment()))
-                .build();
-    }
+    @Mapping(target = "liked", ignore = true)
+    @Mapping(target = "comment", source = "comment", qualifiedByName = "commentDtoToComment")
+    @Mapping(target = "user", source = "user", qualifiedByName = "userDtoToUser")
+    LikeComment toEntity(LikeCommentDTO dto);
 
-    public LikeComment toEntity(LikeCommentDTO dto, Long id) {
-        return LikeComment.builder()
-                .id(id)
-                .user(mapToUserEntity(dto.getUser()))
-                .comment(mapToCommentEntity(dto.getComment()))
-                .build();
-    }
 
-    public LikeCommentDTO toDTO(LikeComment entity) {
-        if (entity == null) {
-            return null;
-        }
-        return LikeCommentDTO.builder()
-                .id(entity.getId() == null ? null : entity.getId())
-                .liked(entity.getLiked())
-                .user(mapToUserDTO(entity.getUser()))
-                .comment(mapToCommentDTO(entity.getComment()))
-                .build();
-    }
+    @Mapping(target = "liked", ignore = true)
+    @Mapping(target = "comment", source = "dto.comment", qualifiedByName = "commentDtoToComment")
+    @Mapping(target = "user", source = "dto.user", qualifiedByName = "userDtoToUser")
+    @Mapping(target = "id", source = "id")
+    LikeComment toEntity(LikeCommentDTO dto, Long id);
 
-    private Comment mapToCommentEntity(CommentDTO comment) {
-        if (comment == null || comment.getId() == null) {
-            return null;
-        }
-        return Comment.builder().id(comment.getId()).build();
-    }
+    @Mapping(target = "user", source = "user", qualifiedByName = "userToUserDto")
+    @Mapping(target = "comment", source = "comment", qualifiedByName = "commentToCommentDto")
+    LikeCommentDTO toDTO(LikeComment entity);
 
-    private CommentDTO mapToCommentDTO(Comment comment) {
-        if (comment == null || comment.getId() == null) {
-            return null;
-        }
-        return CommentDTO.builder().id(comment.getId()).build();
-    }
-
-    private User mapToUserEntity(UserDTO userDTO) {
+    @Named("userDtoToUser")
+    static User mapToUserEntity(UserDTO userDTO) {
         if (userDTO == null || userDTO.getId() == null) {
             return null;
         }
         return User.builder().id(userDTO.getId()).build();
     }
 
-    private UserDTO mapToUserDTO(User user) {
+    @Named("userToUserDto")
+    static UserDTO mapToUserDTO(User user) {
         if (user == null || user.getId() == null) {
             return null;
         }
         return UserDTO.builder().id(user.getId()).build();
+    }
+
+    @Named("commentDtoToComment")
+    static Comment mapToCommentEntity(CommentDTO commentDTO) {
+        if (commentDTO == null || commentDTO.getId() == null) {
+            return null;
+        }
+        return Comment.builder().id(commentDTO.getId()).build();
+    }
+
+    @Named("commentToCommentDto")
+    static CommentDTO mapToCommentDTO(Comment comment) {
+        if (comment == null || comment.getId() == null) {
+            return null;
+        }
+        return CommentDTO.builder().id(comment.getId()).build();
     }
 }

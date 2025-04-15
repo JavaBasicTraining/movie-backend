@@ -20,7 +20,7 @@ public class EvaluationController implements IEvaluationController {
 
     public final EvaluationService service;
     public final EvaluationRepository repository;
-    public final EvaluationMapper mapper;
+    public final EvaluationMapper evaluationMapper;
 
     @Override
     public ResponseEntity<EvaluationDTO> create(EvaluationDTO evaluation) {
@@ -53,7 +53,7 @@ public class EvaluationController implements IEvaluationController {
             return null;
         }
         Evaluation evaluation = evaluationOptional.get();
-        EvaluationDTO evaluationDTO = mapper.toDTO(evaluation);
+        EvaluationDTO evaluationDTO = evaluationMapper.toDTO(evaluation);
         return ResponseEntity.ok(evaluationDTO);
     }
 

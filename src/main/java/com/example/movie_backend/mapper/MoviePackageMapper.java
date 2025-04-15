@@ -2,27 +2,17 @@ package com.example.movie_backend.mapper;
 
 import com.example.movie_backend.dto.moviepakage.MoviePackageDTO;
 import com.example.movie_backend.entity.MoviePackage;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-@Component
-public class MoviePackageMapper {
-    public MoviePackage toEntity(MoviePackageDTO dto) {
-        return MoviePackage.builder()
-                .type(dto.getType())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface MoviePackageMapper {
+    @Mapping(target = "id", ignore = true)
+    MoviePackage toEntity(MoviePackageDTO dto);
 
-    public MoviePackage toEntity(MoviePackageDTO dto, Long id) {
-        return MoviePackage.builder()
-                .id(id)
-                .type(dto.getType())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    MoviePackage toEntity(MoviePackageDTO dto, Long id);
 
-    public MoviePackageDTO toDTO(MoviePackage entity) {
-        return MoviePackageDTO.builder()
-                .id(entity.getId())
-                .type(entity.getType())
-                .build();
-    }
+    MoviePackageDTO toDTO(MoviePackage entity) ;
 }

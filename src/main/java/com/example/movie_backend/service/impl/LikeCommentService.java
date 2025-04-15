@@ -25,7 +25,7 @@ public class LikeCommentService implements ILikeCommentService {
 
     public final LikeCommentRepository repository;
     public final UserRepository userRepository;
-    public final LikeCommentMapper mapper;
+    public final LikeCommentMapper likeCommentMapper;
     public final CommentRepository commentRepository;
 
     @Override
@@ -47,11 +47,9 @@ public class LikeCommentService implements ILikeCommentService {
             likeComment = new LikeComment();
             likeComment.setUser(user);
             likeComment.setComment(comment);
-        } else {
-
         }
         likeComment = repository.save(likeComment);
-        return mapper.toDTO(likeComment);
+        return likeCommentMapper.toDTO(likeComment);
     }
 
     @Override
@@ -70,7 +68,7 @@ public class LikeCommentService implements ILikeCommentService {
     @Transactional(readOnly = true)
     public LikeCommentDTO findByCommentIdAndUserId(Long commentId, Long userId) {
         return this.repository.findByCommentIdAndUserId(commentId, userId)
-                .map(mapper::toDTO)
+                .map(likeCommentMapper::toDTO)
                 .orElse(null);
     }
 }

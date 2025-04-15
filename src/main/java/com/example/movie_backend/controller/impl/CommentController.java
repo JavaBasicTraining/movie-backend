@@ -4,7 +4,6 @@ import com.example.movie_backend.controller.ICommentController;
 import com.example.movie_backend.controller.dto.request.RepliesCountResponse;
 import com.example.movie_backend.controller.dto.request.TotalLikesResponse;
 import com.example.movie_backend.dto.comment.CommentDTO;
-import com.example.movie_backend.mapper.CommentMapper;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.util.HeaderUtils;
@@ -13,17 +12,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class CommentController implements ICommentController {
 
-    public final CommentMapper mapper;
     public final CommentRepository repository;
     public final ICommentService commentService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ResponseEntity<CommentDTO> create(CommentDTO comment) {
@@ -43,8 +41,6 @@ public class CommentController implements ICommentController {
     @Override
     public ResponseEntity<Void> delete(Long id, Pageable pageable) {
         commentService.delete(id);
-        Page<CommentDTO> updatedComments = repository.getReplies(id, pageable);
-        messagingTemplate.convertAndSend("/topic/comment", updatedComments);
         return ResponseEntity.noContent().build();
     }
 
@@ -52,16 +48,16 @@ public class CommentController implements ICommentController {
     public ResponseEntity<List<CommentDTO>> getCommentByMovieId(Long movieId, Pageable pageable) {
         Page<CommentDTO> commentDTOPage = commentService.getCommentByMovieId(movieId, pageable);
         return ResponseEntity.status(HttpStatus.OK)
-                .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
-                .body(commentDTOPage.getContent());
+            .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
+            .body(commentDTOPage.getContent());
     }
 
     @Override
     public ResponseEntity<List<CommentDTO>> getReplies(Long id, Pageable pageable) {
         Page<CommentDTO> commentDTOPage = commentService.getReplies(id, pageable);
         return ResponseEntity.status(HttpStatus.OK)
-                .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
-                .body(commentDTOPage.getContent());
+            .headers(HeaderUtils.buildTotalSizeHeader(commentDTOPage.getTotalElements()))
+            .body(commentDTOPage.getContent());
     }
 
     @Override

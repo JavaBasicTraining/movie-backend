@@ -8,31 +8,27 @@ import com.example.movie_backend.entity.Movie;
 import com.example.movie_backend.repository.EvaluationRepository;
 import com.example.movie_backend.repository.MovieRepository;
 import com.example.movie_backend.service.IEvaluationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class EvaluationService implements IEvaluationService {
     public final EvaluationRepository repository;
     public final MovieRepository movieRepository;
-    public final EvaluationMapper mapper;
-
-    public EvaluationService(EvaluationRepository repository, MovieRepository movieRepository, EvaluationMapper mapper) {
-        this.repository = repository;
-        this.movieRepository = movieRepository;
-        this.mapper = mapper;
-    }
+    public final EvaluationMapper evaluationMapper;
 
     @Override
     public EvaluationDTO create(EvaluationDTO dto) {
-        Evaluation evaluation = mapper.toEntity(dto);
+        Evaluation evaluation = evaluationMapper.toEntity(dto);
         Movie movie = movieRepository.findById(dto.getMovieId()).orElse(null);
         if (Objects.nonNull(movie)) {
             movie.addEvaluation(evaluation);
         }
         evaluation = repository.save(evaluation);
-        return mapper.toDTO(repository.save(evaluation));
+        return evaluationMapper.toDTO(repository.save(evaluation));
     }
 
     @Override
@@ -42,7 +38,7 @@ public class EvaluationService implements IEvaluationService {
             .map(evaluation -> {
                 evaluation.setStar(dto.getStar());
                 evaluation = repository.save(evaluation);
-                return mapper.toDTO(evaluation);
+                return evaluationMapper.toDTO(evaluation);
             })
             .orElseThrow(
                 () -> new RuntimeException("evaluation not found by id: " + id)
@@ -52,7 +48,7 @@ public class EvaluationService implements IEvaluationService {
     @Override
     public EvaluationDTO getById(Long id) {
         return this.repository.findById(id)
-            .map(this.mapper::toDTO)
+            .map(this.evaluationMapper::toDTO)
             .orElseThrow(
                 () -> new BadRequestException("Movie not found")
             );

@@ -34,7 +34,7 @@ services:
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME=192.168.1.120
+#      - KC_HOSTNAME=192.168.1.120
       - KC_HOSTNAME_STRICT=false
       - KC_HTTP_COOKIE_SECURE=true
     ports:
@@ -81,6 +81,11 @@ services:
       MINIO_ENDPOINT: http://192.168.1.120:9000
       MINIO_ACCESS_KEY: ROOTUSER
       MINIO_SECRET_KEY: CHANGEME@123
+      # APP
+      VIDEO_TOKEN_SECRET: jwtR2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNd
+      VIDEO_TOKEN_VALIDITY: 7200000
+      RATE_LIMIT_MAX_REQUESTS: 100
+      RATE_LIMIT_TIME_WINDOW: 3600000
     ports:
       - "8081:8081"
     depends_on:

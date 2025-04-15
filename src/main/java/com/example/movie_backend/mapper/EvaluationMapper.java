@@ -3,36 +3,22 @@ package com.example.movie_backend.mapper;
 import com.example.movie_backend.dto.evaluation.EvaluationDTO;
 import com.example.movie_backend.entity.Evaluation;
 import com.example.movie_backend.entity.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-@Component
-public class EvaluationMapper {
-    public Evaluation toEntity(EvaluationDTO dto) {
-        return Evaluation.builder()
-            .id(dto.getId())
-            .star(dto.getStar())
-            .user(User.builder()
-                .id(dto.getUserId()).build())
-            .movieId(dto.getMovieId())
-            .build();
-    }
+@Mapper(componentModel = "spring")
+public interface EvaluationMapper {
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "movies", ignore = true)
+    Evaluation toEntity(EvaluationDTO dto);
 
-    public Evaluation toEntity(EvaluationDTO dto, Long id) {
-        return Evaluation.builder()
-            .id(id)
-            .star(dto.getStar())
-            .user(User.builder()
-                .id(dto.getUserId()).build())
-            .movieId(dto.getMovieId())
-            .build();
-    }
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "movies", ignore = true)
+    Evaluation toEntity(EvaluationDTO dto, Long id);
 
-    public EvaluationDTO toDTO(Evaluation entity) {
-        return EvaluationDTO.builder()
-            .id(entity.getId())
-            .star(entity.getStar())
-            .userId(entity.getUser().getId())
-            .movieId(entity.getMovieId())
-            .build();
-    }
+    @Mapping(target = "userId", ignore = true)
+    EvaluationDTO toDTO(Evaluation entity);
 }

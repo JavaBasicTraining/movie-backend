@@ -22,8 +22,11 @@ public interface EpisodeMapper {
     @Mapping(target = "movie", ignore = true)
     Episode toEntity(EpisodeDTO episodeDTO, Long id);
 
-    @Named("dtoWithoutMovie")
+    @Mapping(target = "videoPresignedUrl", ignore = true)
+    @Mapping(target = "posterPresignedUrl", ignore = true)
+    @Mapping(target = "movieId", ignore = true)
     @Mapping(target = "movie", ignore = true)
+    @Named("dtoWithoutMovie")
     EpisodeDTO toDTOWithoutMovie(Episode episode);
 
     @IterableMapping(qualifiedByName = "dtoWithoutMovie")

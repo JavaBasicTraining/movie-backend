@@ -8,6 +8,7 @@ import com.example.movie_backend.dto.like_comment.LikeCommentDTO;
 import com.example.movie_backend.entity.Comment;
 import com.example.movie_backend.entity.LikeComment;
 import com.example.movie_backend.entity.User;
+import com.example.movie_backend.enumerate.CommentAction;
 import com.example.movie_backend.mapper.CommentMapper;
 import com.example.movie_backend.repository.CommentRepository;
 import com.example.movie_backend.repository.LikeCommentRepository;
@@ -15,6 +16,7 @@ import com.example.movie_backend.repository.UserRepository;
 import com.example.movie_backend.service.ICommentService;
 import com.example.movie_backend.service.ILikeCommentService;
 import com.example.movie_backend.util.SecurityUtils;
+import com.example.movie_backend.wrapper.CommentMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +32,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CommentService implements ICommentService {
-    public final CommentMapper mapper;
+    public final CommentMapper commentMapper;
     public final CommentRepository repository;
     public final UserRepository userRepository;
     public final LikeCommentRepository likeCommentRepository;
@@ -39,25 +41,30 @@ public class CommentService implements ICommentService {
 
     @Override
     public CommentDTO create(CommentDTO dto) {
-        Comment comment = mapper.toEntity(dto);
+        Comment comment = commentMapper.toEntity(dto);
         comment = repository.save(comment);
-        dto= mapper.toDTO(comment);
-        messagingTemplate.convertAndSend("/topic/comment/" + comment.getMovie().getId(), dto);
+        dto = commentMapper.toDTO(comment);
+        CommentMessage<CommentDTO> message = new CommentMessage<>(CommentAction.ADD, dto);
+        messagingTemplate.convertAndSend("/topic/comment/" + comment.getMovie().getId(), message);
         return dto;
     }
 
+
     @Override
     public CommentDTO update(Long commentId, CommentDTO dto) {
-        Comment comment = findByIdOrThrow(commentId);
-        comment.setContent(dto.getContent());
-        comment = repository.save(comment);
-        return mapper.toDTO(comment);
+        Comment existingComment = findByIdOrThrow(commentId);
+        existingComment.setContent(dto.getContent());
+        Comment updatedComment = repository.save(existingComment);
+        CommentDTO updatedDTO = commentMapper.toDTO(updatedComment);
+        CommentMessage<CommentDTO> message = new CommentMessage<>(CommentAction.UPDATE, updatedDTO);
+        messagingTemplate.convertAndSend("/topic/comment/" + updatedComment.getMovie().getId(), message);
+        return dto;
     }
 
     @Override
     public CommentDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
+                .map(this.commentMapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
                 );
@@ -65,9 +72,16 @@ public class CommentService implements ICommentService {
 
     @Override
     public Boolean delete(Long id) {
+        Optional<Comment> optionalComment = repository.findById(id);
+        Comment comment = optionalComment.get();
+        Long movieId = comment.getMovie().getId();
         repository.deleteById(id);
+        CommentMessage<Long> message = new CommentMessage<>(CommentAction.DELETE, id);
+        messagingTemplate.convertAndSend("/topic/comment/" + movieId, message);
+
         return true;
     }
+
 
     @Override
     public Page<CommentDTO> getCommentByMovieId(Long movieId, Pageable pageable) {
@@ -78,7 +92,7 @@ public class CommentService implements ICommentService {
     public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
         return repository.getListCommentByMovieIdUserId(userId, movieId)
                 .stream()
-                .map(mapper::toDTO)
+                .map(commentMapper::toDTO)
                 .toList();
     }
 
@@ -138,6 +152,7 @@ public class CommentService implements ICommentService {
     public Page<CommentDTO> getReplies(Long id, Pageable pageable) {
         return repository.getReplies(id, pageable);
     }
+
     @Override
     public RepliesCountResponse getRepliesCount(Long commentId) {
         return null;
