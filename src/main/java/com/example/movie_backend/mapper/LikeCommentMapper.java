@@ -20,10 +20,11 @@ public interface LikeCommentMapper {
     @Mapping(target = "liked", ignore = true)
     @Mapping(target = "comment", source = "dto.comment", qualifiedByName = "commentDtoToComment")
     @Mapping(target = "user", source = "dto.user", qualifiedByName = "userDtoToUser")
+    @Mapping(target = "id", source = "id")
     LikeComment toEntity(LikeCommentDTO dto, Long id);
 
-    @Mapping(target = "user", source = "entity.user", qualifiedByName = "userToUserDto")
-    @Mapping(target = "comment", source = "entity.comment", qualifiedByName = "commentToCommentDto")
+    @Mapping(target = "user", source = "user", qualifiedByName = "userToUserDto")
+    @Mapping(target = "comment", source = "comment", qualifiedByName = "commentToCommentDto")
     LikeCommentDTO toDTO(LikeComment entity);
 
     @Named("userDtoToUser")

@@ -11,15 +11,16 @@ import com.example.movie_backend.entity.Episode;
 import com.example.movie_backend.entity.Genre;
 import com.example.movie_backend.entity.Movie;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface MovieMapper {
-    MovieMapper INSTANCE = Mappers.getMapper(MovieMapper.class);
 
+    @Mapping(target = "videoPresignedUrl", ignore = true)
+    @Mapping(target = "trailerPresignedUrl", ignore = true)
+    @Mapping(target = "posterPresignedUrl", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
     @Mapping(target = "episodes", source = "episodes", qualifiedByName = "episodesWithoutJoin")
@@ -31,6 +32,7 @@ public interface MovieMapper {
     @Mapping(target = "genres", source = "genreIds", qualifiedByName = "genresFromIds")
     MovieDTO toDTO(CreateMovieRequest request);
 
+    @Mapping(target = "genreName", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "episodes", ignore = true)
     @Mapping(target = "evaluations", ignore = true)
@@ -45,16 +47,15 @@ public interface MovieMapper {
     @Mapping(target = "movies", ignore = true)
     CategoryDTO mapCategoryDTOWithoutMovies(Category category);
 
-    @Named("categoryWithoutMovies")
-    @Mapping(target = "movies", ignore = true)
-    Category mapCategoryWithoutMovies(CategoryDTO category);
-
     @Named("episodesWithoutJoin")
     @IterableMapping(qualifiedByName = "episodeDTOWithoutJoin")
     List<EpisodeDTO> mapEpisodesWithoutJoin(Set<Episode> episodes);
 
+    @Mapping(target = "movieId", source = "movie.id")
     @Named("episodeDTOWithoutJoin")
     @Mapping(target = "movie", ignore = true)
+    @Mapping(target = "videoPresignedUrl", ignore = true)
+    @Mapping(target = "posterPresignedUrl", ignore = true)
     EpisodeDTO mapEpisodeDTOWithoutJoin(Episode episode);
 
     @Named("categoryFromId")

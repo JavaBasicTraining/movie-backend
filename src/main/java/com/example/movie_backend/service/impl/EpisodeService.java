@@ -31,14 +31,14 @@ import static com.example.movie_backend.constant.SpecialCharacter.SLASH;
 @RequiredArgsConstructor
 public class EpisodeService implements IEpisodeService {
     private final EpisodeRepository repository;
-    private final EpisodeMapper mapper;
+    private final EpisodeMapper episodeMapper;
     private final MinioClient minioClient;
     private final MinioService minioService;
     private final MinioProperties minioProperties;
 
     @Override
     public EpisodeDTO create(CreateEpisodeRequest dto, MultipartFile filePoster, MultipartFile fileMovie) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        Episode episode = mapper.toEntity(dto);
+        Episode episode = episodeMapper.toEntity(dto);
 
         String contentTypePoster = filePoster.getContentType();
         if (Objects.nonNull(contentTypePoster) && isImage(contentTypePoster)) {
@@ -57,20 +57,20 @@ public class EpisodeService implements IEpisodeService {
         } else {
             throw new IllegalArgumentException("Content type not supported");
         }
-        return mapper.toDTO(repository.save(episode));
+        return episodeMapper.toDTO(repository.save(episode));
 
     }
 
     @Override
     public EpisodeDTO update(CreateEpisodeRequest dto, Long id) {
-        Episode comment = mapper.toEntity(dto, id);
-        return mapper.toDTO(repository.save(comment));
+        Episode comment = episodeMapper.toEntity(dto, id);
+        return episodeMapper.toDTO(repository.save(comment));
     }
 
     @Override
     public EpisodeDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
+                .map(this.episodeMapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Episode not found")
                 );
@@ -86,7 +86,7 @@ public class EpisodeService implements IEpisodeService {
     public Set<EpisodeDTO> getListEpisodeByMovieId(Long movieId) {
         Set<EpisodeDTO> episodeDTOS = repository.getListEpisodeByMovieId(movieId)
                 .stream()
-                .map(this.mapper::toDTO)
+                .map(this.episodeMapper::toDTO)
                 .collect(Collectors.toSet());
         return episodeDTOS.stream()
                 .sorted(Comparator.comparing(EpisodeDTO::getEpisodeCount))
@@ -101,7 +101,7 @@ public class EpisodeService implements IEpisodeService {
         } else {
             return repository.getEpisodeByMovieId(movieId, episodeCount)
                     .map(item -> {
-                        EpisodeDTO episodeDTO = mapper.toDTO(item);
+                        EpisodeDTO episodeDTO = episodeMapper.toDTO(item);
                         if (item.getPosterUrl() != null && item.getVideoUrl() != null) {
                             String linkPoster = this.minioService.getPreSignedLink(item.getPosterUrl());
                             episodeDTO.setPosterPresignedUrl(linkPoster);

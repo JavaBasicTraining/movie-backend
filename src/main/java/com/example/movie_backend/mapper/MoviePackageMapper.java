@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 public interface MoviePackageMapper {
     @Mapping(target = "id", ignore = true)
-    public MoviePackage toEntity(MoviePackageDTO dto);
+    MoviePackage toEntity(MoviePackageDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    public MoviePackage toEntity(MoviePackageDTO dto, Long id);
+    MoviePackage toEntity(MoviePackageDTO dto, Long id);
 
-    public MoviePackageDTO toDTO(MoviePackage entity) ;
+    MoviePackageDTO toDTO(MoviePackage entity) ;
 }

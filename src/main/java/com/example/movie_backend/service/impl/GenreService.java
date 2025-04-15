@@ -17,28 +17,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreService implements IGenreService {
 
-    public final GenreMapper mapper;
+    public final GenreMapper genreMapper;
     public final GenreRepository repository;
 
     @Override
     @Transactional
     public GenreDTO create(GenreDTO dto) {
-        Genre genre = mapper.toEntity(dto);
+        Genre genre = genreMapper.toEntity(dto);
         genre = repository.save(genre);
-        return mapper.toDTO(genre);
+        return genreMapper.toDTO(genre);
     }
 
     @Override
     public GenreDTO update(GenreDTO entity, Long id) {
-        Genre category = mapper.toEntity(entity, id);
-        return mapper.toDTO(repository.save(category));
+        Genre category = genreMapper.toEntity(entity, id);
+        return genreMapper.toDTO(repository.save(category));
     }
 
     @Override
     public GenreDTO getById(Long id) {
 
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
+                .map(this.genreMapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
                 );
@@ -47,7 +47,7 @@ public class GenreService implements IGenreService {
     @Override
     public List<GenreDTO> getList(GetCategoriesFilter filter) {
         return repository.filterGenre(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-                .map(mapper::toDTO)
+                .map(genreMapper::toDTO)
                 .toList();
     }
 

@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public interface EvaluationMapper {
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "movies", ignore = true)
     Evaluation toEntity(EvaluationDTO dto);
 
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "movies", ignore = true)
     Evaluation toEntity(EvaluationDTO dto, Long id);
 
+    @Mapping(target = "userId", ignore = true)
     EvaluationDTO toDTO(Evaluation entity);
 }

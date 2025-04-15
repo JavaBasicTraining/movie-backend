@@ -25,7 +25,6 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +32,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CommentService implements ICommentService {
-    public final CommentMapper mapper;
+    public final CommentMapper commentMapper;
     public final CommentRepository repository;
     public final UserRepository userRepository;
     public final LikeCommentRepository likeCommentRepository;
@@ -42,9 +41,9 @@ public class CommentService implements ICommentService {
 
     @Override
     public CommentDTO create(CommentDTO dto) {
-        Comment comment = mapper.toEntity(dto);
+        Comment comment = commentMapper.toEntity(dto);
         comment = repository.save(comment);
-        dto = mapper.toDTO(comment);
+        dto = commentMapper.toDTO(comment);
         CommentMessage<CommentDTO> message = new CommentMessage<>(CommentAction.ADD, dto);
         messagingTemplate.convertAndSend("/topic/comment/" + comment.getMovie().getId(), message);
         return dto;
@@ -56,7 +55,7 @@ public class CommentService implements ICommentService {
         Comment existingComment = findByIdOrThrow(commentId);
         existingComment.setContent(dto.getContent());
         Comment updatedComment = repository.save(existingComment);
-        CommentDTO updatedDTO = mapper.toDTO(updatedComment);
+        CommentDTO updatedDTO = commentMapper.toDTO(updatedComment);
         CommentMessage<CommentDTO> message = new CommentMessage<>(CommentAction.UPDATE, updatedDTO);
         messagingTemplate.convertAndSend("/topic/comment/" + updatedComment.getMovie().getId(), message);
         return dto;
@@ -65,7 +64,7 @@ public class CommentService implements ICommentService {
     @Override
     public CommentDTO getById(Long id) {
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
+                .map(this.commentMapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
                 );
@@ -93,7 +92,7 @@ public class CommentService implements ICommentService {
     public List<CommentDTO> getListCommentByMovieIdUserId(Long userId, Long movieId) {
         return repository.getListCommentByMovieIdUserId(userId, movieId)
                 .stream()
-                .map(mapper::toDTO)
+                .map(commentMapper::toDTO)
                 .toList();
     }
 

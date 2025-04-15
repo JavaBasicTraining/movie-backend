@@ -12,9 +12,9 @@ spring:
   profiles:
     active: ${ENV:dev}
   datasource:
-    url: ${DATABASE_URL:jdbc:mysql://localhost:3307/movie_website}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/movie_website}
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PASSWORD:1234}
+    password: ${DATABASE_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: hikari-id
@@ -48,7 +48,7 @@ spring:
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
   accessKey: ${MINIO_ACCESS_KEY:ROOTUSER}
-  secretKey: ${MINIO_SECRET_KEY:CHANGEME@123}
+  secretKey: ${MINIO_SECRET_KEY:CHANGEME123}
   fileHost: ${MINIO_FILE_HOST:http://localhost:9001}
   expiredDefault: ${EXPIRED:60}
   bucket: ${MINIO_BUCKET:movie}

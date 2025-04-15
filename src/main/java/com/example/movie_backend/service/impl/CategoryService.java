@@ -18,28 +18,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
 
-    public final CategoryMapper mapper;
+    public final CategoryMapper categoryMapper;
     public final CategoryRepository repository;
 
     @Override
     @Transactional
     public CategoryDTO create(CategoryDTO dto) {
-        Category category = mapper.toEntity(dto);
+        Category category = categoryMapper.toEntity(dto);
         category = repository.save(category);
-        return mapper.toDTO(category);
+        return categoryMapper.toDTO(category);
     }
 
     @Override
     public CategoryDTO update(CategoryDTO entity, Long id) {
-        Category category = mapper.toEntity(entity, id);
-        return mapper.toDTO(repository.save(category));
+        Category category = categoryMapper.toEntity(entity, id);
+        return categoryMapper.toDTO(repository.save(category));
     }
 
     @Override
     public CategoryDTO getById(Long id) {
 
         return this.repository.findById(id)
-                .map(this.mapper::toDTO)
+                .map(this.categoryMapper::toDTO)
                 .orElseThrow(
                         () -> new BadRequestException("Movie not found")
                 );
@@ -48,7 +48,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<CategoryDTO> getList(GetCategoriesFilter filter) {
         return repository.filterCategory(filter.getSearchTerm(), filter.getExcludeIds()).stream()
-                .map(mapper::toDTO)
+                .map(categoryMapper::toDTO)
                 .toList();
     }
 
