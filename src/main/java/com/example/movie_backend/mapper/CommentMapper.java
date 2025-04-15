@@ -29,7 +29,7 @@ public interface CommentMapper {
     Comment toEntity(CommentDTO commentDTO);
 
     @Mapping(target = "parentComment", expression = "java(mapOnlyIdToComment(commentDTO.getParentComment()))")
-    @Mapping(target = "user", expression = "java(commentDTO.getIdUser() != null ? com.example.movie_backend.entity.User.builder().id(commentDTO.getIdUser()).build() : null)")
+    @Mapping(target = "user", expression = "java(commentDTO.getIdUser() != null ? com.example.movie_backend.entity.User.builder().id(commentDTO.getIdUser()).username(commentDTO.getUser().getUserName()).build() : null)")
     @Mapping(target = "movie", expression = "java(commentDTO.getIdMovie() != null ? com.example.movie_backend.entity.Movie.builder().id(commentDTO.getIdMovie()).build() : null)")
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
     Comment toEntity(CommentDTO commentDTO, Long id);
